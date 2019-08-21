@@ -9,42 +9,171 @@ This topic describes how to install and configure Pivotal RabbitMQ for Kubernete
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before you install and configure RabbitMQ for Kubernetes, you must do the following:
+Before you install and configure RabbitMQ for Kubernetes, you must have the following installed and configured:
 
-+ 
-+ 
+1. [Docker](https://docs.docker.com/install/)
+2. A working Kubernetes cluster
+3. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+
+This topic is written under the assumption that you are using a private image registry.
+If you do not have access to a private image registry, please email the team at rabbitmq-for-k8s@pivotal.io
+for further assistance.
 
 ## <a id='overview'></a> Overview
 
-NOTE TO AUTHORS: Write a few sentences to describe the process for getting this product up and running.
+To install and configure RabbitMQ for Kubernetes:
 
-NOTE TO AUTHORS: If there are multiple tasks in the procedure and they must be completed in order,
-create an ordered list that contains each task in the topic.
-Include anchor links to the headings for each task.
+### <a id='artifacts'></a> Download Artifacts
 
-To install and configure RabbitMQ for Kubernetes, do the following:
+Download the artifact for RabbitMQ for Kubernetes from
+[Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/). The artifact contains
+three docker images and <!-- three? --> deployment manifests for the operator and the broker. The three images are:
 
-1. [Install RabbitMQ for Kubernetes](#install)
-1. [Configure RabbitMQ for Kubernetes](#configure)
+1. RabbitMQ
+2. RabbitMQ Operator
+3. Service Broker
+
+### <a id='relocate'></a> Relocate Images
+
+Load the images to local Docker by running the following commands:
+
+```
+tar xvf PATH-TO-RABBITMQ-FOR-KUBERNETES-VERSION.tar
+docker load -i rabbitmq-for-kubernetes-operator
+docker load -i rabbitmq-3.8-rc-management
+docker load -i rabbitmq-for-kubernetes-servicebroker
+```
+
+Tag the image to point to your own image repository
+
+```bash
+~$ docker tag rabbitmq-3.8-rc-management \
+>  YOUR-REPOSITORY/rabbitmq:3.8-rc-management
+~$ docker tag rabbitmq-for-kubernetes-operator \
+>  YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION
+~$ docker tag rabbitmq-for-kubernetes-servicebroker \
+>  YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION
+```
+
+Push the image to your own image repository
+
+```
+docker push YOUR-REPOSITORY/rabbitmq:3.8-rc-management
+docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION
+docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION
+```
+
+### <a id='private-images'></a> (Optional) Configure Kubernetes Cluster Access to Private Images
+
+Pivotal recommends that you keep the operator and service-broker images private if your repository is publicly accessible.
+
+1. Create a `pivotal-rabbitmq-system` namespace by running the following command:
+
+```
+kubectl apply -f manifests/namespace.yaml
+```
+
+1. In your cluster, create a Kubernetes secret that authorizes access to private images in the
+namespace that you just created.
+1. Repeat this task for the `pivotal-rabbitmq-servicebroker-system` namespace.
+For more information, see [the Kubernetes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
 
-##<a id='install'></a> Install RabbitMQ for Kubernetes
+### <a id='image-repo'></a> Configure Image Repository
 
-To install RabbitMQ for Kubernetes:
+Provide your repository URL in our operator manifest (`manifests/operator.yaml`)
+Replace all instances of REPLACE-WITH-IMAGE-REPOSITORY-HOST with your image repository host.
+Replace all instances of REPLACE-WITH-OPERATOR-IMAGE-URL with the full operator image URL. This URL looks
+similar to the below:
 
-1. 
+`YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION`
 
-1.
+Provide your repository URL in the service broker manifest (`manifests/service-broker.yaml`)
+Replace all instances of REPLACE-WITH-BROKER-IMAGE-URL with the full broker image URL. This URL looks
+similar to the below:
 
-1.
+  `YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION`
 
-1.
+## <a id='config-service-type'></a> (Optional) Configuring Service Type
 
-##<a id='configure'></a>Configure RabbitMQ for Kubernetes
+Our operator allows you to specify what kind of Kubernetes Service is provisioned for your RabbitMQ cluster.
+The default type is ClusterIP. For more information about different Kubernetes Service types, see
+[the Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+If you wish to change the Service type, you can change it in our <!-- who is "our"? --> operator manifest (`manifests/operator.yaml`):
 
-To configure RabbitMQ for Kubernetes:
+Replace the value of `SERVICE_TYPE` from `ClusterIP` to either `NodePort` or `LoadBalancer` <!-- which? -->.
+<p class="note"><strong>Note:</strong> <code>ExternalName</code> is currently not supported.
+</p>
 
-1. First thing to do
+## <a id='broker-creds'></a> Create Broker Credentials
 
-1. Next thing you do
+The service broker looks for its username and password in a Kubernetes secret called `broker-credentials` in
+the `pivotal-rabbitmq-system` namespace. To create a secret:
 
+1. Run the following commands.
+
+  ```
+  echo -n BROKER-USERNAME > ./username
+  echo -n BROKER-PASSWORD > ./password
+  kubectl create secret generic broker-credentials -n pivotal-rabbitmq-system --from-file=./username --from-file=./password
+  ```
+
+  <p class="note"><strong>Note:</strong> To read about other ways to create a secret, see
+  [the Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/secret).
+  </p>
+
+The secret name must be `broker-credetails` <!-- really? --> and should be in the `pivotal-rabbitmq-system`
+namespace with the username and password as part of the data, otherwise the service broker fails to deploy.
+
+## <a id='deploy-op-and-broker'></a> Deploy Operator and Broker
+
+To deploy the operator and broker and install the `RabbitmqCluster` custom resource definition, run:
+```
+kubectl apply -f manifests/
+```
+
+## <a id='register-broker'></a> Register Broker with Cloud Foundry
+
+To register the service broker, run the following cf CLI <!-- aren't they all cf CLI commands? --> command:
+
+```
+~$ cf create-service-broker SERVICE-BROKER-NAME BROKER-USERNAME BROKER-PASSWORD \
+>  http://SERVICE-BROKER-IP:8080
+```
+
+`SERVICE-BROKER-NAME` can be any arbitrary name. The `SERVICE-BROKER-IP` is the external IP assigned to the
+  `LoadBalancer` service named `p-rmq-servicebroker`, which is deployed in the service broker namespace
+  `pivotal-rabbitmq-servicebroker-system`.
+
+The broker-username and broker-password are the credentials you used to create the Kubernetes secrets earlier
+in [Create Broker Credentials](#broker-creds).
+
+After the service broker is registered, run the following command to enable access in the Marketplace:
+
+```
+cf enable-service-access p-rabbitmq-k8s -b SERVICE-BROKER-NAME
+```
+
+## <a id='limitations'></a> Limitations
+
+### <a id='update-rmq-cluster'></a> Updating the RabbitMQ Cluster
+
+Currently you cannot update the RabbitMQ cluster and any of its child objects (stateful set,
+config map, service and secrets) after creation. If you update any of the configurations, they have no effect.
+If you delete the child config map, service or secret objects, they are not re-created (stateful set objects are re-created).
+In this case you must delete the cluster and re-create it again.
+
+### <a id='rmq-image'></a> RabbitMQ Image
+
+Currently we do not support pulling the RabbitMQ image from a repository that requires authentication.
+
+### <a id='service-broker'></a> Service Broker
+
+Currently the service broker can only provision instances in the the Kubernetes cluster that the operator and
+broker are deployed. The broker creates a new namespace for each instance to live in.
+
+### <a id='prov-status'></a> Provision Status of Service Instance
+
+If the service instance provision status is stuck in _create in progress_, the RabbitMQ
+cluster might have failed to create. Pivotal recommends that you to check the status of the RabbitMQ cluster
+resources in your Kubernetes cluster for more details about the failure.
