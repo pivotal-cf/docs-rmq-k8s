@@ -9,7 +9,7 @@ This topic describes how to install and configure Pivotal RabbitMQ for Kubernete
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before you install and configure RabbitMQ for Kubernetes, you must install and configure <!-- will the reader need config instructions for any of the below? --> the following software:
+Before you install and configure RabbitMQ for Kubernetes, you must install and configure <!-- does the reader need config instructions for any of the below? --> the following software:
 
 1. [Docker](https://docs.docker.com/install/)
 2. A working Kubernetes cluster
@@ -106,24 +106,27 @@ To configure the image repository:
 
 ## <a id='config-service-type'></a> (Optional) Configure the Service Type
 
-Since both the Rabbitmq Operator and Service Broker are deployed in Kubernetes, you can take advantage of the configurability of the Kubernetes Service objects that expose these components. The default type is `ClusterIP` for the Operator and `LoadBalancer` for the ServiceBroker. You can find out more details about how to choose your Service type [here](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
+You can choose which types of Kubernetes Service are provisioned for RabbitMQ Operator and Service Broker.
+The default type for Operator is `ClusterIP`. The default type for Service Broker is `LoadBalancer`.
+For more information about how to choose your Service type, see
+[the Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 
 <p class="note">
-  <strong>Note:</strong> <code>ExternalName</code> is currently not supported.
+  <strong>Note:</strong> the <code>ExternalName</code> Service Type is currently not supported.
 </p>
 
-To specify the `Service` type you want, configure the following:
+To specify a Service type, configure the Operator and Service Broker manifests:
 
-### Operator
+### <a id='operator'></a> Operator
 In the Operator manifest (`manifests/operator.yaml`):
-- locate the ConfigMap object in the manifest
-- locate the `SERVICE` key within the `data` section of the ConfigMap
-- replace the value of `TYPE` from `ClusterIP` to either `NodePort` or `LoadBalancer`. Please note, ExternalName is currently **NOT** supported.
+- locate the `ConfigMap` object in the manifest
+- locate the `SERVICE` key within the `data` section of `ConfigMap`
+- replace the value of `TYPE` from `ClusterIP` to either `NodePort` or `LoadBalancer`.
 
-### Service Broker
-In the ServiceBroker manifest (`manifests/servicebroker.yaml`):
+### <a id='service-broker'></a> Service Broker
+In the Service Broker manifest (`manifests/servicebroker.yaml`):
 - locate the Service object in the manifest
-- replace the value of `spec.type` from `LoadBalancer` to either `NodePort` or `ClusterIP`. Please note, ExternalName is currently **NOT** supported.
+- replace the value of `spec.type` from `LoadBalancer` to either `NodePort` or `ClusterIP`.
 
 ## <a id='broker-creds'></a> Create Broker Credentials
 
