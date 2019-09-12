@@ -115,18 +115,51 @@ For more information about how to choose your Service type, see
   <strong>Note:</strong> the <code>ExternalName</code> Service Type is currently not supported.
 </p>
 
-To specify a Service type, configure the Operator and Service Broker manifests:
+To specify a Service type, configure the Operator and Service Broker manifests as detailed below.
 
 ### <a id='operator'></a> Operator
-In the Operator manifest (`manifests/operator.yaml`):
-- locate the `ConfigMap` object in the manifest
-- locate the `SERVICE` key within the `data` section of `ConfigMap`
-- replace the value of `TYPE` from `ClusterIP` to either `NodePort` or `LoadBalancer`.
+In `manifests/operator.yaml`, change `TYPE: "ClusterIP"` to `TYPE: "NodePort"` or `TYPE: "LoadBalancer"`, as
+in the example below:
+
+```yaml
+---
+apiVersion: v1
+data:
+  IMAGE_PULL_SECRET: ""
+  IMAGE_REPOSITORY: YOUR-IMAGE-REPOSITORY-HOST
+  SERVICE: |
+    TYPE: "NodePort"
+kind: ConfigMap
+metadata:
+  name: pivotal-rabbitmq-manager-config
+  namespace: pivotal-rabbitmq-system
+---
+```
+
 
 ### <a id='service-broker'></a> Service Broker
-In the Service Broker manifest (`manifests/servicebroker.yaml`):
-- locate the Service object in the manifest
-- replace the value of `spec.type` from `LoadBalancer` to either `NodePort` or `ClusterIP`.
+In `manifests/servicebroker.yaml`, replace the value of `spec.type` from `LoadBalancer` to either `NodePort` or `ClusterIP`, as in the example below:
+
+```yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: p-rmq-servicebroker
+  namespace: pivotal-rabbitmq-system
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: servicebroker
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}
+---
+```
 
 ## <a id='broker-creds'></a> Create Broker Credentials
 
@@ -141,11 +174,12 @@ the `pivotal-rabbitmq-system` namespace. To create a secret:
   kubectl create secret generic broker-credentials -n pivotal-rabbitmq-system --from-file=./username --from-file=./password
   ```
 
-  The secret name must be `broker-credentials` and must be in the `pivotal-rabbitmq-system`
-  namespace with the username and password as part of the data. If not, the service broker fails to deploy.
-
-  <p class="note"><strong>Note:</strong> To read about other ways to create a secret, see
-  <a href="https://kubernetes.io/docs/concepts/configuration/secret">the Kubernetes documentation</a>.
+  <p class="note">
+    <strong>Note:</strong>
+    The secret name must be `broker-credentials` and must be in the `pivotal-rabbitmq-system`
+    namespace with the username and password as part of the data. If not, the service broker fails to deploy.
+    To read about other ways to create a secret, see
+    <a href="https://kubernetes.io/docs/concepts/configuration/secret">the Kubernetes documentation</a>.
   </p>
 
 ## <a id='deploy-op-and-broker'></a> Deploy the Operator and the Broker and Install `RabbitMQCluster`
