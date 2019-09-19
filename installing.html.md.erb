@@ -9,7 +9,7 @@ This topic describes how to install and configure Pivotal RabbitMQ for Kubernete
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before you install and configure RabbitMQ for Kubernetes, you must install and configure <!-- does the reader need config instructions for any of the below? --> the following software:
+Before you install and configure RabbitMQ for Kubernetes, you must install and configure the following software:
 
 1. [Docker](https://docs.docker.com/install/)
 2. A working Kubernetes cluster
@@ -36,7 +36,7 @@ To install and configure RabbitMQ for Kubernetes:
 
 Download the artifact for RabbitMQ for Kubernetes from
 [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/). The artifact contains
-three docker images and <!-- three? --> deployment manifests for the operator and the broker. The three images are:
+three docker images as well as deployment manifests for the operator and the broker. The three images are:
 
 1. RabbitMQ
 2. RabbitMQ Operator
@@ -46,7 +46,7 @@ three docker images and <!-- three? --> deployment manifests for the operator an
 
 Load the images to your local Docker by running the following commands:
 
-```<!-- bash? -->
+```bash
 tar xvf PATH-TO-RABBITMQ-FOR-KUBERNETES-VERSION.tar
 docker load -i rabbitmq-for-kubernetes-operator
 docker load -i rabbitmq-3.8-rc-management
@@ -66,7 +66,7 @@ Tag each image to point to your own image repository by running these commands:
 
 Push each image to your own image repository by running these commands:
 
-```
+```bash
 docker push YOUR-REPOSITORY/rabbitmq:3.8-rc-management
 docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION
 docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION
@@ -77,14 +77,13 @@ docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION
 Pivotal recommends that you keep the operator and service-broker images private if your repository is publicly accessible.
 To do so:
 
-1. Create a `pivotal-rabbitmq-system` namespace by running the following command:
-
-```
-kubectl apply -f manifests/namespace.yaml <!-- Is `namespace` here supposed to be a placeholder? -->
-```
+1. Create a `pivotal-rabbitmq-system` namespace by running the following command:<br><br>
+  <code>
+    kubectl apply -f manifests/namespace.yaml
+  </code>
 
 1. In your cluster, create a Kubernetes secret that authorizes access to private images in the namespace that
-you just created. <!-- Steps needed for how to do this? -->
+you just created. <%# Steps needed for how to do this? %>
 1. Repeat the above steps for the `pivotal-rabbitmq-servicebroker-system` namespace.
 For more information, see [the Kubernetes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
