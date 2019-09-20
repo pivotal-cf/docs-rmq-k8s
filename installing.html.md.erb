@@ -92,7 +92,7 @@ For more information, see [the Kubernetes documentation](https://kubernetes.io/d
 
 To configure the image repository:
 
-1. Provide your repository URL in our <!-- Pivotal's? --> operator manifest `manifests/operator.yaml`.
+1. Provide your repository URL in the operator manifest `manifests/operator.yaml`.
 1. Replace all instances of REPLACE-WITH-IMAGE-REPOSITORY-HOST with your image repository host. <!-- Example needed below? -->
 1. Replace all instances of REPLACE-WITH-OPERATOR-IMAGE-URL with the full operator image URL. This URL looks similar to the below.
 
@@ -183,7 +183,7 @@ the `pivotal-rabbitmq-system` namespace. To create a secret:
 
 ## <a id='deploy-op-and-broker'></a> Deploy the Operator and the Broker and Install `RabbitMQCluster`
 
-To deploy the operator and the broker, and install the `RabbitmqCluster` <!-- Should be `RabbitMQCluster`? --> custom resource definition, run:
+To deploy the operator and the broker, and install the `RabbitmqCluster` custom resource definition, run:
 
   ```
   kubectl apply -f manifests/
@@ -191,7 +191,7 @@ To deploy the operator and the broker, and install the `RabbitmqCluster` <!-- Sh
 
 ## <a id='register-broker'></a> Register the Broker with Cloud Foundry
 
-1. To register the service broker, run the following cf CLI <!-- are all the other commands run in kubectl? --> command:
+1. To register the service broker, run the following cf CLI command:
 
   ```
   ~$ cf create-service-broker SERVICE-BROKER-NAME BROKER-USERNAME BROKER-PASSWORD \
@@ -234,5 +234,5 @@ broker are deployed in. The broker creates a new namespace for each instance to 
 ### <a id='prov-status'></a> Provision Status of Service Instance
 
 If the service instance provision status is constantly `create in progress`, the RabbitMQ cluster might have
-failed to create. <!-- what actually creates it? --> Check the status of the RabbitMQ cluster resources in your
-Kubernetes cluster for more details about the failure.
+failed to generate. Check the status of the RabbitMQ cluster resources in your Kubernetes cluster for more
+details about the failure.
