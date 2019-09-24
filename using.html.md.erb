@@ -9,54 +9,161 @@ This topic describes how to use Pivotal RabbitMQ for Kubernetes.
 
 ## <a id='overview'></a> Overview
 
-NOTE TO AUTHORS: Write a few sentences to introduce the ways that you use RabbitMQ for Kubernetes.
+Pivotal RabbitMQ for Kubernetes is currently only used to broker messages between PCF apps.
 
-NOTE TO AUTHORS: If there are multiple tasks in the procedure and they must be completed in order,
-create an ordered list that contains each task in the topic.
-Include anchor links to the headings for each task.
+This topic focuses on the interaction of Pivotal RabbitMQ for Kubernetes with Marketplace through PCF.
 
 To use RabbitMQ for Kubernetes, do the following:
 
 1. [First Procedure](#proc-1)
 1. [Second Procedure](#proc-2)
 
+## <a id='marketplace'></a>Confirm Service Availability
 
-##<a id='proc-1'></a> To Do Procedure 1
+For an app to use a service, the service must be available in the Marketplace for its space.
 
-To do procedure 1:
+To confirm this availability:
 
-1.
+1. Run `cf marketplace`.
+1. Check that `p.rabbitmq` <%# Maybe replace all the p.rabbitmq instances %> is in the `service` column. If it is, Pivotal RabbitMQ for Kubernetes is available. If it is not, ask your operator to install it.
 
-1.
+    <pre class="terminal">
+    $ cf marketplace
+    Getting services from marketplace in org my-org / space my-space as user<span>@</span>example.com...
+    OK
+    service      plans         description
+    [...]
+    p.rabbitmq   single-node   RabbitMQ service to provide dedicated instances of this high-performance multi-protocol messaging broker <%# Replace this whole line %>
+    [...]
+    </pre>
 
-1.
+## <a id='create'></a>Create a Service Instance
 
-1.
+For an app to use a service, an instance of the service must exist in its space.
+On-Demand services are created asynchronously, not immediately.
+The `watch` command shows you when your service instance is ready to bind and use.
 
-##<a id='proc-2'></a> To Do Procedure 2
+You can enable TLS and additional plugins using the `cf create-service` command.
+For instructions on how to modify the `cf create-service` command,
+see [Enable TLS for Your Service Instance](#tls) or [Enable Optional Plugins](#optional-plugins) below.
+
+To create an instance of the on-demand RabbitMQ for PCF service:
+
+1. Check to see if there is an existing service by running:
+
+    ```
+    cf services
+    ```
+    Look for instances that have `p.rabbitmq` in the `service` column.
+    If there is an existing instance that you want to use, skip to the [Bind a Service Instance to Your App](#bind) section below.
+    <br><br>
+    For example:
+    <pre class="terminal">
+    $ cf services
+    Getting services in org my-org / space my-space as user<span>@</span>example.com...
+    OK
+    name          service      plan                   bound apps    last operation
+    my-instance   p.rabbitmq   ha, single <%# Check this %>                  create succeeded
+    </pre>
+
+1. Create the service instance by running:
+
+    ```
+    cf create-service p.rabbitmq HA SERVICE-INSTANCE
+    ```
+
+    Where:
+    + `SERVICE-INSTANCE` is a name you choose to identify the service instance.
+    This name appears under `name` in the output from `cf services`.
+    + `HA` is the plan.
+    You can replace it with any of the other plans listed in the Marketplace for the
+    `p.rabbitmq` service.
+
+1. Check that the process was successful by running:
+
+    ```
+    watch cf services
+    ```
+
+    If successful, `last operation` for your instance is reported as `create succeeded`.<br><br>
+    For example:
+    <pre class="terminal">
+      $ cf create-service p.rabbitmq single-node my-instance<br>
+       Creating service my-instance in org my-org / space my-space as user<span>@</span>example.com...
+       OK<br>
+      $ watch cf services<br>
+       Getting services in org my-org / space my-space as user<span>@</span>example.com...
+       OK
+       name          service        plan           bound apps    last operation
+       my-instance   p.rabbitmq     ha, single <%# Check this %>                  create succeeded
+    </pre>
+
+   If you encounter an error, see [Troubleshooting Instances](./troubleshoot-instances.html).
+
+## <a id='binding'></a> Bind Your Service Instance to an App
+
+For an app to use a service, you must bind it to a service instance.
+Do this after you push or re-push the app using `cf push`.
+
+To bind an app to a RabbitMQ instance, run
+
+```
+cf bind-service APP SERVICE-INSTANCE
+```
+
+Where `APP` is the app you want to use the RabbitMQ service instance and `SERVICE-INSTANCE` is the name you supplied when you ran `cf create-service`.
+
+See an example below.
+
+<pre class="terminal">
+$ cf bind-service my-app my-instance<br>
+Binding service mydb to my-app in org my-org / space test as user<span>@</span>example.com...
+OK
+</pre>
+
+## <a id='proc-2'></a> Use the RabbitMQ Service in Your App
 
 To do procedure 2:
 
-1.
+Apps running in Cloud Foundry gain access to the bound service instances through an environment variable credentials hash called `VCAP_SERVICES`.
+An example hash is shown below:
 
-1.
+<%# Fill in example %>
 
-<%# This topic should include any instructions for how to use the service or dashboard created by the tile.
-Give procedures for how to perform the different functions offered by your product and provide screenshots where necessary. %>
+Apps that have been bound to a service instance can read `VCAP_SERVICES` from their environment.
+To see the `VCAP_SERVICES` for an app, run `cf env APP-NAME` with the name of an app bound to the Pivotal RabbitMQ for Kubernetes instance.
 
-<%# Other topics that you should address in your documentation %>
 
-<%# + **Troubleshooting**  If you include a Troubleshooting section, follow the Symptom/Explanation format
-used in the [Okta Troubleshooting](http://docs.pivotal.io/p-identity/okta/troubleshooting.html) topic. %>
+## <a id="unbind"></a>Unbind a Service Instance From Your App
 
-<%# + **Disaster recovery**  How do you recover data from the tile after a disaster? How do you perform backups? %>
+To stop an app from using a service it no longer needs, unbind it from the service instance by running;
 
-<%# + **Scalability**--How do you scale up the tile? How do you know when you need to scale up? %>
+<pre class="terminal">
+$ cf unbind-service APP SERVICE-INSTANCE
+</pre>
 
-<%# + **Monitoring**--How do you monitor the tile? Does the tile send events to the Loggregator Firehose? %>
+Where `APP` is the app you want to stop using the RabbitMQ service instance and `SERVICE-INSTANCE` is the name you supplied when you ran `cf create-service`.
 
-<%# + **Auditing**--Can PCF operators use the standard Accounting and Usage reports? %>
+See an example below.
 
-<%# + **Security**--How is this tile secured? How is the data secured? %>
+<pre class="terminal">
+$ cf unbind-service my-app my-instance<br>
+Unbinding app my-app from service my-instance in org my-org / space my-space as user<span>@</span>example.com...
+OK
+</pre>
 
-<%# You can create separate pages for each of these topics or group them in one page about administering or maintaining the tile. %>
+## <a id="delete"></a>Delete a Service Instance
+
+To delete a service instance, use `cf delete-service`.
+
+1. Run `cf delete-service SERVICE-INSTANCE`, where `SERVICE-INSTANCE` is the name of the service to delete. See an example below.
+  <pre class="terminal">
+   $ cf delete-service my-instance<br>
+    Are you sure you want to delete the service my-instance ? y
+    Deleting service my-service in org my-org / space my-space as user<span>@</span>example.com...
+    OK
+  </pre>
+
+1. Run `watch cf service SERVICE-INSTANCE` and wait for a `Service instance not found` error indicating that the instance no longer exists.
+
+You cannot delete a service instance that an app is bound to.
