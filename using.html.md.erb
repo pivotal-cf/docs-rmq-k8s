@@ -13,10 +13,14 @@ Pivotal RabbitMQ for Kubernetes is currently only used to broker messages betwee
 
 This topic focuses on the interaction of Pivotal RabbitMQ for Kubernetes with Marketplace through PCF.
 
-To use RabbitMQ for Kubernetes, do the following:
+You can use RabbitMQ for Kubernetes to:
 
-1. [First Procedure](#proc-1)
-1. [Second Procedure](#proc-2)
+1. [Confirm Service Availability](#marketplace)
+1. [Create a Service Instance](#create)
+1. [Bind Your Service Instance to an App](#binding)
+1. [Use the RabbitMQ Service in Your App](#use)
+1. [Unbind a Service Instance From Your App](#unbind)
+1. [Delete a Service Instance](#delete)
 
 ## <a id='marketplace'></a>Confirm Service Availability
 
@@ -121,9 +125,7 @@ Binding service mydb to my-app in org my-org / space test as user<span>@</span>e
 OK
 </pre>
 
-## <a id='proc-2'></a> Use the RabbitMQ Service in Your App
-
-To do procedure 2:
+## <a id='use'></a> Use the RabbitMQ Service in Your App
 
 Apps running in Cloud Foundry gain access to the bound service instances through an environment variable credentials hash called `VCAP_SERVICES`.
 An example hash is shown below:
@@ -136,7 +138,7 @@ To see the `VCAP_SERVICES` for an app, run `cf env APP-NAME` with the name of an
 
 ## <a id="unbind"></a>Unbind a Service Instance From Your App
 
-To stop an app from using a service it no longer needs, unbind it from the service instance by running;
+To stop an app from using a service it no longer needs, unbind it from the service instance by running:
 
 <pre class="terminal">
 $ cf unbind-service APP SERVICE-INSTANCE
