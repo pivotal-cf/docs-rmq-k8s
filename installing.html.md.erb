@@ -105,20 +105,27 @@ To configure the image repository:
 
 ## <a id='config-service-type'></a> (Optional) Configure the Service Type
 
-You can choose which types of Kubernetes Service are provisioned for RabbitMQ Operator and Service Broker.
-The default type for Operator is `ClusterIP`. The default type for Service Broker is `LoadBalancer`.
-For more information about how to choose your Service type, see
+If you do not want to use the default Service types for the RabbitMQ Operator and the Service Broker images <!-- Check with engineer re: this word -->,
+you can edit the manifests to change the Service Type.
+
+| Image | Default Service Type |
+| ------|----------------------|
+| RabbitMQ Operator | `ClusterIP` |
+| Service Broker | `LoadBalancer` |
+
+For more information about the Service types, see
 [the Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 
 <p class="note">
   <strong>Note:</strong> the <code>ExternalName</code> Service Type is currently not supported.
 </p>
 
-To specify a Service type, configure the Operator and Service Broker manifests as detailed below.
+### <a id='procedures'></a> Procedures
 
-### <a id='operator'></a> Operator
-In `manifests/operator.yaml`, change `TYPE: "ClusterIP"` to `TYPE: "NodePort"` or `TYPE: "LoadBalancer"`, as
-in the example below:
+To specify a Service type for the RabbitMQ operator:
+
+1. Open `manifests/operator.yaml` in a text editor.
+1. Change `TYPE: "ClusterIP"` to `TYPE: "NodePort"` or `TYPE: "LoadBalancer"`, as in the example below:
 
 ```yaml
 ---
@@ -135,9 +142,10 @@ metadata:
 ---
 ```
 
+To specify a Service type for the Service Broker:
 
-### <a id='service-broker'></a> Service Broker
-In `manifests/servicebroker.yaml`, replace the value of `spec.type` from `LoadBalancer` to either `NodePort` or `ClusterIP`, as in the example below:
+1. Open `manifests/servicebroker.yaml` in a text editor.
+1. Replace the value of `spec.type` from `LoadBalancer` to either `NodePort` or `ClusterIP`, as in the example below:
 
 ```yaml
 ---
