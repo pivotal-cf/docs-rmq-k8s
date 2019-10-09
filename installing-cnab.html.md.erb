@@ -1,0 +1,147 @@
+---
+title: Installing and Configuring Pivotal RabbitMQ for Kubernetes (Beta) Using CNAB
+owner: RMQ for k8s
+---
+
+## Prerequisites
+
+You must have:
+
+1. a private registry eg a private docker hub or google container registry
+
+### 1. Import
+Extract tarball to gain access to bundle.json for the next step
+
+```
+duffle import rabbitmq-for-kubernetes-<version>.tgz
+```
+
+Where version is the version number of RabbitMQ for Kubernetes on Pivotal Network
+
+### 2. Generate Credentials
+
+Run the following command to generate credentials to grant kubernetes clusters access to
+images in your private registry:
+
+```
+duffle credentials generate rabbitmq-creds -f rabbitmq-for-kubernetes-<version>/bundle.json
+```
+
+You will be prompted by the duffle command to fill in the following:
+
+* provide absolute path to local kubeconfig,
+* the url for the docker server, and the
+* docker username and password.
+
+For more options on how to generate duffle credentials, run `duffle credentials --help`
+
+
+
+Note: Make sure auth token is still valid if your kubeconfig context uses an auth provider
+(e.g. GKE). You can check this by running any `kubectl` command just before you
+`duffle install` in the `Install bundle using relocated Images` step below.
+
+### 3. Relocate Images
+
+Run the following to relocate images to your own private registry:
+
+```
+duffle relocate rabbitmq-for-kubernetes-<version>.tgz -f \
+  --repository-prefix=<registry-host>/<account-name> \
+  --relocation-mapping=relmap.json
+```
+
+**Note** `--relocation-mapping` specifies the name of the file which will be created to store relocation mappings
+
+### 4. Install
+
+Provide name of credentials-set to use for the installation and the relocation-mapping for the images.
+`broker_username` and `broker_password` are mandatory parameters. See `Available Parameters` for the complete parameters.
+
+```
+duffle install rabbitmq rabbitmq-for-kubernetes-<version>.tgz -f \
+  --relocation-mapping=relmap.json \
+  --credentials rabbitmq-creds \
+  --set broker_username=admin \
+  --set broker_password=admin \
+  --set rabbitmq_service_type=LoadBalancer \
+  --set broker_service_type=LoadBalancer \
+```
+
+You can also pass parameters using a file with `duffle install --set-file FILENAME ...`. A sample JSON file can be found in the repository.
+
+##### Available Parameters
+
+- `broker_username`: [mandatory] Username for the service broker
+- `broker_password`: [mandatory] Password for the service broker
+- `rabbitmq_service_type`: Kubernetes Service type for the RabbitmqCluster Service (`ClusterIP`, `NodePort`, or `LoadBalancer`)
+- `broker_service_type`: Kubernetes Service type for the service broker (`ClusterIP`, `NodePort`, or `LoadBalancer`)
+- `service_annotations`: Kubernetes annotations for Service metadata (e.g. for IAAS configuration)
+- `storage_class_name`: Name of the Kubernetes StorageClass to use for provisioning RabbitmqCluster PersistentVolumes
+- `storage_capacity`: Capacity set in the RabbitmqCluster PersistentVolumeClaims
+- `image_pull_secret`: Name of the Kuberenetes ImagePullSecret for the RabbitmqCluster to use when pulling the RabbitMQ docker image
+
+Note: if your desired configuration requires multiple key/value pairs in `service_annotations`, add them as a `\n` separated string in a parameters JSON file. e.g.:
+
+```
+{
+  "service_annotations": "service.k8s.io/cert: arn:aws:acm:us-east-1\nservice.k8s.io/ports: 443,889"
+}
+```
+
+## Verify Installation
+
+1. Run the following to Verify operator and broker have been installed successfully and get address for broker from service object.
+
+```
+kubectl -n pivotal-rabbitmq-system get services
+```
+
+1. Run the following to Show catalog to get service and plan IDs.
+
+```
+curl -H "X-Broker-API-Version: 2.14" \
+  -H "Content-Type: application/json" \
+  BROKER-USERNAME:BROKER-PASSWORD@IP-ADDRESS:8080/v2/catalog
+```
+
+Where:
+* `BROKER-USERNAME` is the `broker_username` you specified in the `duffle install` command above
+* `BROKER-PASSWORD` is the `broker_password` you specified in the `duffle install` command above
+* `IP-ADDRESS` is found in the output of `kubectl get services` command
+
+1. Run the following command to provision service instance
+
+```
+curl -X PUT -H "X-Broker-API-Version: 2.14" \
+  -H "Content-Type: application/json" \
+  BROKER-USERNAME:BROKER-PASSWORD@IP-ADDRESS:8080/v2/service_instances/INSTANCE-NAME?accepts_incomplete=true -d '{
+  "service_id": "00000000-0000-0000-0000-000000000000",
+  "plan_id": "22222222-2222-2222-2222-222222222222"
+}'
+```
+
+Where: `INSTANCE-NAME` is a name you define for your instance.
+
+1. Run the following to verify the RabbitMQ cluster has been created:
+
+```
+kubectl -n p-rabbitmq-INSTANCE-NAME get all
+```
+
+Where: `INSTANCE-NAME` is a name you defined above.
+
+## Get the Status of the Installed CNAB Bundle
+
+To get the status:
+
+```
+duffle status rabbitmq --credentials rabbitmq-creds
+```
+
+<%# this should be on the upgrade page as an upgrade step -- you have to uninstall this before you install the next version %>
+## Uninstall Bundle
+
+```
+duffle uninstall rabbitmq --credentials rabbitmq-creds
+```
