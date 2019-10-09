@@ -1,5 +1,5 @@
 ---
-title: Installing and Configuring Pivotal RabbitMQ for Kubernetes (Beta) Using K8s Manifests
+title: Installing and Configuring Using Kubernetes Manifests
 owner: RMQ for k8s
 ---
 
@@ -7,12 +7,18 @@ owner: RMQ for k8s
 
 This topic describes how to install and configure Pivotal RabbitMQ for Kubernetes.
 
+You can install RabbitMQ for Kubernetes using one of the following:
+
+* **Kubernetes Manifests:** If you are installing for the first time, use the procedure in this topic.
+* **CNAB:** If you have previously installed Pivotal RabbitMQ for Kubernetes, use this.
+For instructions, see [Installing and Configuring Using CNAB](./installing-cnab.html)
+
 ## <a id='prerequisites'></a> Prerequisites
 
 Before you install and configure RabbitMQ for Kubernetes, you must install and configure the following software:
 
 1. [Docker](https://docs.docker.com/install/)
-2. A working Kubernetes cluster
+2. A Kubernetes cluster
 3. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
 This topic is written under the assumption that you use a private image registry.
@@ -24,17 +30,17 @@ for help.
 To install and configure RabbitMQ for Kubernetes:
 
 1. [Download the Artifact](#artifact)
-1. [Relocate the Images](#relocate)
+1. [Move the Images](#relocate)
 1. [(Optional) Configure Kubernetes Cluster Access to Private Images](#private-images)
 1. [Configure the Image Repository](#image-repo)
 1. [(Optional) Configure the Service Type](#config-service-type)
 1. [Create Broker Credentials](#broker-creds)
-1. [Deploy the Operator and the Broker and Install `RabbitMQCluster`](#deploy-op-and-broker)
+1. [Deploy the Operator and the Broker and Install RabbitMQCluster](#deploy-op-and-broker)
 1. [Register the Broker with Cloud Foundry](#register-broker)
 
-## <a id='artifact'></a> Download the Artifact
+## <a id='artifact'></a> Download Pivotal RabbitMQ for Kubernetes
 
-Download the artifact for RabbitMQ for Kubernetes from
+Download the Pivotal RabbitMQ for Kubernetes artifact from
 [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/). The artifact contains
 three docker images as well as deployment manifests for the operator and the broker. The three images are:
 
@@ -42,7 +48,7 @@ three docker images as well as deployment manifests for the operator and the bro
 2. RabbitMQ Operator
 3. Service Broker
 
-## <a id='relocate'></a> Relocate the Images
+## <a id='relocate'></a> Move the Images
 
 Load the images to your local Docker by running the following commands:
 
