@@ -8,7 +8,7 @@ owner: RMQ for k8s
 This topic describes how to install and configure Pivotal RabbitMQ for Kubernetes
 using Cloud Native Application Bundle (CNAB).
 
-You can install RabbitMQ for Kubernetes using one of the following:<%# To introduce steps we now just write "To do x:" %>
+There are two methods to install RabbitMQ for Kubernetes, use one of the following:
 
 * **Kubernetes Manifests:** If you are installing for the first time, use this.
 For instructions, see [Installing and Configuring Using Kubernetes Manifests](./installing.html).
@@ -18,13 +18,14 @@ For instructions, see [Installing and Configuring Using Kubernetes Manifests](./
 
 Before you install and configure RabbitMQ for Kubernetes, you must install and configure:
 
-1. [Docker](https://docs.docker.com/install/)
-1. **A Kubernetes cluster**
-1. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-1. [Duffle](https://github.com/deislabs/duffle)
-1. **A Private Registry:** Pivotal recommends that you keep the operator and service-broker images private if your repository is publicly accessible.
+1. **[kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)**
+1. **[Docker](https://docs.docker.com/install/)**
+1. **[Duffle](https://github.com/deislabs/duffle)**
+1. **A Kubernetes cluster** <%# Do we want to mention Enterprise PKS here? %>
+1. **A private registry:** Pivotal recommends that you keep the operator and
+service-broker images private if your repository is publicly accessible.
 
-<%# do we need the following? here and the other install page %>
+<%# do we need the statement below? here and the other install page %>
 
 This topic is written under the assumption that you use a private registry.
 If you do not have access to a private registry, email the team at
@@ -34,11 +35,11 @@ rabbitmq-for-k8s@pivotal.io for help.
 
 To install and configure Pivotal RabbitMQ for Kubernetes:
 
-1. Import
-2. Generate Credentials
-3. Move the Images
-4. Install
-5. Verify Installation
+1. [Download and Import Pivotal RabbitMQ for Kubernetes](#import)
+2. [Configure Kubernetes Cluster Access to your Private Registry](#generate-credentials)
+3. [Move the Images](#relocate-images)
+4. [Install the CNAB Bundle](#install)
+5. [Verify the Installation](#verify)
 
 ## <a id='import'></a>Download and Import Pivotal RabbitMQ for Kubernetes
 
@@ -46,13 +47,18 @@ To download and import Pivotal RabbitMQ for Kubernetes:
 
 1. Download the Pivotal RabbitMQ for Kubernetes CNAB artifact from [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
 
-
 1. Extract the tarball you downloaded to gain access to `bundle.json` by running:
 
     ```
     duffle import rabbitmq-for-kubernetes-VERSION.tgz
     ```
     Where `VERSION` is the version of RabbitMQ for Kubernetes that you downloaded.
+    <br><br>
+    For example:
+
+    <pre class="terminal">
+      $ duffle import rabbitmq-for-kubernetes-0.1.4.tgz
+    </pre>
 
 ## <a id='generate-credentials'></a>Configure Kubernetes Cluster Access to your Private Registry
 
@@ -95,7 +101,7 @@ To move the images to your private registry:
       --repository-prefix=REGISTRY-HOST/ACCOUNT-NAME \
       --relocation-mapping=relmap.json
     ```
-
+    <%# needs example including output %>
     Where:
     * `REGISTRY-HOST` is the hostname for your private registry
     * `ACCOUNT-NAME` is the account name of your private registry
@@ -118,39 +124,79 @@ To install the CNAB bundle:
       --set broker_username=BROKER-USERNAME \
       --set broker_password=BROKER-PASSWORD \
     ```
-
+    <%# needs example including output %>
     Where:
     * `BROKER-USERNAME` is a username you specify for your broker
     * `BROKER-PASSWORD` is a password you specify for your broker
 
-<%# Create a table  including the duffle flags and CNAB flags. Columns flag name and flag description. Rowspan labeling the Duffle then CNAB. %>
+    The <code>set</code> flag refers to CNAB parameters that configure your CNAB installation.
+    The table below lists the RabbitMQ for Kubernetes CNAB parameters that are
+    available to use with the `--set` flag.
 
-<%# ask for file type %>
-<p class="note"><strong>Note:</strong>
-The <code>set</code> flag refers to CNAB parameters that configure your CNAB installation.
-You can also pass CNAB parameters using a file with <code>duffle install --set-file FILENAME ...</code>.
-</p>
+    <%# ask for file type %>
+    <p class="note"><strong>Note:</strong>
+      You can also pass CNAB parameters using a file with the <code>--set-file FILENAME</code> flag.
+    </p>
 
-The following are flags for duffle:
-
-The `--credentials` flag refers to the secret generated during Configure Kubernetes Cluster Access to your Private Registry
-
-The `--relocation-mapping` flag refers to the output generated during Move the Images.
-
-
-
-The table below lists the available RMQ for K8s CNAB Parameters:
-
-- `broker_username`: [mandatory] Username for the service broker
-- `broker_password`: [mandatory] Password for the service broker
-- `rabbitmq_service_type`: Kubernetes Service type for the RabbitmqCluster Service (`ClusterIP`, `NodePort`, or `LoadBalancer`)
-- `broker_service_type`: Kubernetes Service type for the service broker (`ClusterIP`, `NodePort`, or `LoadBalancer`)
-- `service_annotations`: Kubernetes annotations for Service metadata (e.g. for IaaS configuration) Note: If your desired configuration requires multiple key-value pairs in `service_annotations`,
-add them as a `\n` separated string. example value `service.k8s.io/cert: arn:aws:acm:us-east-1\nservice.k8s.io/ports: 443,889`
-- `storage_class_name`: Name of the Kubernetes StorageClass to use for provisioning RabbitmqCluster PersistentVolumes
-- `storage_capacity`: Capacity set in the RabbitmqCluster PersistentVolumeClaims
-- `image_pull_secret`: Name of the Kuberenetes ImagePullSecret for the RabbitmqCluster to use when pulling the RabbitMQ Docker image
-
+    <table>
+      <tr>
+        <th width="35%">Parameter</th>
+        <th width="65%">Description</th>
+      </tr>
+      <tr>
+        <td><code>broker_username</code></td>
+        <td>Username for the service broker</td>
+      </tr>
+      <tr>
+        <td><code>broker_password</code></td>
+        <td>Password for the service broker</td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>rabbitmq_service_type</code></td>
+        <td>
+          Kubernetes service type for the RabbitmqCluster service.
+          Available values are:
+          <ul>
+            <li><code>ClusterIP</code></li>
+            <li><code>NodePort</code></li>
+            <li><code>LoadBalance</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>broker_service_type</code></td>
+        <td>
+          Kubernetes Service type for the service broker.
+          Available values are:
+          <ul>
+            <li><code>ClusterIP</code></li>
+            <li><code>NodePort</code></li>
+            <li><code>LoadBalance</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>service_annotations</code></td>
+        <td>
+          Kubernetes annotations for service metadata such as for IaaS configuration.
+          If the configuration you want requires multiple key-value pairs,
+          add them as a <code>\n</code> separated string. <br>For example:
+          <code>--set service_annotations="service.k8s.io/cert: arn:aws:acm:us-east-1\nservice.k8s.io/ports: 443,889"</code>
+        </td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>storage_class_name</code></td>
+        <td>Name of the Kubernetes StorageClass to use for provisioning RabbitmqCluster PersistentVolumes</td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>storage_capacity</code></td>
+        <td>Capacity set in the RabbitmqCluster PersistentVolumeClaims</td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>image_pull_secret</code></td>
+        <td>Name of the Kuberenetes ImagePullSecret for the RabbitmqCluster to use when pulling the RabbitMQ Docker image</td>
+      </tr>
+    </table>
 
 ## <a id='verify'></a>Verify the Installation
 
@@ -162,7 +208,7 @@ address for the broker from the service object by running:
     ```
     kubectl -n pivotal-rabbitmq-system get services
     ```
-
+    <%# needs example including output %>
 1. View the catalog to confirm the service and plan IDs:
 
     ```
@@ -170,7 +216,7 @@ address for the broker from the service object by running:
       -H "Content-Type: application/json" \
       BROKER-USERNAME:BROKER-PASSWORD@IP-ADDRESS:8080/v2/catalog
     ```
-
+    <%# needs example including output %>
     Where:
     * `BROKER-USERNAME` is the `broker_username` you specified in the `duffle install` command above
     * `BROKER-PASSWORD` is the `broker_password` you specified in the `duffle install` command above
@@ -186,7 +232,7 @@ address for the broker from the service object by running:
       "plan_id": "22222222-2222-2222-2222-222222222222"
     }'
     ```
-
+    <%# needs example including output %>
     Where is `INSTANCE-NAME` is a name you define for your instance.
 
 1. Verify the RabbitMQ cluster has been created by running:
@@ -194,7 +240,7 @@ address for the broker from the service object by running:
     ```
     kubectl -n p-rabbitmq-INSTANCE-NAME get all
     ```
-
+    <%# needs example including output %>
     Where is `INSTANCE-NAME` is a name you defined above.
 
 <%# this is probably more a Troubleshooting thing
