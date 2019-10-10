@@ -17,13 +17,13 @@ For instructions, see [Installing and Configuring Using CNAB](./installing-cnab.
 
 Before you install and configure RabbitMQ for Kubernetes, you must install and configure the following software:
 
-1. [Docker](https://docs.docker.com/install/)
-2. A Kubernetes cluster
-3. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-
-This topic is written under the assumption that you use a private image registry.
-If you do not have access to a private image registry, please email the team at rabbitmq-for-k8s@pivotal.io
-for help.
+1. **[kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)**
+1. **[Docker](https://docs.docker.com/install/)**
+1. **A Kubernetes cluster** <%# Do we want to mention Enterprise PKS here? %>
+1. **A private registry:** Pivotal recommends that you keep the operator and
+service-broker images private if your repository is publicly accessible.
+If you do not have access to a private registry, email the team at
+rabbitmq-for-k8s@pivotal.io for help.
 
 ## <a id='overview'></a> Overview
 

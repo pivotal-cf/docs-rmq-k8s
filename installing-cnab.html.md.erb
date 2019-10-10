@@ -22,12 +22,8 @@ Before you install and configure RabbitMQ for Kubernetes, you must install and c
 1. **[Docker](https://docs.docker.com/install/)**
 1. **[Duffle](https://github.com/deislabs/duffle)**
 1. **A Kubernetes cluster** <%# Do we want to mention Enterprise PKS here? %>
-1. **A private registry:** Pivotal recommends that you keep the operator and
+1. **A private registry:** Pivotal recommends that you keep the CNAB, operator, and
 service-broker images private if your repository is publicly accessible.
-
-<%# do we need the statement below? here and the other install page %>
-
-This topic is written under the assumption that you use a private registry.
 If you do not have access to a private registry, email the team at
 rabbitmq-for-k8s@pivotal.io for help.
 
@@ -81,15 +77,6 @@ To generate credentials to grant the Kubernetes cluster access to images in your
     * The URL for the docker server
     * The docker username and password
 
-<%# When do you need to check the token is valid????? maybe move this to Install as a first step? or make a step here. %>
-
-<p class="note"><strong>Note:</strong>
-  Ensure the authentication token is still valid if your kubeconfig context uses
-  an authentication provider such as Google Kubernetes Engine (GKE).
-  You can check this by running any <code>kubectl</code> command before you run <code>duffle install</code>
-  in <a href="install">Install the Bundle</a> below.
-</p>
-
 ## <a id='relocate-images'></a>Move the Images
 
 To move the images to your private registry:
@@ -115,6 +102,12 @@ To move the images to your private registry:
 
 To install the CNAB bundle:
 
+1. Ensure that your Kubernetes authentication token has not expired by running:
+
+    ```
+    kubectl get nodes
+    ```
+
 1. Run the following command:
 
     ```
@@ -133,9 +126,8 @@ To install the CNAB bundle:
     The table below lists the RabbitMQ for Kubernetes CNAB parameters that are
     available to use with the `--set` flag.
 
-    <%# ask for file type %>
     <p class="note"><strong>Note:</strong>
-      You can also pass CNAB parameters using a file with the <code>--set-file FILENAME</code> flag.
+      You can also pass CNAB parameters using a JSON file with the <code>--parameters FILENAME</code> flag.
     </p>
 
     <table>
