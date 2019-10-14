@@ -89,7 +89,10 @@ To do so:
   </code>
 
 1. In your cluster, create a Kubernetes secret that authorizes access to private images in the namespace that
-you just created. <%# Steps needed for how to do this? %>
+you just created. To do so, run:
+```bash
+kubectl -n $NAMESPACE create secret docker-registry p-rmq-registry-access --docker-server="$DOCKER_SERVER" --docker-username="$DOCKER_USERNAME" --docker-password="$DOCKER_PASSWORD"
+```
 1. Repeat the above steps for the `pivotal-rabbitmq-servicebroker-system` namespace.
 For more information, see [the Kubernetes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
