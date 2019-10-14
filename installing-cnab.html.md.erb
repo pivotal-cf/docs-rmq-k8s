@@ -18,10 +18,16 @@ For instructions, see [Installing and Configuring Using Kubernetes Manifests](./
 
 Before you install and configure RabbitMQ for Kubernetes, you must install and configure:
 
-1. **[kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)**
-1. **[Docker](https://docs.docker.com/install/)**
-1. **[Duffle](https://github.com/deislabs/duffle)**
-1. **A Kubernetes cluster** <%# Do we want to mention Enterprise PKS here? %>
+1. **kubectl:** For installation instructions, see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/). <%# should we say install the latest version of kubectl %>
+
+1. **Docker:** For installation instructions, see [Docker](https://docs.docker.com/install/)  <%# what should be downloaded - the docker cli? %>
+
+1. **Duffle:** For installation instructions, see [duffle](https://github.com/deislabs/duffle) on GitHub. <%# should we say install the latest version of duffle %>
+
+1. **A Kubernetes cluster:** RabbitMQ for Kubernetes supports Enterprise PKS clusters.
+For information about Enterprise PKS, see [Pivotal Container Service (PKS)](https://docs.pivotal.io/pks/1-5/index.html).
+RabbitMQ for Kubernetes also supports Kubernetes clusters that are not deployed by Enterprise PKS. <%# need feedback on this. should we mention PKS? should this be worded differently %>
+
 1. **A private registry:** Pivotal recommends that you keep the CNAB, operator, and
 service-broker images private if your repository is publicly accessible.
 If you do not have access to a private registry, email the team at
@@ -53,7 +59,7 @@ To download and import Pivotal RabbitMQ for Kubernetes:
     For example:
 
     <pre class="terminal">
-      $ duffle import rabbitmq-for-kubernetes-0.1.4.tgz
+      $ duffle import rabbitmq-for-kubernetes-0.3.0.tgz
     </pre>
 
 ## <a id='generate-credentials'></a>Configure Kubernetes Cluster Access to your Private Registry
@@ -92,6 +98,14 @@ To move the images to your private registry:
     Where:
     * `REGISTRY-HOST` is the hostname for your private registry
     * `ACCOUNT-NAME` is the account name of your private registry
+    <br><br>
+    For example:
+
+    <pre class="terminal">
+      $ duffle relocate rabbitmq-for-kubernetes-0.4.0-build.12.tgz -f \
+        --repository-prefix=eu.gcr.io/my-account \
+        --relocation-mapping=relmap.json
+    </pre>
 
     <p class="note"><strong>Note:</strong>
       <code>--relocation-mapping</code> specifies the name of the file that is
@@ -107,6 +121,7 @@ To install the CNAB bundle:
     ```
     kubectl get nodes
     ```
+<%# what would you see if the auth has/hasn't expired? %>
 
 1. Run the following command:
 
@@ -121,6 +136,16 @@ To install the CNAB bundle:
     Where:
     * `BROKER-USERNAME` is a username you specify for your broker
     * `BROKER-PASSWORD` is a password you specify for your broker
+    <br><br>
+    For example:
+
+    <pre class="terminal">
+      $ duffle install rabbitmq rabbitmq-for-kubernetes-0.4.0-build.12.tgz -f \
+        --relocation-mapping=relmap.json \
+        --credentials rabbitmq-creds \
+        --set broker_username=user1 \
+        --set broker_password=password123 \
+    </pre>
 
     The <code>set</code> flag refers to CNAB parameters that configure your CNAB installation.
     The table below lists the RabbitMQ for Kubernetes CNAB parameters that are
@@ -213,6 +238,14 @@ address for the broker from the service object by running:
     * `BROKER-USERNAME` is the `broker_username` you specified in the `duffle install` command above
     * `BROKER-PASSWORD` is the `broker_password` you specified in the `duffle install` command above
     * `IP-ADDRESS` is found in the output of `kubectl get services` command
+    <br><br>
+    For example:
+
+    <pre class="terminal">
+      curl -H "X-Broker-API-Version: 2.14" \
+        -H "Content-Type: application/json" \
+        user1:password123@10.25.18.2:8080/v2/catalog
+    </pre>
 
 1. Provision a service instance by running:
 
@@ -226,15 +259,32 @@ address for the broker from the service object by running:
     ```
     <%# needs example including output %>
     Where is `INSTANCE-NAME` is a name you define for your instance.
+    <br><br>
+    For example:
+
+    <pre class="terminal">
+      curl -X PUT -H "X-Broker-API-Version: 2.14" \
+        -H "Content-Type: application/json" \
+        user1:password123@10.25.18.2:8080/v2/service_instances/instance-1?accepts_incomplete=true -d '{
+        "service_id": "00000000-0000-0000-0000-000000000000",
+        "plan_id": "22222222-2222-2222-2222-222222222222"
+      }'
+    </pre>
 
 1. Verify the RabbitMQ cluster has been created by running:
 
     ```
-    kubectl -n p-rabbitmq-INSTANCE-NAME get all
+    kubectl -n p-rabbitmq-INSTANCE-ID get all
     ```
     <%# needs example including output %>
-    Where is `INSTANCE-NAME` is a name you defined above.
+    Where is `INSTANCE-ID` is .
+    <br><br>
+    For example:
 
+    <pre class="terminal">
+      kubectl -n p-rmq-dc0c9336-b676-4736-9b7b-b34650774d74 get all
+    </pre>
+    <%# should the command above be p-rmq or p-rabbitmq? %>
 <%# this is probably more a Troubleshooting thing
 
 ## <a id='status'></a>Get the Status of the Installed CNAB Bundle
