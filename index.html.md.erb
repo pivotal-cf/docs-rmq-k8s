@@ -8,75 +8,73 @@ owner: RMQ for k8s
 <%# If this product is in beta, keep and edit the warning note below. %>
 <p class="note warning">
 <strong>Warning: </strong>
-The Pivotal RabbitMQ for Kubernetes tile is currently in beta and is intended for evaluation and test purposes only.
+Pivotal RabbitMQ for Kubernetes is currently in beta and is intended for evaluation and test purposes only.
 Do not use this product in a production environment.
 </p>
 
-<%# This topic begins with a brief description of what the product tile (e.g. Apigee Edge Service Broker for
-PCF) does, whereas the Overview section below describes what the service itself (e.g. Apigee Edge) does. See
-below for an example. %>
-
-This documentation describes Pivotal RabbitMQ for Kubernetes.
-
-DESCRIBE THE PURPOSE OF THIS PRODUCT.
+RabbitMQ for Kubernetes is a Kubernetes operator that automates provisioning, management and operations of RabbitMQ clusters
+running on Kubernetes.
 
 ## <a id='overview'></a>Overview
 
-DESCRIBE IN SOME DETAIL WHAT THIS PRODUCT IS AND HOW IT WORKS.
+RabbitMQ for Kubernetes provides a consistent and easy way to deploy RabbitMQ clusters to Kubernetes and
+manage their lifecycle. RabbitMQ clusters can be accessed by applications running anywhere - on Kubernetes,
+Pivotal Application Service or elsewhere.
+
+RabbitMQ for Kubernetes has two main components:
+* Kubernetes operator that automates provisioning, management and operations of RabbitMQ clusters
+* Optional OSBAPI-compliant service broker for integration with Pivotal Platform
+
+When combined with Pivotal Application Service, this product provides a single command experience to create RabbitMQ clusters
+(cf create-service) and to bind them to a PAS-deployed application (cf bind-service).
 
 ## <a id='features'></a>Key Features
 
-
 Pivotal RabbitMQ for Kubernetes includes the following key features:
 
-* Feature one
-* Feature two
-* Feature three
-
-
+* Provisioning of a single-node and 3-node RabbitMQ clusters
+* Automatic reconciliation of deployed clusters whenever their actual state does not match the expected state
+* Integration with Pivotal Platform through an OSBAPI service broker (optional - this product does not require Pivotal Platform)
+* Monitoring of RabbitMQ clusters via Prometheus and Grafana
+* Automated upgrades of RabbitMQ clusters (coming soon)
 
 ## <a id="snapshot"></a>Product Snapshot
 
-The following table provides version and version-support information about PRODUCT-NAME.
+The following table provides version and version-support information about RabbitMQ for Kubernetes.
 
 <table class="nice">
     <th>Element</th>
     <th>Details</th>
     <tr>
-        <td>Tile version</td>
-        <td>vYOUR-VERSION-NUMBER</td>
+        <td>Version</td>
+        <td>0.4.0</td>
     </tr>
     <tr>
         <td>Release date</td>
-        <td>YOUR-RELEASE-DATE (Ex: July 1, 2019)</td>
+        <td>October 21, 2019</td>
     </tr>
     <tr>
         <td>Software component version</td>
-        <td>YOUR-SOFTWARE-COMPONENT-VERSION-NUMBER</td>
+        <td>RabbitMQ OSS 3.8.0</td>
     </tr>
 </table>
 
 
 ## <a id="reqs"></a>Requirements
 
-<%# Provide any general or specific requirements, prerequisites, or dependencies here. A general requirement
-might be something like, "An AppDynamics account." A specific requirement might be something like, "Packaging
-Dependencies for Offline Buildpacks." %>
+RabbitMQ for Kubernetes has the following requirements:
 
-YOUR-PRODUCT-NAME has the following requirements:
-
-+ PREREQUISITE-1
-
-+ PREREQUISITE-2
-
-NOTE TO AUTHORS: Requirements can also be listed on the installing page as prerequisites to installing.
++ an existing Kubernetes cluster, version 1.14 or newer
 
 ## <a id="limitations"></a>Limitations
 
-<%# List any known limitations. %>
+* This product is currently in beta. We do not provide commercial support at this point.
+* This product is intended to be used with any Kubernetes distribution. However, given the number of Kubernetes vendors,
+  versions and configurations, we cannot guarantee it will work with all of them. The requirements section will be updated as we learn more.
+* Product upgrades are currently not supported. If you want to test a newer version, please delete the previous version first.
 
 ## <a id="feedback"></a>Feedback
 
 If you have a feature request, questions, or information about an issue, please email
-[Pivotal Cloud Foundry Feedback](mailto:cf-feedback@pivotal.io) or send an email to YOUR-SUPPORT-EMAIL.
+[RabbitMQ for Kubernetes Feedback](mailto:rabbitmq-for-k8s@pivotal.io).
 
