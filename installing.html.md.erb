@@ -99,7 +99,22 @@ For more information, see [the Kubernetes documentation](https://kubernetes.io/d
 To configure the image repository:
 
 1. Provide your repository URL in the operator manifest `manifests/operator.yaml`.
-1. Replace all instances of REPLACE-WITH-IMAGE-REPOSITORY-HOST with your image repository host. <!-- Example needed below? -->
+1. Replace all instances of REPLACE-WITH-RABBITMQ-IMAGE-URL with your image repository host, as in the example below:
+
+```
+apiVersion: v1
+data:
+  CONFIG: |
+    SERVICE:
+      TYPE: "ClusterIP"
+    IMAGE_URL: "EXAMPLE-RABBITMQ-IMAGE-URL"
+    IMAGE_PULL_SECRET: ""
+kind: ConfigMap
+metadata:
+  name: p-rmq-operator-config
+  namespace: pivotal-rabbitmq-system
+```
+
 1. Replace all instances of REPLACE-WITH-OPERATOR-IMAGE-URL with the full operator image URL. This URL looks similar to the below.
 
   `YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION`
@@ -111,10 +126,10 @@ To configure the image repository:
 
 ## <a id='config-service-type'></a> (Optional) Configure the Service Type
 
-If you do not want to use the default Service types for the RabbitMQ Operator and the Service Broker images <!-- Check with engineer re: this word -->,
+If you do not want to use the default Service types for the RabbitMQ Operator and the Service Broker components,
 you can edit the manifests to change the Service Type.
 
-| Image | Default Service Type |
+| Component | Default Service Type |
 | ------|----------------------|
 | RabbitMQ Operator | `ClusterIP` |
 | Service Broker | `LoadBalancer` |
