@@ -86,22 +86,26 @@ docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION
 Pivotal recommends that you keep the operator and service-broker images private if your repository is publicly accessible.
 To do so:
 
-1. Create a `pivotal-rabbitmq-system` namespace by running the following command:<br><br>
-  <code>
+1. Create a `pivotal-rabbitmq-system` namespace by running the following command:
+
+    ```
     kubectl apply -f manifests/namespace.yaml
-  </code>
+    ```
 
 1. In your cluster, create a Kubernetes secret that authorizes access to private images in the namespace that
 you just created. To do so, run:
 
-  ```
-  kubectl -n $NAMESPACE create secret docker-registry p-rmq-registry-access --docker-server="$DOCKER_SERVER" --docker-username="$DOCKER_USERNAME" --docker-password="$DOCKER_PASSWORD"
-  ```
+    ```
+    kubectl -n pivotal-rabbitmq-system create secret docker-registry p-rmq-registry-access \
+    --docker-server="DOCKER-SERVER" --docker-username="DOCKER-USERNAME" \
+    --docker-password="DOCKER-PASSWORD"
+    ```
 
-  For example:
-  <pre class="terminal">
-    $ kubectl -n pivotal-rabbitmq-system create secret docker-registry p-rmq-registry-access --docker-server="registry.pivotal.io" --docker-username="your-pivnet-email@gmail.com" --docker-password="password1"
-  </pre>
+    For example:
+    <pre class="terminal">$ kubectl -n pivotal-rabbitmq-system create secret docker-registry p-rmq-registry-access \
+      --docker-server="registry.pivotal.io" --docker-username="your-pivnet-email@gmail.com" \
+      --docker-password="password1"
+    </pre>
 
 1. Repeat the above steps for the `pivotal-rabbitmq-servicebroker-system` namespace.
 For more information, see [the Kubernetes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
