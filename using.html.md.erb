@@ -5,11 +5,9 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to use Pivotal RabbitMQ for Kubernetes.
+This topic describes how to use Pivotal RabbitMQ for Kubernetes with Pivotal Platform and Cloud Foundry.
 
 ## <a id='overview'></a> Overview
-
-This topic focuses on the interaction of Pivotal RabbitMQ for Kubernetes with Cloud Foundry Marketplace.
 
 You can use RabbitMQ for Kubernetes to:
 
@@ -76,6 +74,12 @@ To create an instance of the RabbitMQ for Kubernetes service:
     + `HA` is the plan.
     You can replace it with any of the other plans listed in the Marketplace for the
     `p-rabbitmq-k8s` service.
+    
+    For example:
+    
+    <pre class="terminal">$ cf create-service p-rabbitmq-k8s single-node my-instance
+    Creating service my-instance in org my-org / space my-space as user<span>@</span>example.com...
+    OK</pre>
 
 1. Check that the process was successful by running:
 
@@ -85,19 +89,16 @@ To create an instance of the RabbitMQ for Kubernetes service:
 
     If successful, `last operation` for your instance is reported as `create succeeded`.<br><br>
     For example:
-    <pre class="terminal">
-      $ cf create-service p-rabbitmq-k8s single-node my-instance<br>
-       Creating service my-instance in org my-org / space my-space as user<span>@</span>example.com...
-       OK<br>
-      $ watch cf services<br>
-       Getting services in org my-org / space my-space as user<span>@</span>example.com...
-       OK
-       name          service        plan           bound apps    last operation
-       my-instance   p-rabbitmq-k8s ha                           create succeeded
+    <pre class="terminal">$ watch cf services
+    Getting services in org my-org / space my-space as user<span>@</span>example.com...
+    OK
+    name          service        plan           bound apps    last operation
+    my-instance   p-rabbitmq-k8s ha                           create succeeded
     </pre>
-
    If you encounter an error, contact your operator or email the team at rabbitmq-for-k8s@pivotal.io for help.
    Specifically, make sure that your Kubernetes cluster has a default storage class configured or that a correct storage class is configured in the RabbitMQ for Kubernetes Operator config map.
+   
+   <%# HOW DO PEOPLE CONFIGURE THE OPERATOR CONFIG MAP? CAN WE GET A LINK? WHAT IS THE CORRECT/DEFAULT STORAGE CLASS? WHAT IS A TYPICAL ERROR? WHAT COMMAND WOULD OUTPUT THIS ERROR?%>
 
 ## <a id='binding'></a> Bind Your Service Instance to an App
 
@@ -122,90 +123,86 @@ OK
 
 ## <a id='use'></a> Use the RabbitMQ Service in Your App
 
+<%# CAN WE HAVE A CALL TO ACTION IN THIS SECTION? HOW DO I USE THIS INFO TO MODIFY MY APPS OR DO OTHER THINGS? DO WE NEED TO DO SOMETHING WITH CONNECTION STRINGS? CREDENTIALS?%>
+
 Apps running in Cloud Foundry gain access to the bound service instances through an environment variable called `VCAP_SERVICES`.
+
 Apps that have been bound to a service instance can read `VCAP_SERVICES` from their environment.
-To see the `VCAP_SERVICES` for an app, run `cf env APP-NAME` with the name of an app bound to the Pivotal RabbitMQ for Kubernetes instance.
+To see the `VCAP_SERVICES` for an app, run `cf env APP-NAME` with the name of an app bound to the Pivotal RabbitMQ for Kubernetes instance. An example hash is shown below:
+<%# ARE THE BELOW VALUES DUMMYS? CAN BE MORE OBVIOUSLY DUMMIES %>
 
-For example:
-
-  <pre class="terminal">
-    $ cf env my-app
-    Getting env variables for app rabbitmq-perf-test in org my-org / space test as user<span>@</span>example.com...
-    OK
-
-    System-Provided:
-    {
-    "VCAP_SERVICES": {
-      "p-rabbitmq-k8s": [
-      {
-        "binding_name": null,
-        "credentials": {
-        "dashboard_url": "http://10.103.52.107:15672/#/login/username/password",
-        "hostname": "10.103.52.107",
-        "hostnames": [
-          "10.103.52.107"
-        ],
-        "http_api_uri": "http://username:password@10.103.52.107:15672/api/",
-        "http_api_uris": [
-          "http://username:password@10.103.52.107:15672/api/"
-        ],
-        "password": "password",
-        "protocols": {
-          "amqp": {
-          "host": "10.103.52.107",
-          "hosts": [
+```json
+{
+    "p-rabbitmq-k8s": [{
+      "binding_name": null,
+      "credentials": {
+          "dashboard_url": "http://10.103.52.107:15672/#/login/username/password",
+          "hostname": "10.103.52.107",
+          "hostnames": [
             "10.103.52.107"
           ],
+          "http_api_uri": "http://username:password@10.103.52.107:15672/api/",
+          "http_api_uris": [
+            "http://username:password@10.103.52.107:15672/api/"
+          ],
           "password": "password",
-          "port": 5672,
+          "protocols": {
+            "amqp": {
+              "host": "10.103.52.107",
+              "hosts": [
+                "10.103.52.107"
+              ],
+              "password": "password",
+              "port": 5672,
+              "ssl": false,
+              "uri": "amqp://username:password@10.103.52.107:5672/%2F",
+              "uris": [
+                "amqp://username:password@10.103.52.107:5672/%2F"
+              ],
+              "username": "username",
+              "vhost": "%2F"
+            },
+            "management": {
+              "host": "10.103.52.107",
+              "hosts": [
+                "10.103.52.107"
+              ],
+              "password": "password",
+              "path": "/api/",
+              "port": 15672,
+              "ssl": false,
+              "uri": "http://username:password@10.103.52.107:15672/api/",
+              "uris": [
+                "http://username:password@10.103.52.107:15672/api/"
+              ],
+              "username": "username"
+            }
+          },
           "ssl": false,
-          "uri": "amqp://username:password@10.103.52.107:5672/%2F",
+          "uri": "amqp://username:password@10.103.52.107/%2F",
           "uris": [
-            "amqp://username:password@10.103.52.107:5672/%2F"
+            "amqp://username:password@10.103.52.107/%2F"
           ],
           "username": "username",
           "vhost": "%2F"
-          },
-          "management": {
-          "host": "10.103.52.107",
-          "hosts": [
-            "10.103.52.107"
-          ],
-          "password": "password",
-          "path": "/api/",
-          "port": 15672,
-          "ssl": false,
-          "uri": "http://username:password@10.103.52.107:15672/api/",
-          "uris": [
-            "http://username:password@10.103.52.107:15672/api/"
-          ],
-          "username": "username"
-          }
-        },
-        "ssl": false,
-        "uri": "amqp://username:password@10.103.52.107/%2F",
-        "uris": [
-          "amqp://username:password@10.103.52.107/%2F"
-        ],
-        "username": "username",
-        "vhost": "%2F"
-        },
-        "instance_name": "my-instance",
-        "label": "p-rabbitmq-k8s",
-        "name": "my-instance",
-        "plan": "ha",
-        "provider": null,
-        "syslog_drain_url": null,
-        "tags": [
+      },
+      "instance_name": "my-instance",
+      "label": "p-rabbitmq-k8s",
+      "name": "my-instance",
+      "plan": "ha",
+      "provider": null,
+      "syslog_drain_url": null,
+      "tags": [
         "rabbitmq",
         "amqp"
-        ],
-        "volume_mounts": []
-      }
-      ]
-    }
-    }
-  </pre>
+      ],
+      "volume_mounts": []
+    }]
+}
+
+```
+  
+
 
 ## <a id="unbind"></a>Unbind a Service Instance From Your App
 
