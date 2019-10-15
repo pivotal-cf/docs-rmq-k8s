@@ -98,7 +98,7 @@ To move the images to your private registry:
     Where:
     * `REGISTRY-HOST` is the hostname for your private registry
     * `ACCOUNT-NAME` is the account name of your private registry
-    <br><br>
+
     For example:
 
     <pre class="terminal">
@@ -136,7 +136,7 @@ To install the CNAB bundle:
     Where:
     * `BROKER-USERNAME` is a username you specify for your broker
     * `BROKER-PASSWORD` is a password you specify for your broker
-    <br><br>
+
     For example:
 
     <pre class="terminal">
@@ -238,7 +238,7 @@ address for the broker from the service object by running:
     * `BROKER-USERNAME` is the `broker_username` you specified in the `duffle install` command above
     * `BROKER-PASSWORD` is the `broker_password` you specified in the `duffle install` command above
     * `IP-ADDRESS` is found in the output of `kubectl get services` command
-    <br><br>
+
     For example:
 
     <pre class="terminal">
@@ -271,20 +271,27 @@ address for the broker from the service object by running:
       }'
     </pre>
 
+1. Retrive the instance ID by running:
+
+    ```
+    kubectl get namespaces
+    ```
+<%# how do they know which namespace is the instance ID to use? %>
 1. Verify the RabbitMQ cluster has been created by running:
 
     ```
     kubectl -n p-rabbitmq-INSTANCE-ID get all
     ```
     <%# needs example including output %>
-    Where is `INSTANCE-ID` is .
+    Where is `INSTANCE-ID` is the instance ID you retrieved in the previous step.
     <br><br>
     For example:
 
     <pre class="terminal">
-      $ kubectl -n p-rmq-dc0c9336-b676-4736-9b7b-b34650774d74 get all
+      $ kubectl -n p-rabbitmq-dc0c9336-b676-4736-9b7b-b34650774d74 get all
     </pre>
-    <%# should the command above be p-rmq or p-rabbitmq? %>
+    <%# should the example command above be p-rmq or p-rabbitmq? %>
+
 <%# this is probably more a Troubleshooting thing
 
 ## <a id='status'></a>Get the Status of the Installed CNAB Bundle
