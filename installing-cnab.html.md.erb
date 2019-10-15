@@ -242,7 +242,7 @@ address for the broker from the service object by running:
     For example:
 
     <pre class="terminal">
-      curl -H "X-Broker-API-Version: 2.14" \
+      $ curl -H "X-Broker-API-Version: 2.14" \
         -H "Content-Type: application/json" \
         user1:password123@10.25.18.2:8080/v2/catalog
     </pre>
@@ -263,7 +263,7 @@ address for the broker from the service object by running:
     For example:
 
     <pre class="terminal">
-      curl -X PUT -H "X-Broker-API-Version: 2.14" \
+      $ curl -X PUT -H "X-Broker-API-Version: 2.14" \
         -H "Content-Type: application/json" \
         user1:password123@10.25.18.2:8080/v2/service_instances/instance-1?accepts_incomplete=true -d '{
         "service_id": "00000000-0000-0000-0000-000000000000",
@@ -282,7 +282,7 @@ address for the broker from the service object by running:
     For example:
 
     <pre class="terminal">
-      kubectl -n p-rmq-dc0c9336-b676-4736-9b7b-b34650774d74 get all
+      $ kubectl -n p-rmq-dc0c9336-b676-4736-9b7b-b34650774d74 get all
     </pre>
     <%# should the command above be p-rmq or p-rabbitmq? %>
 <%# this is probably more a Troubleshooting thing
