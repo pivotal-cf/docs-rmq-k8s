@@ -46,15 +46,15 @@ To install and configure Pivotal RabbitMQ for Kubernetes:
 <p class="note">
   <strong>Note:</strong>
   RabbitMQ for Kubernetes is currently visible to selected customers only.
-  Email the team at rabbitmq-for-k8s@pivotal.io if you would like to get access.
-  Otherwise, you will see <code>Page not found</code> error.
+  Email the team at rabbitmq-for-k8s@pivotal.io if you want access.
+  Otherwise, you see <code>Page not found</code> error.
 </p>
 
 To download and import Pivotal RabbitMQ for Kubernetes:
 
 1. Download the Pivotal RabbitMQ for Kubernetes CNAB artifact from [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
 
-1. Extract the tarball you downloaded to gain access to `bundle.json` by running:
+1. Extract the tarball that you downloaded to gain access to `bundle.json` by running:
 
     ```
     duffle import rabbitmq-for-kubernetes-cnab-VERSION.tgz
@@ -356,11 +356,12 @@ cf create-service-broker rabbitmq-for-kubernetes BROKER-USERNAME BROKER-PASSWORD
 
 <p class="note">
   <strong>Note:</strong>
-  To register a service broker this way you need to be logged in as Cloud Foundry administrator.
+  To register a service broker this way, you need to be logged in as Cloud Foundry administrator.
   If you want, you can register a space-scoped service broker as a normal user by adding <code>--space-scoped</code> parameter to the command above.
 </p>
 
-See [Register a Broker in Cloud Foundry documentation](https://docs.cloudfoundry.org/services/managing-service-brokers.html#register-broker) for more information about registering service brokers.
+For more information about registering service brokers,
+see [Register a Broker in Cloud Foundry documentation](https://docs.cloudfoundry.org/services/managing-service-brokers.html#register-broker).
 
 ## <a id='troubleshooting'></a>Troubleshooting the Installation
 
