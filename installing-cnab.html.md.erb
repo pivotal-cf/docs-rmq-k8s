@@ -43,6 +43,13 @@ To install and configure Pivotal RabbitMQ for Kubernetes:
 
 ## <a id='import'></a>Download and Import Pivotal RabbitMQ for Kubernetes
 
+<p class="note">
+  <strong>Note:</strong>
+  RabbitMQ for Kubernetes is currently visible to selected customers only.
+  Email the team at rabbitmq-for-k8s@pivotal.io if you would like to get access.
+  Otherwise, you will see <code>Page not found</code> error.
+</p>
+
 To download and import Pivotal RabbitMQ for Kubernetes:
 
 1. Download the Pivotal RabbitMQ for Kubernetes CNAB artifact from [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
@@ -50,14 +57,14 @@ To download and import Pivotal RabbitMQ for Kubernetes:
 1. Extract the tarball you downloaded to gain access to `bundle.json` by running:
 
     ```
-    duffle import rabbitmq-for-kubernetes-VERSION.tgz
+    duffle import rabbitmq-for-kubernetes-cnab-VERSION.tgz
     ```
     Where `VERSION` is the version of RabbitMQ for Kubernetes that you downloaded.
     <br><br>
     For example:
 
     <pre class="terminal">
-      $ duffle import rabbitmq-for-kubernetes-0.3.0.tgz
+      $ duffle import rabbitmq-for-kubernetes-cnab-0.4.0-build.32.tgz
     </pre>
 
 ## <a id='generate-credentials'></a>Configure Kubernetes Cluster Access to your Private Registry
@@ -68,7 +75,7 @@ To generate credentials to grant the Kubernetes cluster access to images in your
 
     ```
     duffle credentials generate rabbitmq-creds \
-     -f rabbitmq-for-kubernetes-VERSION/bundle.json
+     -f rabbitmq-for-kubernetes-cnab-VERSION/bundle.json
     ```
 
     Where `VERSION` is the version of RabbitMQ for Kubernetes that you downloaded.
@@ -78,8 +85,8 @@ To generate credentials to grant the Kubernetes cluster access to images in your
 
 1. When prompted, enter the following:
     * The absolute path to the kubeconfig that points to your target Kubernetes cluster
-    * The URL for the docker server
-    * The docker username and password
+    * The URL for the docker registry server
+    * The docker registry username and password
 
 ## <a id='relocate-images'></a>Move the Images
 
@@ -88,11 +95,11 @@ To move the images to your private registry:
 1. Run the following command:
 
     ```
-    duffle relocate rabbitmq-for-kubernetes-VERSION.tgz -f \
+    duffle relocate rabbitmq-for-kubernetes-cnab-VERSION.tgz -f \
       --repository-prefix=REGISTRY-HOST/ACCOUNT-NAME \
       --relocation-mapping=relmap.json
     ```
-    <%# needs example including output %>
+
     Where:
     * `REGISTRY-HOST` is the hostname for your private registry
     * `ACCOUNT-NAME` is the account name of your private registry
@@ -100,9 +107,13 @@ To move the images to your private registry:
     For example:
 
     <pre class="terminal">
-      $ duffle relocate rabbitmq-for-kubernetes-0.4.0-build.12.tgz -f \
+      $ duffle relocate -f rabbitmq-for-kubernetes-cnab-0.4.0-build.32.tgz \
         --repository-prefix=eu.gcr.io/my-account \
         --relocation-mapping=relmap.json
+      writing registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-cnab@sha256:550991eea3412ff9360adf2cf157bee6bfe935bb48923e920fb9366d6e42d6a2 to eu.gcr.io/my-account/p-rabbitmq-for-kubernetes-staging-rabbitmq-for-kubernetes-cnab-0839b8b2055a4de05b31712c67e2eb52@sha256:550991eea3412ff9360adf2cf157bee6bfe935bb48923e920fb9366d6e42d6a2
+      writing registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq@sha256:6709cafde00784361b231f6c94b6dbecb8fefd3d3195676ed81823e007e37449 to eu.gcr.io/my-account/p-rabbitmq-for-kubernetes-staging-rabbitmq-228ecdc119f602d199fa39cc0326057e@sha256:6709cafde00784361b231f6c94b6dbecb8fefd3d3195676ed81823e007e37449
+      writing registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-operator@sha256:25c5b9693c6b23f3f18f91dd43a13c20d60210d47efe239c151d801c59575979 to eu.gcr.io/my-account/p-rabbitmq-for-kubernetes-staging-rabbitmq-for-kubernetes-operator-6cce6b962354fbbcdcc03a91055eb7d3@sha256:25c5b9693c6b23f3f18f91dd43a13c20d60210d47efe239c151d801c59575979
+      writing registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-servicebroker@sha256:a36eb92cf2152c13c9cb420bc46722c8499d2b1bcdf0f84bb1549c6b93e83822 to eu.gcr.io/my-account/p-rabbitmq-for-kubernetes-staging-rabbitmq-for-kubernetes-servicebroker-180ccfcfb779e0c8b093dd44ae168157@sha256:a36eb92cf2152c13c9cb420bc46722c8499d2b1bcdf0f84bb1549c6b93e83822
     </pre>
 
     <p class="note"><strong>Note:</strong>
@@ -124,13 +135,13 @@ To install the CNAB bundle:
 1. Run the following command:
 
     ```
-    duffle install rabbitmq rabbitmq-for-kubernetes-VERSION.tgz -f \
+    duffle install rabbitmq rabbitmq-for-kubernetes-cnab-VERSION.tgz -f \
       --relocation-mapping=relmap.json \
       --credentials rabbitmq-creds \
       --set broker_username=BROKER-USERNAME \
-      --set broker_password=BROKER-PASSWORD \
+      --set broker_password=BROKER-PASSWORD
     ```
-    <%# needs example including output %>
+
     Where:
     * `BROKER-USERNAME` is a username you specify for your broker
     * `BROKER-PASSWORD` is a password you specify for your broker
@@ -138,11 +149,133 @@ To install the CNAB bundle:
     For example:
 
     <pre class="terminal">
-      $ duffle install rabbitmq rabbitmq-for-kubernetes-0.4.0-build.12.tgz -f \
+      $ duffle install rabbitmq rabbitmq-for-kubernetes-0.4.0-build.32.tgz -f \
         --relocation-mapping=relmap.json \
         --credentials rabbitmq-creds \
         --set broker_username=user1 \
         --set broker_password=password123 \
+      Executing install action...
+      + action=install
+      + name=rabbitmq
+      + case ${action} in
+      + kubectl apply -f /cnab/app/manifests/namespace.yaml
+      namespace/pivotal-rabbitmq-system created
+      + [[ -n _json_key ]]
+      + [[ -n {
+        "type": "service_account",
+        "project_id": "my-account",
+        "private_key_id": "abc123",
+        "private_key": "-----BEGIN PRIVATE KEY----- ... -----END PRIVATE KEY-----\n",
+        "client_email": "gcr@my-account.iam.gserviceaccount.com",
+        "client_id": "1234",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gcr%40my-account.iam.gserviceaccount.com"
+      }
+      ]]
+      + echo 'Creating Registry Secret'
+      Creating Registry Secret
+      + kubectl -n pivotal-rabbitmq-system create secret docker-registry p-rmq-registry-access --docker-server=eu.gcr.io/my-account --docker-username=_json_key '--docker-password={
+        "type": "service_account",
+        "project_id": "my-account",
+        "private_key_id": "abc1234",
+        "private_key": "-----BEGIN PRIVATE KEY----- ... -----END PRIVATE KEY-----\n",
+        "client_email": "gcr@my-account.iam.gserviceaccount.com",
+        "client_id": "1234",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gcr%40my-account.iam.gserviceaccount.com"
+      }
+      '
+      secret/p-rmq-registry-access created
+      + echo 'Installing RabbitMQ for Kubernetes Operator'
+      + bash /cnab/app/install_operator
+      Installing RabbitMQ for Kubernetes Operator
+
+      ---
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: p-rmq-operator-config
+        namespace: pivotal-rabbitmq-system
+      data:
+        CONFIG: |
+          SERVICE:
+            TYPE: ""
+            ANNOTATIONS:
+
+          PERSISTENCE:
+            STORAGE_CLASS_NAME:
+            STORAGE:
+          IMAGE_URL: eu.gcr.io/my-account/p-rabbitmq-for-kubernetes-staging-rabbitmq-228ecdc119f602d199fa39cc0326057e@sha256:6709cafde00784361b231f6c94b6dbecb8fefd3d3195676ed81823e007e37449
+          IMAGE_PULL_SECRET: p-rmq-registry-access
+      configmap/p-rmq-operator-config created
+      customresourcedefinition.apiextensions.k8s.io/rabbitmqclusters.rabbitmq.pivotal.io created
+      Changes
+
+      Namespace                Name                        Kind                Conds.  Age  Op      Wait to    Rs  Ri
+      -                        p-rmq-operator-role         ClusterRole         -       -    create  reconcile  -   -
+      ~                        p-rmq-operator-rolebinding  ClusterRoleBinding  -       -    create  reconcile  -   -
+      pivotal-rabbitmq-system  p-rmq-operator              Deployment          -       -    create  reconcile  -   -
+
+      Op:      3 create, 0 delete, 0 update, 0 noop
+      Wait to: 3 reconcile, 0 delete, 0 noop
+
+      12:02:28PM: ---- applying 3 changes [0/3 done] ----
+      12:02:28PM: create clusterrole/p-rmq-operator-role (rbac.authorization.k8s.io/v1) cluster
+      12:02:28PM: create clusterrolebinding/p-rmq-operator-rolebinding (rbac.authorization.k8s.io/v1) cluster
+      12:02:28PM: create deployment/p-rmq-operator (apps/v1) namespace: pivotal-rabbitmq-system
+      12:02:28PM: ---- waiting on 3 changes [0/3 done] ----
+      12:02:28PM: ok: reconcile clusterrole/p-rmq-operator-role (rbac.authorization.k8s.io/v1) cluster
+      12:02:28PM: ok: reconcile clusterrolebinding/p-rmq-operator-rolebinding (rbac.authorization.k8s.io/v1) cluster
+      12:02:28PM: ongoing: reconcile deployment/p-rmq-operator (apps/v1) namespace: pivotal-rabbitmq-system
+      12:02:28PM:  ^ Waiting for 1 unavailable replicas
+      12:02:28PM:  L ok: waiting on replicaset/p-rmq-operator-6c5b99ccd4 (apps/v1) namespace: pivotal-rabbitmq-system
+      12:02:28PM:  L ongoing: waiting on pod/p-rmq-operator-6c5b99ccd4-jds84 (v1) namespace: pivotal-rabbitmq-system
+      12:02:28PM:     ^ Pending: ContainerCreating
+      12:02:28PM: ---- waiting on 1 changes [2/3 done] ----
+      12:02:38PM: ok: reconcile deployment/p-rmq-operator (apps/v1) namespace: pivotal-rabbitmq-system
+      12:02:38PM: ---- applying complete [3/3 done] ----
+      12:02:38PM: ---- waiting complete [3/3 done] ----
+
+      Succeeded
+      + echo 'Installing RabbitMQ for Kubernetes Broker'
+      + bash /cnab/app/install_broker
+      Installing RabbitMQ for Kubernetes Broker
+      secret/p-rmq-servicebroker-admin created
+      Changes
+
+      Namespace                Name                             Kind                Conds.  Age  Op      Wait to    Rs  Ri
+      -                        p-rmq-servicebroker-role         ClusterRole         -       -    create  reconcile  -   -
+      ~                        p-rmq-servicebroker-rolebinding  ClusterRoleBinding  -       -    create  reconcile  -   -
+      pivotal-rabbitmq-system  p-rmq-servicebroker              Deployment          -       -    create  reconcile  -   -
+      ~                        p-rmq-servicebroker-ingress      Service             -       -    create  reconcile  -   -
+
+      Op:      4 create, 0 delete, 0 update, 0 noop
+      Wait to: 4 reconcile, 0 delete, 0 noop
+
+      12:02:38PM: ---- applying 4 changes [0/4 done] ----
+      12:02:38PM: create clusterrole/p-rmq-servicebroker-role (rbac.authorization.k8s.io/v1) cluster
+      12:02:38PM: create clusterrolebinding/p-rmq-servicebroker-rolebinding (rbac.authorization.k8s.io/v1) cluster
+      12:02:38PM: create service/p-rmq-servicebroker-ingress (v1) namespace: pivotal-rabbitmq-system
+      12:02:38PM: create deployment/p-rmq-servicebroker (apps/v1) namespace: pivotal-rabbitmq-system
+      12:02:38PM: ---- waiting on 4 changes [0/4 done] ----
+      12:02:38PM: ok: reconcile clusterrole/p-rmq-servicebroker-role (rbac.authorization.k8s.io/v1) cluster
+      12:02:38PM: ok: reconcile clusterrolebinding/p-rmq-servicebroker-rolebinding (rbac.authorization.k8s.io/v1) cluster
+      12:02:38PM: ok: reconcile service/p-rmq-servicebroker-ingress (v1) namespace: pivotal-rabbitmq-system
+      12:02:38PM: ongoing: reconcile deployment/p-rmq-servicebroker (apps/v1) namespace: pivotal-rabbitmq-system
+      12:02:38PM:  ^ Waiting for 1 unavailable replicas
+      12:02:38PM:  L ok: waiting on replicaset/p-rmq-servicebroker-58949574b5 (apps/v1) namespace: pivotal-rabbitmq-system
+      12:02:38PM:  L ongoing: waiting on pod/p-rmq-servicebroker-58949574b5-jdbcz (v1) namespace: pivotal-rabbitmq-system
+      12:02:38PM:     ^ Pending: ContainerCreating
+      12:02:38PM: ---- waiting on 1 changes [3/4 done] ----
+      12:02:45PM: ok: reconcile deployment/p-rmq-servicebroker (apps/v1) namespace: pivotal-rabbitmq-system
+      12:02:45PM: ---- applying complete [4/4 done] ----
+      12:02:45PM: ---- waiting complete [4/4 done] ----
+
+      Succeeded
     </pre>
 
     The <code>set</code> flag refers to CNAB parameters that configure your CNAB installation.
@@ -213,9 +346,25 @@ To install the CNAB bundle:
       </tr>
     </table>
 
-## <a id='verify'></a>Verify the Installation
+## <a id='register'></a>(Optional) Register the Service Broker with Cloud Foundry
 
-To verify the installation:
+Service broker is an optional component that allows integration with Cloud Foundry, such as Pivotal Application Service.
+To register the service broker you need to log in with CF CLI and run the following command:
+```
+cf create-service-broker rabbitmq-for-kubernetes BROKER-USERNAME BROKER-PASSWORD https://IP-ADDRESS:8080
+```
+
+<p class="note">
+  <strong>Note:</strong>
+  To register a service broker this way you need to be logged in as Cloud Foundry administrator.
+  If you want, you can register a space-scoped service broker as a normal user by adding <code>--space-scoped</code> parameter to the command above.
+</p>
+
+See [Register a Broker in Cloud Foundry documentation](https://docs.cloudfoundry.org/services/managing-service-brokers.html#register-broker) for more information about registering service brokers.
+
+## <a id='troubleshooting'></a>Troubleshooting the Installation
+
+The steps below allow you to verify the installation and to provision an instance without registering the service broker with Pivotal Application Service.
 
 1. Verify the operator and broker have been installed successfully and get the
 address for the broker from the service object by running:
@@ -223,7 +372,14 @@ address for the broker from the service object by running:
     ```
     kubectl -n pivotal-rabbitmq-system get services
     ```
-    <%# needs example including output %>
+    For example:
+
+    <pre class="terminal">
+      $ kubectl -n pivotal-rabbitmq-system get services
+      NAME                          TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)          AGE
+      p-rmq-servicebroker-ingress   LoadBalancer   10.109.111.3   172.17.255.1   8080:30444/TCP   58m
+    </pre>
+
 1. View the catalog to confirm the service and plan IDs:
 
     ```
@@ -231,7 +387,7 @@ address for the broker from the service object by running:
       -H "Content-Type: application/json" \
       BROKER-USERNAME:BROKER-PASSWORD@IP-ADDRESS:8080/v2/catalog
     ```
-    <%# needs example including output %>
+
     Where:
     * `BROKER-USERNAME` is the `broker_username` you specified in the `duffle install` command above
     * `BROKER-PASSWORD` is the `broker_password` you specified in the `duffle install` command above
@@ -240,9 +396,8 @@ address for the broker from the service object by running:
     For example:
 
     <pre class="terminal">
-      $ curl -H "X-Broker-API-Version: 2.14" \
-        -H "Content-Type: application/json" \
-        user1:password123@10.25.18.2:8080/v2/catalog
+      $ curl -H "X-Broker-API-Version: 2.14"   -H "Content-Type: application/json"   BROKER-USERNAME:BROKER-PASSWORD@p-rmq-servicebroker-ingress:8080/v2/catalog
+      {"services":[{"id":"00000000-0000-0000-0000-000000000000","name":"p-rabbitmq-k8s","description":"RabbitMQ on K8s","bindable":true,"tags":["rabbitmq","amqp"],"plan_updateable":false,"plans":[{"id":"22222222-2222-2222-2222-222222222222","name":"single","description":"Single-node RabbitMQ on K8s"},{"id":"33333333-3333-3333-3333-333333333333","name":"ha","description":"3-node RabbitMQ on K8s"}]}]}
     </pre>
 
 1. Provision a service instance by running:
@@ -255,7 +410,7 @@ address for the broker from the service object by running:
       "plan_id": "22222222-2222-2222-2222-222222222222"
     }'
     ```
-    <%# needs example including output %>
+
     Where is `INSTANCE-NAME` is a name you define for your instance.
     <br><br>
     For example:
@@ -267,6 +422,7 @@ address for the broker from the service object by running:
         "service_id": "00000000-0000-0000-0000-000000000000",
         "plan_id": "22222222-2222-2222-2222-222222222222"
       }'
+      {}
     </pre>
 
 1. Retrieve the instance ID by running:
@@ -278,35 +434,118 @@ address for the broker from the service object by running:
 1. Verify the RabbitMQ cluster has been created by running:
 
     ```
-    kubectl -n p-rabbitmq-INSTANCE-ID get all
+    kubectl -n p-rmq-INSTANCE-ID get all
     ```
-    <%# needs example including output %>
-    Where is `INSTANCE-ID` is the instance ID you retrieved in the previous step.
+    Where is `INSTANCE-ID` is the name you specified in the step above.
     <br><br>
     For example:
 
     <pre class="terminal">
-      $ kubectl -n p-rabbitmq-dc0c9336-b676-4736-9b7b-b34650774d74 get all
+      $ kubectl -n p-rmq-instance-1 get all
+      NAME                            READY   STATUS    RESTARTS   AGE
+      pod/pivotal-rabbitmq-server-0   1/1     Running   0          2m27s
+
+      NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                        AGE
+      service/pivotal-rabbitmq-headless   ClusterIP   None             <none>        4369/TCP                       2m27s
+      service/pivotal-rabbitmq-ingress    ClusterIP   10.111.202.183   <none>        5672/TCP,15672/TCP,15692/TCP   2m28s
+
+      NAME                                       READY   AGE
+      statefulset.apps/pivotal-rabbitmq-server   1/1     2m28s
     </pre>
-    <%# should the example command above be p-rmq or p-rabbitmq? %>
-
-<%# this is probably more a Troubleshooting thing
-
-## <a id='status'></a>Get the Status of the Installed CNAB Bundle
-
-To get the status of the CNAB bundle, run:
-
-```
-duffle status rabbitmq --credentials rabbitmq-creds
-```
-%>
 
 <%# the uninstall section should be on the upgrade page as an upgrade step -- you have to uninstall this before you install the next version
 
 ## <a id='uninstall'></a>Uninstall Bundle
 
+If you want to uninstall the product, run the following command:
 ```
-duffle uninstall rabbitmq --credentials rabbitmq-creds
+duffle uninstall rabbitmq --credentials rabbitmq-creds --relocation-mapping=relmap.json
 ```
+
+For example:
+    <pre class="terminal">
+      $ duffle uninstall rabbitmq --credentials rabbitmq-creds --relocation-mapping relmap.json
+      Executing uninstall action...
+      + action=uninstall
+      + name=rabbitmq
+      + case ${action} in
+      + kapp delete -n pivotal-rabbitmq-system --yes -a rabbitmq-operator
+      Changes
+
+      Namespace                Name                             Kind                Conds.  Age  Op      Wait to  Rs  Ri
+      -                        p-rmq-operator-role              ClusterRole         -       1h   delete  delete   ok  -
+      ~                        p-rmq-operator-rolebinding       ClusterRoleBinding  -       1h   delete  delete   ok  -
+      pivotal-rabbitmq-system  p-rmq-operator                   Deployment          2/2 t   1h   delete  delete   ok  -
+      ~                        p-rmq-operator-5d76f588dd        ReplicaSet          -       1h   -       delete   ok  -
+      ~                        p-rmq-operator-5d76f588dd-fs4nf  Pod                 4/4 t   1h   -       delete   ok  -
+
+      Op:      0 create, 3 delete, 0 update, 2 noop
+      Wait to: 0 reconcile, 5 delete, 0 noop
+
+      2:28:42PM: ---- applying 5 changes [0/5 done] ----
+      2:28:42PM: delete clusterrole/p-rmq-operator-role (rbac.authorization.k8s.io/v1) cluster
+      2:28:42PM: delete deployment/p-rmq-operator (apps/v1) namespace: pivotal-rabbitmq-system
+      2:28:42PM: delete clusterrolebinding/p-rmq-operator-rolebinding (rbac.authorization.k8s.io/v1) cluster
+      2:28:42PM: noop replicaset/p-rmq-operator-5d76f588dd (apps/v1) namespace: pivotal-rabbitmq-system
+      2:28:42PM: noop pod/p-rmq-operator-5d76f588dd-fs4nf (v1) namespace: pivotal-rabbitmq-system
+      2:28:42PM: ---- waiting on 5 changes [0/5 done] ----
+      2:28:42PM: ok: delete clusterrole/p-rmq-operator-role (rbac.authorization.k8s.io/v1) cluster
+      2:28:42PM: ok: delete deployment/p-rmq-operator (apps/v1) namespace: pivotal-rabbitmq-system
+      2:28:42PM: ok: delete clusterrolebinding/p-rmq-operator-rolebinding (rbac.authorization.k8s.io/v1) cluster
+      2:28:42PM: ongoing: delete replicaset/p-rmq-operator-5d76f588dd (apps/v1) namespace: pivotal-rabbitmq-system
+      2:28:42PM: ongoing: delete pod/p-rmq-operator-5d76f588dd-fs4nf (v1) namespace: pivotal-rabbitmq-system
+      2:28:42PM: ---- waiting on 2 changes [3/5 done] ----
+      2:28:43PM: ok: delete replicaset/p-rmq-operator-5d76f588dd (apps/v1) namespace: pivotal-rabbitmq-system
+      2:28:43PM: ---- waiting on 1 changes [4/5 done] ----
+      2:28:45PM: ok: delete pod/p-rmq-operator-5d76f588dd-fs4nf (v1) namespace: pivotal-rabbitmq-system
+      2:28:45PM: ---- applying complete [5/5 done] ----
+      2:28:45PM: ---- waiting complete [5/5 done] ----
+
+      Succeeded
+      + kapp delete -n pivotal-rabbitmq-system --yes -a rabbitmq-broker
+      Changes
+
+      Namespace                Name                                  Kind                Conds.  Age  Op      Wait to  Rs  Ri
+      -                        p-rmq-servicebroker-role              ClusterRole         -       1h   delete  delete   ok  -
+      ~                        p-rmq-servicebroker-rolebinding       ClusterRoleBinding  -       1h   delete  delete   ok  -
+      pivotal-rabbitmq-system  p-rmq-servicebroker                   Deployment          2/2 t   1h   delete  delete   ok  -
+      ~                        p-rmq-servicebroker-6d5f6b4df7        ReplicaSet          -       1h   -       delete   ok  -
+      ~                        p-rmq-servicebroker-6d5f6b4df7-hxrbm  Pod                 4/4 t   1h   -       delete   ok  -
+      ~                        p-rmq-servicebroker-ingress           Endpoints           -       1h   -       delete   ok  -
+      ~                        p-rmq-servicebroker-ingress           Service             -       1h   delete  delete   ok  -
+
+      Op:      0 create, 4 delete, 0 update, 3 noop
+      Wait to: 0 reconcile, 7 delete, 0 noop
+
+      2:28:46PM: ---- applying 7 changes [0/7 done] ----
+      2:28:46PM: noop pod/p-rmq-servicebroker-6d5f6b4df7-hxrbm (v1) namespace: pivotal-rabbitmq-system
+      2:28:46PM: delete service/p-rmq-servicebroker-ingress (v1) namespace: pivotal-rabbitmq-system
+      2:28:46PM: delete clusterrolebinding/p-rmq-servicebroker-rolebinding (rbac.authorization.k8s.io/v1) cluster
+      2:28:46PM: noop endpoints/p-rmq-servicebroker-ingress (v1) namespace: pivotal-rabbitmq-system
+      2:28:46PM: delete deployment/p-rmq-servicebroker (apps/v1) namespace: pivotal-rabbitmq-system
+      2:28:46PM: noop replicaset/p-rmq-servicebroker-6d5f6b4df7 (apps/v1) namespace: pivotal-rabbitmq-system
+      2:28:46PM: delete clusterrole/p-rmq-servicebroker-role (rbac.authorization.k8s.io/v1) cluster
+      2:28:46PM: ---- waiting on 7 changes [0/7 done] ----
+      2:28:46PM: ongoing: delete pod/p-rmq-servicebroker-6d5f6b4df7-hxrbm (v1) namespace: pivotal-rabbitmq-system
+      2:28:46PM: ok: delete service/p-rmq-servicebroker-ingress (v1) namespace: pivotal-rabbitmq-system
+      2:28:46PM: ok: delete clusterrolebinding/p-rmq-servicebroker-rolebinding (rbac.authorization.k8s.io/v1) cluster
+      2:28:46PM: ok: delete endpoints/p-rmq-servicebroker-ingress (v1) namespace: pivotal-rabbitmq-system
+      2:28:46PM: ok: delete deployment/p-rmq-servicebroker (apps/v1) namespace: pivotal-rabbitmq-system
+      2:28:46PM: ok: delete replicaset/p-rmq-servicebroker-6d5f6b4df7 (apps/v1) namespace: pivotal-rabbitmq-system
+      2:28:46PM: ok: delete clusterrole/p-rmq-servicebroker-role (rbac.authorization.k8s.io/v1) cluster
+      2:28:46PM: ---- waiting on 1 changes [6/7 done] ----
+      2:28:54PM: ok: delete pod/p-rmq-servicebroker-6d5f6b4df7-hxrbm (v1) namespace: pivotal-rabbitmq-system
+      2:28:54PM: ---- applying complete [7/7 done] ----
+      2:28:54PM: ---- waiting complete [7/7 done] ----
+
+      Succeeded
+      + kubectl delete -n pivotal-rabbitmq-system --ignore-not-found -f /cnab/app/manifests/crd.yaml
+      warning: deleting cluster-scoped resources, not scoped to the provided namespace
+      customresourcedefinition.apiextensions.k8s.io "rabbitmqclusters.rabbitmq.pivotal.io" deleted
+      + kubectl delete --ignore-not-found -f /cnab/app/manifests/namespace.yaml
+      namespace "pivotal-rabbitmq-system" deleted
+    </pre>
+
+Since upgrades are currently not supported, you should also uninstall the product before installing a newer version.
 
 %>
