@@ -8,7 +8,7 @@ owner: RMQ for k8s
 This topic describes how to install and configure Pivotal RabbitMQ for Kubernetes
 using Cloud Native Application Bundle (CNAB).
 
-There are two methods to install RabbitMQ for Kubernetes, use one of the following:
+There are two methods to install RabbitMQ for Kubernetes. Use one of the following:
 
 * **Kubernetes Manifests:** If you are installing for the first time, use the Kubernetes Manifests method.
 For instructions, see [Installing and Configuring Using Kubernetes Manifests](./installing.html).
@@ -24,7 +24,7 @@ Before you install and configure RabbitMQ for Kubernetes, you must install and c
 
 1. **Duffle:** For installation instructions, see [duffle](https://github.com/deislabs/duffle) on GitHub. <%# should we say install the latest version of duffle %>
 
-1. **A Kubernetes cluster** 
+1. **A Kubernetes cluster**.
 
 1. **A private registry:** Pivotal recommends that you keep the CNAB, operator, and
 service-broker images private if your repository is publicly accessible.
@@ -46,11 +46,13 @@ To install and configure Pivotal RabbitMQ for Kubernetes:
 <p class="note">
   <strong>Note:</strong>
   RabbitMQ for Kubernetes is currently visible to selected customers only.
-  Email the team at rabbitmq-for-k8s@pivotal.io if you want access.
+  Email the team at <a href="mailto:rabbitmq-for-k8s@pivotal.io">rabbitmq-for-k8s@pivotal.io</a> if you want access.
   Otherwise, you see <code>Page not found</code> error.
 </p>
 
 To download and import Pivotal RabbitMQ for Kubernetes:
+
+1. Sign in to [Pivotal Network](https://login.run.pivotal.io/login).
 
 1. Download the Pivotal RabbitMQ for Kubernetes CNAB artifact from [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
 
@@ -82,6 +84,11 @@ To generate credentials to grant the Kubernetes cluster access to images in your
     <p class="note"><strong>Note:</strong>
      For more options on how to generate duffle credentials, run <code>duffle credentials --help</code>.
     </p>
+
+    <pre class="terminal">
+      $ duffle credentials generate rabbitmq-creds \
+       -f rabbitmq-for-kubernetes-cnab-0.4.0-build.32/bundle.json
+    </pre>
 
 1. When prompted, enter the following:
     * The absolute path to the kubeconfig that points to your target Kubernetes cluster
@@ -344,11 +351,29 @@ To install the CNAB bundle:
 
 ## <a id='register'></a>(Optional) Register the Service Broker with Cloud Foundry
 
-Service broker is an optional component that allows integration with Cloud Foundry, such as Pivotal Application Service.
-To register the service broker you need to log in with CF CLI and run the following command:
-```
-cf create-service-broker rabbitmq-for-kubernetes BROKER-USERNAME BROKER-PASSWORD https://IP-ADDRESS:8080
-```
+The service broker is an optional component that allows integration with Cloud Foundry,
+such as Pivotal Application Service.
+
+To register the service broker:
+
+1. Log in to the cf CLI.
+
+1. Run the following command:
+
+    ```
+    cf create-service-broker rabbitmq-for-kubernetes BROKER-USERNAME BROKER-PASSWORD https://IP-ADDRESS:8080
+    ```
+
+    Where:
+    * `BROKER-USERNAME` is
+    * `BROKER-PASSWORD` is
+    * `IP-ADDRESS` is
+
+    For example:
+
+    <pre class="terminal">
+
+    </pre>
 
 <p class="note">
   <strong>Note:</strong>
