@@ -10,9 +10,9 @@ using Cloud Native Application Bundle (CNAB).
 
 There are two methods to install RabbitMQ for Kubernetes. Use one of the following:
 
-* **Kubernetes Manifests:** If you are installing for the first time, use the Kubernetes Manifests method.
+* **Kubernetes Manifests:** This method requires manual YAML editing but allows more flexibility; recommended for advanced users
 For instructions, see [Installing and Configuring Using Kubernetes Manifests](./installing.html).
-* **CNAB:** If you have previously installed Pivotal RabbitMQ for Kubernetes, use the procedure in this topic.
+* **CNAB:** This method uses [Cloud Native Application Bundle](https://cnab.io) to automate the installation process
 
 ## <a id='prerequisites'></a> Prerequisites
 
@@ -372,7 +372,8 @@ To register the service broker:
     For example:
 
     <pre class="terminal">
-
+      ~$ cf create-service-broker rabbitmq-for-k8s BROKER-USERNAME BROKER-PASSWORD http://12.13.14.15:8080
+      OK
     </pre>
 
 <p class="note">
