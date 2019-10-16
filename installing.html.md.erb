@@ -57,34 +57,32 @@ Load the images to your local Docker by running the following commands:
 
 ```bash
 tar xvf PATH-TO-RABBITMQ-FOR-KUBERNETES-VERSION.tar
-docker load -i rabbitmq-for-kubernetes-operator
-docker load -i rabbitmq-3.8-rc-management
-docker load -i rabbitmq-for-kubernetes-servicebroker
+cd RABBITMQ-FOR-KUBERNETES-VERSION
+docker load -i images/rabbitmq-for-kubernetes-operator
+docker load -i images/rabbitmq
+docker load -i images/rabbitmq-for-kubernetes-servicebroker
 ```
 
 Tag each image to point to your own image repository by running these commands:
 
 ```bash
-~$ docker tag rabbitmq-3.8-rc-management \
->  YOUR-REPOSITORY/rabbitmq:3.8-rc-management
-~$ docker tag rabbitmq-for-kubernetes-operator \
+~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq \
+>  YOUR-REPOSITORY/rabbitmq:VERSION
+~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-operator \
 >  YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION
-~$ docker tag rabbitmq-for-kubernetes-servicebroker \
+~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-servicebroker \
 >  YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION
 ```
 
 Push each image to your own image repository by running these commands:
 
 ```bash
-docker push YOUR-REPOSITORY/rabbitmq:3.8-rc-management
+docker push YOUR-REPOSITORY/rabbitmq:VERSION
 docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION
 docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION
 ```
 
-## <a id='private-images'></a> (Optional) Configure Kubernetes Cluster Access to Private Images
-
-Pivotal recommends that you keep the operator and service-broker images private if your repository is publicly accessible.
-To do so:
+## <a id='private-images'></a> Create the Namespace
 
 1. Create a `pivotal-rabbitmq-system` namespace by running the following command:
 
@@ -92,24 +90,17 @@ To do so:
     kubectl apply -f manifests/namespace.yaml
     ```
 
-1. In your cluster, create a Kubernetes secret that authorizes access to private images in the namespace that
-you just created. To do so, run:
+## <a id='private-images'></a> (Optional) Configure Kubernetes Cluster Access to Private Images
 
-    ```
-    kubectl -n pivotal-rabbitmq-system create secret docker-registry p-rmq-registry-access \
-    --docker-server="DOCKER-SERVER" --docker-username="DOCKER-USERNAME" \
-    --docker-password="DOCKER-PASSWORD"
-    ```
+If you require authentication to pull images from your registry, you need to authorize access to them from the pivotal-rabbitmq-system namespace.
+To do so, run:
 
-    For example:
-    <pre class="terminal">$ kubectl -n pivotal-rabbitmq-system create secret docker-registry p-rmq-registry-access \
-      --docker-server="registry.pivotal.io" --docker-username="<span>your-pivnet-email@gmail.com</span>" \
-      --docker-password="password1"
-    </pre>
+```bash
+~$ kubectl -n pivotal-rabbitmq-system create secret docker-registry p-rmq-registry-access --docker-server="$DOCKER_SERVER" --docker-username="$DOCKER_USERNAME" --docker-password="$DOCKER_PASSWORD"
+~$ kubectl -n pivotal-rabbitmq-system patch serviceaccount default -p '{"imagePullSecrets": [{"name": "p-rmq-registry-access"}]}'
+```
 
-1. Repeat the above steps for the `pivotal-rabbitmq-system` namespace.
-For more information, see [the Kubernetes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
-
+Note: Pivotal recommends that you keep the operator and service-broker images private if your repository is publicly accessible.
 
 ## <a id='image-repo'></a> Configure the Image Repository
 
@@ -136,8 +127,8 @@ metadata:
 
   `YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION`
 
-1. Provide your image reference in the service broker manifest `manifests/service-broker.yaml`
-1. Replace all instances of REPLACE-WITH-BROKER-IMAGE-URL with the full broker image reference. This reference looks similar to the below.
+1. Provide your repository URL in the service broker manifest `manifests/broker.yaml`
+1. Replace all instances of REPLACE-WITH-BROKER-IMAGE-URL with the full broker image URL. This URL looks similar to the below.
 
   `YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION`
 
@@ -182,7 +173,7 @@ metadata:
 
 To specify a Service type for the Service Broker:
 
-1. Open `manifests/servicebroker.yaml` in a text editor.
+1. Open `manifests/broker.yaml` in a text editor.
 1. Replace the value of `spec.type` from `LoadBalancer` to either `NodePort` or `ClusterIP`, as in the example below:
 
 ```yaml
