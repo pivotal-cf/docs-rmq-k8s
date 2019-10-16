@@ -1,4 +1,4 @@
-# RabbitMQ for Pivotal CF docs
+# Pivotal RabbitMQ for Kubernetes docs
 
 ## Branches in this Content Repo
 
@@ -13,7 +13,7 @@ Then, if necessary, immediately cherry-pick/copy any changes that you want to pu
 | Branch Name| Use for… |
 |------------| ---------|
 | master     | 0.5 (staged here: http://docs-pcf-staging.cfapps.io/rabbitmq-kubernetes/0-n/index.html) |
-| 0.4        | 0.4      | 
+| 0.4        | 0.4 (staged here: http://docs.pivotal.io/rabbitmq-kubernetes/0-4/index.html) | 
 
 
 [docs-book-rmq-k8s]: https://github.com/pivotal-cf/docs-book-rmq-k8s/blob/master/config.yml
