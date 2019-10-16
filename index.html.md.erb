@@ -6,11 +6,8 @@ owner: RMQ for k8s
 <strong><%= modified_date %></strong>
 
 <%# If this product is in beta, keep and edit the warning note below. %>
-<p class="note warning">
-<strong>Warning: </strong>
-Pivotal RabbitMQ for Kubernetes is currently in beta and is intended for evaluation and test purposes only.
-Do not use this product in a production environment.
-</p>
+
+<%= partial vars.path_to_partials + "/services/beta-notice" %>
 
 RabbitMQ for Kubernetes is a Kubernetes operator that automates provisioning, management and operations of RabbitMQ clusters
 running on Kubernetes.
@@ -22,6 +19,7 @@ manage their lifecycle. RabbitMQ clusters can be accessed by applications runnin
 Pivotal Application Service or elsewhere.
 
 RabbitMQ for Kubernetes has two main components:
+
 * Kubernetes operator that automates provisioning, management and operations of RabbitMQ clusters
 * Optional OSBAPI-compliant service broker for integration with Pivotal Platform
 
@@ -77,4 +75,3 @@ RabbitMQ for Kubernetes has the following requirements:
 
 If you have a feature request, questions, or information about an issue, please email
 [RabbitMQ for Kubernetes Feedback](mailto:rabbitmq-for-k8s@pivotal.io).
-

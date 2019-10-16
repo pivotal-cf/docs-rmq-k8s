@@ -10,16 +10,19 @@ This topic describes how to install and configure Pivotal RabbitMQ for Kubernete
 There are two methods to install RabbitMQ for Kubernetes, use one of the following:
 
 * **Kubernetes Manifests:** If you are installing for the first time, use the procedure in this topic.
-* **CNAB:** If you have previously installed Pivotal RabbitMQ for Kubernetes, use this.
+* **CNAB:** If you have previously installed Pivotal RabbitMQ for Kubernetes, use the CNAB method.
 For instructions, see [Installing and Configuring Using CNAB](./installing-cnab.html)
 
 ## <a id='prerequisites'></a> Prerequisites
 
 Before you install and configure RabbitMQ for Kubernetes, you must install and configure the following software:
 
-1. **[kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)**
-1. **[Docker](https://docs.docker.com/install/)**
+1. **kubectl:** For installation instructions, see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/). <%# should we say install the latest version of kubectl %>
+
+1. **Docker:** For installation instructions, see [Docker](https://docs.docker.com/install/)  <%# what should be downloaded - the docker cli? %>
+
 1. **A Kubernetes cluster** <%# Do we want to mention Enterprise PKS here? %>
+
 1. **A private registry:** Pivotal recommends that you keep the operator and
 service-broker images private if your repository is publicly accessible.
 If you do not have access to a private registry, email the team at
@@ -81,10 +84,11 @@ docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION
 
 ## <a id='private-images'></a> Create the Namespace
 
-1. Create a `pivotal-rabbitmq-system` namespace by running the following command:<br><br>
-  <code>
+1. Create a `pivotal-rabbitmq-system` namespace by running the following command:
+
+    ```
     kubectl apply -f manifests/namespace.yaml
-  </code>
+    ```
 
 ## <a id='private-images'></a> (Optional) Configure Kubernetes Cluster Access to Private Images
 
@@ -103,7 +107,7 @@ Note: Pivotal recommends that you keep the operator and service-broker images pr
 To configure the image repository:
 
 1. Provide your repository URL in the operator manifest `manifests/operator.yaml`.
-1. Replace all instances of REPLACE-WITH-RABBITMQ-IMAGE-URL with your image repository host, as in the example below:
+1. Replace all instances of REPLACE-WITH-RABBITMQ-IMAGE-REFERENCE with your image repository host. If you use a private registry, also replace the image pull secret as in the example below:
 
 ```
 apiVersion: v1
@@ -111,15 +115,15 @@ data:
   CONFIG: |
     SERVICE:
       TYPE: "ClusterIP"
-    IMAGE_URL: "EXAMPLE-RABBITMQ-IMAGE-URL"
-    IMAGE_PULL_SECRET: ""
+    IMAGE: "example-registry.pivotal.io/example-rabbitmq/rabbitmq:3.8.0"
+    IMAGE_PULL_SECRET: "example-secret"
 kind: ConfigMap
 metadata:
   name: p-rmq-operator-config
   namespace: pivotal-rabbitmq-system
 ```
 
-1. Replace all instances of REPLACE-WITH-OPERATOR-IMAGE-URL with the full operator image URL. This URL looks similar to the below.
+1. Replace all instances of REPLACE-WITH-OPERATOR-IMAGE-URL with the full operator image reference. This reference looks similar to the below.
 
   `YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION`
 
@@ -156,13 +160,13 @@ To specify a Service type for the RabbitMQ operator:
 ---
 apiVersion: v1
 data:
-  IMAGE_PULL_SECRET: ""
-  IMAGE_REPOSITORY: YOUR-IMAGE-REPOSITORY-HOST
+  IMAGE_PULL_SECRET: "example-secret"
+  IMAGE: "example-registry.pivotal.io/example-rabbitmq/rabbitmq:3.8.0"
   SERVICE: |
     TYPE: "NodePort"
 kind: ConfigMap
 metadata:
-  name: pivotal-rabbitmq-manager-config
+  name: p-rmq-operator-config
   namespace: pivotal-rabbitmq-system
 ---
 ```
@@ -177,7 +181,7 @@ To specify a Service type for the Service Broker:
 apiVersion: v1
 kind: Service
 metadata:
-  name: p-rmq-servicebroker
+  name: p-rmq-servicebroker-ingress
   namespace: pivotal-rabbitmq-system
 spec:
   ports:
@@ -232,8 +236,8 @@ To deploy the operator and the broker, and install the `RabbitmqCluster` custom 
   ```
   Where:
     * `SERVICE-BROKER-NAME` is a name of your choice for the service broker
-    * `SERVICE-BROKER-IP` is the external IP assigned to the `LoadBalancer` service named `p-rmq-servicebroker`,
-    which is deployed in the service broker namespace `pivotal-rabbitmq-servicebroker-system`
+    * `SERVICE-BROKER-IP` is the external IP assigned to the `LoadBalancer` service named `p-rmq-servicebroker-ingress`,
+    which is deployed in namespace `pivotal-rabbitmq-system`
     * `BROKER-USERNAME` is the broker username you used to create the Kubernetes secrets earlier in
     [Create Broker Credentials](#broker-creds).
     * `BROKER-PASSWORD` is the broker password you used to create the Kubernetes secrets earlier in
