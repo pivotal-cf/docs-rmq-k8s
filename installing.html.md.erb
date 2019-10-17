@@ -5,9 +5,9 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to install and configure Pivotal RabbitMQ for Kubernetes.
+This topic describes how to install and configure <%= vars.product_name %>.
 
-There are two methods to install RabbitMQ for Kubernetes, use one of the following:
+There are two methods to install <%= vars.product_name %>, use one of the following:
 
 * **Kubernetes Manifests:** If you are installing for the first time, use the procedure in this topic.
 * **CNAB:** If you have previously installed Pivotal RabbitMQ for Kubernetes, use the CNAB method.
@@ -15,13 +15,13 @@ For instructions, see [Installing and Configuring Using CNAB](./installing-cnab.
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before you install and configure RabbitMQ for Kubernetes, you must install and configure the following software:
+Before you install and configure <%= vars.product_name %>, you must install and configure the following software:
 
-1. **kubectl:** For installation instructions, see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/). <%# should we say install the latest version of kubectl %>
+1. **kubectl:** For installation instructions, see the [Kubernetes documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
 
-1. **Docker:** For installation instructions, see [Docker](https://docs.docker.com/install/)  <%# what should be downloaded - the docker cli? %>
+1. **Docker CLI:** For installation instructions, see the [Docker documentation](https://docs.docker.com/install/).
 
-1. **A Kubernetes cluster** <%# Do we want to mention Enterprise PKS here? %>
+1. **A v1.14 or later Kubernetes cluster**
 
 1. **A private registry:** Pivotal recommends that you keep the operator and
 service-broker images private if your repository is publicly accessible.
@@ -30,7 +30,7 @@ rabbitmq-for-k8s@pivotal.io for help.
 
 ## <a id='overview'></a> Overview
 
-To install and configure RabbitMQ for Kubernetes:
+To install and configure <%= vars.product_name %>:
 
 1. [Download Pivotal RabbitMQ for Kubernetes](#artifact)
 1. [Move the Images](#relocate)
@@ -43,7 +43,7 @@ To install and configure RabbitMQ for Kubernetes:
 
 ## <a id='artifact'></a> Download Pivotal RabbitMQ for Kubernetes
 
-Download the Pivotal RabbitMQ for Kubernetes artifact from
+Download the <%= vars.product_name %> artifact from
 [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/). The artifact contains
 three docker images as well as deployment manifests for the operator and the broker. The three images are:
 
@@ -134,13 +134,12 @@ metadata:
 
 ## <a id='config-service-type'></a> (Optional) Configure the Service Type
 
-If you do not want to use the default Service types for the RabbitMQ Operator and the Service Broker components,
-you can edit the manifests to change the Service Type.
+Service Broker is an OSBAPI-compliant component that allows integration with <%= vars.platform_name %> and other OSBAPI-based
+solutions such as [Kubernetes Service Catalog](https://github.com/kubernetes-sigs/service-catalog).
 
-| Component | Default Service Type |
-| ------|----------------------|
-| RabbitMQ Operator | `ClusterIP` |
-| Service Broker | `LoadBalancer` |
+When the Service Broker is deployed, it has to be exposed using a Kubernetes Service so that its endpoint can be
+reached by the API clients. By default, a LoadBalancer service type is configured. For more information, see
+the [Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 
 For more information about the Service types, see
 [the Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
@@ -151,7 +150,9 @@ For more information about the Service types, see
 
 ### <a id='procedures'></a> Procedures
 
-To specify a Service type for the RabbitMQ operator:
+For each RabbitMQ cluster deployed by the operator, a service is defined to allow RabbitMQ client connections.
+By default, <%= vars.product_name %> creates a service of type `ClusterIP`.
+To specify a different Service type for all newly created RabbitMQ clusters:
 
 1. Open `manifests/operator.yaml` in a text editor.
 1. Change `TYPE: "ClusterIP"` to `TYPE: "NodePort"` or `TYPE: "LoadBalancer"`, as in the example below:
@@ -212,7 +213,7 @@ the `pivotal-rabbitmq-system` namespace. To create a secret:
 
   <p class="note">
     <strong>Note:</strong>
-    The secret name must be `broker-credentials` and must be in the `pivotal-rabbitmq-system`
+    The secret name must be <code>broker-credentials</code> and must be in the <code>pivotal-rabbitmq-system</code>
     namespace with the username and password as part of the data. If not, the service broker fails to deploy.
     To read about other ways to create a secret, see
     <a href="https://kubernetes.io/docs/concepts/configuration/secret">the Kubernetes documentation</a>.
@@ -255,9 +256,8 @@ To deploy the operator and the broker, and install the `RabbitmqCluster` custom 
 
 Currently you cannot update the RabbitMQ cluster or any of its child objects after creation, such as stateful
 set, config map, service, and secrets. Attempts to update any of the configurations have no effect.
-Stateful set objects are re-created if you delete them.
-If you delete the child config map, service, or secret objects, however, they are not re-created. In this case,
-you must delete the cluster and re-create it again.
+`StatefulSet`, `ConfigMap` and `Service` objects are re-created if you delete them. However, `Secret` objects are
+not re-created automatically. If you lose them, you must manually re-create the secret or delete the cluster and re-create it again.
 
 ### <a id='rmq-image'></a> RabbitMQ Image
 
@@ -270,6 +270,8 @@ broker are deployed in. The broker creates a new namespace for each instance to 
 
 ### <a id='prov-status'></a> Provision Status of Service Instance
 
-If the service instance provision status is constantly `create in progress`, the RabbitMQ cluster might have
-failed to generate. Check the status of the RabbitMQ cluster resources in your Kubernetes cluster for more
-details about the failure.
+Due to the eventually-consistent design of Kubernetes, the Service Broker cannot tell whether a deployment takes a long time, failed
+temporarily (could succeed on another attempt) or failed permanently (it will not succeed without human intervention, eg. it refers to
+a non-existent `storageClass`). Therefore, the Service Broker never returns the `deployment failed` status but rather `create in progress`.
+If the service instance provision status is `create in progress` for more than a few minutes, the RabbitMQ cluster might have
+failed permanently. Check the status of the RabbitMQ cluster resources in your Kubernetes cluster for more details about the failure.
