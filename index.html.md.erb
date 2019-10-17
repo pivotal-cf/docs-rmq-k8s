@@ -5,51 +5,50 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-<%# If this product is in beta, keep and edit the warning note below. %>
-
 <%= partial vars.path_to_partials + "/services/beta-notice" %>
 
-RabbitMQ for Kubernetes is a Kubernetes operator that automates provisioning, management and operations of RabbitMQ clusters
+<%= vars.product_name %> is a Kubernetes operator that automates provisioning, management, and operations of RabbitMQ clusters
 running on Kubernetes.
 
-## <a id='overview'></a>Overview
+## <a id='overview'></a> Overview
 
-RabbitMQ for Kubernetes provides a consistent and easy way to deploy RabbitMQ clusters to Kubernetes and
-manage their lifecycle. RabbitMQ clusters can be accessed by applications running anywhere - on Kubernetes,
-Pivotal Application Service or elsewhere.
+<%= vars.product_name %> provides a consistent and easy way to deploy RabbitMQ clusters to Kubernetes and
+manage their lifecycle. RabbitMQ clusters can be accessed by apps running on Kubernetes,
+<%= vars.app_runtime %>, or anywhere else.
 
-RabbitMQ for Kubernetes has two main components:
+<%= vars.product_name %> has two main components:
 
-* Kubernetes operator that automates provisioning, management and operations of RabbitMQ clusters
-* Optional OSBAPI-compliant service broker for integration with Pivotal Platform
+* a Kubernetes operator that automates the provision, management, and operations of RabbitMQ clusters
+* (Optional) a OSBAPI-compliant service broker for integration with <%= vars.platform_name %>
 
-When combined with Pivotal Application Service, this product provides a single command experience to create RabbitMQ clusters
-(cf create-service) and to bind them to a PAS-deployed application (cf bind-service).
+When combined with <%= vars.app_runtime %>, this product enables you to create and bind RabbitMQ clusters with single commands.
+Run `cf create-service` to create RabbitMQ clusters and run `cf bind-service` to bind them to a <%= vars.app_runtime_abbr %>-deployed application.
 
-## <a id='features'></a>Key Features
+## <a id='features'></a> Key Features
 
-Pivotal RabbitMQ for Kubernetes includes the following key features:
+<%= vars.product_name %> includes the following key features:
 
-* Provisioning of a single-node and 3-node RabbitMQ clusters
+* Provisioning of single-node and 3-node RabbitMQ clusters
 * Automatic reconciliation of deployed clusters whenever their actual state does not match the expected state
-* Integration with Pivotal Platform through an OSBAPI service broker (optional - this product does not require Pivotal Platform)
-* Monitoring of RabbitMQ clusters via Prometheus and Grafana
-* Automated upgrades of RabbitMQ clusters (coming soon)
+* (Optional) integration with <%= vars.platform_name %> through an OSBAPI-compliant service broker
+* Monitoring of RabbitMQ clusters through Prometheus and Grafana. For more information, see the [Prometheus](https://prometheus.io/docs/introduction/overview/) and [Grafana](https://grafana.com/docs/) documentation.
 
-## <a id="snapshot"></a>Product Snapshot
+Automated upgrading of RabbitMQ clusters, another key feature, is planned for a later update.
 
-The following table provides version and version-support information about RabbitMQ for Kubernetes.
+## <a id="snapshot"></a> Product Snapshot
+
+The following table provides version and version-support information about <%= vars.product_name %>.
 
 <table class="nice">
     <th>Element</th>
     <th>Details</th>
     <tr>
         <td>Version</td>
-        <td>0.4.0</td>
+        <td>X.X.X</td>
     </tr>
     <tr>
         <td>Release date</td>
-        <td>October 21, 2019</td>
+        <td>MMMM DD, 2019</td>
     </tr>
     <tr>
         <td>Software component version</td>
@@ -58,20 +57,18 @@ The following table provides version and version-support information about Rabbi
 </table>
 
 
-## <a id="reqs"></a>Requirements
+## <a id="reqs"></a> Requirements
 
-RabbitMQ for Kubernetes has the following requirements:
+<%= vars.product_name %> requires a v1.14 or later Kubernetes cluster
 
-+ an existing Kubernetes cluster, version 1.14 or newer
+## <a id="limitations"></a> Limitations
 
-## <a id="limitations"></a>Limitations
-
-* This product is currently in beta. Pivotal does not provide commercial support for this product right now.
+* This product is currently in beta. Pivotal does not provide commercial support at this point.
 * This product is intended to be used with any Kubernetes distribution. However, given the number of Kubernetes vendors,
-  versions and configurations, we cannot guarantee it will work with all of them. The requirements section will be updated as we learn more.
-* Product upgrades are currently not supported. If you want to test a newer version, please delete the previous version first.
+  versions and configurations, it is impossible to say if it works with all of them. The requirements section is updated as research continues.
+* Product upgrades are currently not supported. If you want to test a newer version, delete the previous version first.
 
-## <a id="feedback"></a>Feedback
+## <a id="feedback"></a> Feedback
 
 If you have a feature request, questions, or information about an issue, please email
 [RabbitMQ for Kubernetes Feedback](mailto:rabbitmq-for-k8s@pivotal.io).
