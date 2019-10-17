@@ -10,21 +10,22 @@ using Cloud Native Application Bundle (CNAB).
 
 There are two methods to install <%= vars.product_name %>. Use one of the following:
 
-* **Kubernetes Manifests:** This method requires manual YAML editing but allows more flexibility; recommended for advanced users
+* **Kubernetes Manifests:** This method requires manually editing YAML but is more flexible than the CNAB method. Pivotal recommends this method for advanced users.
 For instructions, see [Installing and Configuring Using Kubernetes Manifests](./installing.html).
-* **CNAB:** This method uses [Cloud Native Application Bundle](https://cnab.io) to automate the installation process
+* **CNAB:** This method uses CNAB to automate the installation process.
+For information about CNAB, see [Cloud Native Application Bundle](https://cnab.io).
 
 ## <a id='prerequisites'></a> Prerequisites
 
 Before you install and configure <%= vars.product_name %>, you must install and configure:
 
-1. **kubectl:** For installation instructions, see the [Kubernetes documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/). <%# should we say install the latest version of kubectl %>
+1. **kubectl:** For installation instructions, see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes documentation.
 
-1. **Docker:** For installation instructions, see the [Docker documentation](https://docs.docker.com/install/)  <%# what should be downloaded - the docker cli? %>
+1. **The Docker CLI:** For installation instructions, see the [Docker documentation](https://docs.docker.com/install/).
 
 1. **Duffle:** For installation instructions, see [duffle](https://github.com/deislabs/duffle) on GitHub. <%# should we say install the latest version of duffle %>
 
-1. **A Kubernetes cluster**.
+1. **A Kubernetes cluster:** You must use Kubernetes v1.14 or later
 
 1. **A private registry:** Pivotal recommends that you keep the CNAB, operator, and
 service-broker images private if your repository is publicly accessible.
@@ -361,10 +362,11 @@ To register the service broker:
 1. Run the following command:
 
     ```
-    cf create-service-broker rabbitmq-for-kubernetes BROKER-USERNAME BROKER-PASSWORD https://IP-ADDRESS:8080
+    cf create-service-broker SERVICE-BROKER-NAME BROKER-USERNAME BROKER-PASSWORD https://IP-ADDRESS:8080
     ```
 
     Where:
+    * `SERVICE-BROKER-NAME` is
     * `BROKER-USERNAME` is
     * `BROKER-PASSWORD` is
     * `IP-ADDRESS` is
@@ -375,7 +377,7 @@ To register the service broker:
       ~$ cf create-service-broker rabbitmq-for-k8s BROKER-USERNAME BROKER-PASSWORD http://12.13.14.15:8080
       OK
     </pre>
-
+    
 <p class="note">
   <strong>Note:</strong>
   To register a service broker this way, you need to be logged in as Cloud Foundry admin.
