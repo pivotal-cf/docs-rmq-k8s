@@ -5,10 +5,10 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to install and configure Pivotal RabbitMQ for Kubernetes
+This topic describes how to install and configure <%= vars.product_name %>
 using Cloud Native Application Bundle (CNAB).
 
-There are two methods to install RabbitMQ for Kubernetes. Use one of the following:
+There are two methods to install <%= vars.product_name %>. Use one of the following:
 
 * **Kubernetes Manifests:** If you are installing for the first time, use the Kubernetes Manifests method.
 For instructions, see [Installing and Configuring Using Kubernetes Manifests](./installing.html).
@@ -16,11 +16,11 @@ For instructions, see [Installing and Configuring Using Kubernetes Manifests](./
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before you install and configure RabbitMQ for Kubernetes, you must install and configure:
+Before you install and configure <%= vars.product_name %>, you must install and configure:
 
-1. **kubectl:** For installation instructions, see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/). <%# should we say install the latest version of kubectl %>
+1. **kubectl:** For installation instructions, see the [Kubernetes documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/). <%# should we say install the latest version of kubectl %>
 
-1. **Docker:** For installation instructions, see [Docker](https://docs.docker.com/install/)  <%# what should be downloaded - the docker cli? %>
+1. **Docker:** For installation instructions, see the [Docker documentation](https://docs.docker.com/install/)  <%# what should be downloaded - the docker cli? %>
 
 1. **Duffle:** For installation instructions, see [duffle](https://github.com/deislabs/duffle) on GitHub. <%# should we say install the latest version of duffle %>
 
@@ -33,7 +33,7 @@ rabbitmq-for-k8s@pivotal.io for help.
 
 ## <a id='overview'></a> Overview
 
-To install and configure Pivotal RabbitMQ for Kubernetes:
+To install and configure <%= vars.product_name %>:
 
 1. [Download and Import Pivotal RabbitMQ for Kubernetes](#import)
 2. [Configure Kubernetes Cluster Access to your Private Registry](#generate-credentials)
@@ -50,18 +50,18 @@ To install and configure Pivotal RabbitMQ for Kubernetes:
   Otherwise, you see a 404 error.
 </p>
 
-To download and import Pivotal RabbitMQ for Kubernetes:
+To download and import <%= vars.product_name %>:
 
 1. Sign in to [Pivotal Network](https://login.run.pivotal.io/login).
 
-1. Download the Pivotal RabbitMQ for Kubernetes CNAB artifact from [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
+1. Download the <%= vars.product_name %> CNAB artifact from [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
 
 1. Extract the tarball that you downloaded to gain access to `bundle.json` by running:
 
     ```
     duffle import rabbitmq-for-kubernetes-cnab-VERSION.tgz
     ```
-    Where `VERSION` is the version of RabbitMQ for Kubernetes that you downloaded.
+    Where `VERSION` is the version of <%= vars.product_name %> that you downloaded.
     <br><br>
     For example:
 
@@ -80,7 +80,7 @@ To generate credentials to grant the Kubernetes cluster access to images in your
      -f rabbitmq-for-kubernetes-cnab-VERSION/bundle.json
     ```
 
-    Where `VERSION` is the version of RabbitMQ for Kubernetes that you downloaded.
+    Where `VERSION` is the version of <%= vars.product_name %> that you downloaded.
     <p class="note"><strong>Note:</strong>
      For more options on how to generate duffle credentials, run <code>duffle credentials --help</code>.
     </p>
@@ -352,7 +352,7 @@ To install the CNAB bundle:
 ## <a id='register'></a>(Optional) Register the Service Broker with Cloud Foundry
 
 The service broker is an optional component that allows integration with Cloud Foundry,
-such as Pivotal Application Service.
+such as <%= vars.app_runtime %>.
 
 To register the service broker:
 
@@ -377,7 +377,7 @@ To register the service broker:
 
 <p class="note">
   <strong>Note:</strong>
-  To register a service broker this way, you need to be logged in as Cloud Foundry administrator.
+  To register a service broker this way, you need to be logged in as Cloud Foundry admin.
   If you want, you can register a space-scoped service broker as a normal user by adding <code>--space-scoped</code> parameter to the command above.
 </p>
 
@@ -386,7 +386,7 @@ see [Register a Broker in Cloud Foundry documentation](https://docs.cloudfoundry
 
 ## <a id='troubleshooting'></a>Troubleshooting the Installation
 
-The steps below allow you to verify the installation and to provision an instance without registering the service broker with Pivotal Application Service.
+The steps below allow you to verify the installation and to provision an instance without registering the service broker with <%= vars.app_runtime %>.
 
 1. Verify the operator and broker have been installed successfully and get the
 address for the broker from the service object by running:
@@ -568,6 +568,6 @@ For example:
       namespace "pivotal-rabbitmq-system" deleted
     </pre>
 
-Since upgrades are currently not supported, you should also uninstall the product before installing a newer version.
+Because upgrades are currently not supported, you should also uninstall the product before installing a newer version.
 
 %>
