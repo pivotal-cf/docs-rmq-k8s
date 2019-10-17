@@ -7,21 +7,23 @@ owner: RMQ for k8s
 
 This topic describes how to install and configure <%= vars.product_name %>.
 
-There are two methods to install <%= vars.product_name %>, use one of the following:
+There are two methods to install <%= vars.product_name %>. Use one of the following:
 
-* **Kubernetes Manifests:** This method requires manual YAML editing but allows more flexibility; recommended for advanced users
-* **CNAB:** This method uses [Cloud Native Application Bundle](https://cnab.io) to automate the installation process
-For instructions, see [Installing and Configuring Using CNAB](./installing-cnab.html)
+* **Kubernetes Manifests:** This method requires manually editing YAML but is more flexible than the CNAB method. 
+Pivotal recommends this method for advanced users.
+* **CNAB:** This method uses CNAB to automate the installation process. 
+For instructions, see [Installing and Configuring Using CNAB](./installing-cnab.html).
+For information about CNAB, see [Cloud Native Application Bundle](https://cnab.io).
 
 ## <a id='prerequisites'></a> Prerequisites
 
 Before you install and configure <%= vars.product_name %>, you must install and configure the following software:
 
-1. **kubectl:** For installation instructions, see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
+1. **kubectl:** For installation instructions, see the [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes documentation.
 
-1. **Docker CLI:** For installation instructions, see [Docker](https://docs.docker.com/install/)
+1. **Docker CLI:** For installation instructions, see the [Docker documentation](https://docs.docker.com/install/).
 
-1. **A Kubernetes cluster**, version 1.14 or newer
+1. **A v1.14 or later Kubernetes cluster**
 
 1. **A private image registry:** Pivotal recommends that you keep the operator and
 service-broker images private if your repository is publicly accessible.
@@ -135,11 +137,12 @@ metadata:
 
 ## <a id='config-service-type'></a> (Optional) Configure the Service Broker Service Type
 
-Service Broker is an OSBAPI-compliant component that allows integration with the Pivotal Platform and other OSBAPI-based
-solutions such as [Kubernetes Service Catalog](https://github.com/kubernetes-sigs/service-catalog)
+Service Broker is an OSBAPI-compliant component that allows integration with <%= vars.platform_name %> and other OSBAPI-based
+solutions such as [Kubernetes Service Catalog](https://github.com/kubernetes-sigs/service-catalog).
 
-When the Service Broker is deployed, it has to be exposed using a [Kubernetes Service](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
-so that its endpoint can be reached by the API clients. By default, a LoadBalancer service type is configured.
+When the Service Broker is deployed, it has to be exposed using a Kubernetes Service so that its endpoint can be
+reached by the API clients. By default, a LoadBalancer service type is configured. For more information, see
+the [Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 
 To specify a different Service type for the Service Broker or provide additional LoadBalancer configuration (such as annotations):
 
@@ -170,7 +173,7 @@ status:
 ## <a id='config-service-type'></a> (Optional) Configure the RabbitMQ Instance Service Type
 
 For each RabbitMQ cluster deployed by the operator, a service is defined to allow RabbitMQ client connections.
-By default, RabbitMQ for Kubernetes creates a service of type `ClusterIP`.
+By default, <%= vars.product_name %> creates a service of type `ClusterIP`.
 To specify a different Service type for all newly created RabbitMQ clusters:
 
 1. Open `manifests/operator.yaml` in a text editor.
