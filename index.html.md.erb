@@ -22,7 +22,7 @@ manage their lifecycle. RabbitMQ clusters can be accessed by apps running on Kub
 * (Optional) An OSBAPI-compliant service broker for integration with <%= vars.platform_name %>
 
 When combined with <%= vars.app_runtime %>, this product enables you to create and bind RabbitMQ clusters with single commands.
-Run `cf create-service` to create RabbitMQ clusters and run `cf bind-service` to bind them to a <%= vars.app_runtime_abbr %>-deployed application.
+Run `cf create-service` to create RabbitMQ clusters and run `cf bind-service` to bind them to a <%= vars.app_runtime %>-deployed application.
 
 ## <a id='features'></a> Key Features
 
@@ -31,8 +31,8 @@ Run `cf create-service` to create RabbitMQ clusters and run `cf bind-service` to
 * Provisioning of single-node and 3-node RabbitMQ clusters
 * Automatic reconciliation of deployed clusters whenever their actual state does not match the expected state
 * Integration with <%= vars.platform_name %> through an OSBAPI-compliant service broker
-* Monitoring of RabbitMQ clusters through Prometheus and Grafana. 
-For more information, see the [Prometheus](https://prometheus.io/docs/introduction/overview/) 
+* Monitoring of RabbitMQ clusters through Prometheus and Grafana.
+For more information, see the [Prometheus](https://prometheus.io/docs/introduction/overview/)
 and [Grafana](https://grafana.com/docs/) documentation.
 
 Automated upgrading of RabbitMQ clusters, another key feature, is planned for a later update.
@@ -60,19 +60,20 @@ The following table provides version and version-support information about <%= v
 
 
 ## <a id="reqs"></a> Requirements
-RabbitMQ for Kubernetes has the following requirements:
+<%= vars.product_name %> has the following requirements:
 
 + <%= vars.product_name %> requires a v1.14 or later Kubernetes cluster
 
 <%# ARE THERE MORE REQUIREMENTS? ARE THE PREREQS ON THE INSTALLING PAGES REQUIREMENTS? %>
+<%# Should we even have a Requirements section if it just means repeating Installation doc content? %>
 
 ## <a id="limitations"></a> Limitations
 
 * This product is currently in beta. Pivotal does not currently provide commercial support.
-* This product is intended to be used with any Kubernetes distribution. 
-  However, given the number of Kubernetes vendors, versions and configurations, not all of them have been 
+* This product is intended to be used with any Kubernetes distribution.
+  However, given the number of Kubernetes vendors, versions and configurations, not all of them have been
   tested with <%= vars.product_name %>.
-* Product upgrades are currently not supported. 
+* Product upgrades are currently not supported.
 If you want to test a newer version, delete the previous version first.
 
 ## <a id="feedback"></a> Feedback
