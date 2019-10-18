@@ -19,9 +19,11 @@ For information about CNAB, see [Cloud Native Application Bundle](https://cnab.i
 
 Before you install and configure <%= vars.product_name %>, you must install and configure the following software:
 
-1. **kubectl:** For installation instructions, see the [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes documentation.
+1. **kubectl:** For installation instructions,
+see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes documentation.
 
-1. **Docker CLI:** For installation instructions, see the [Docker documentation](https://docs.docker.com/install/).
+1. **The Docker CLI:** For installation instructions,
+see the [Docker documentation](https://docs.docker.com/install/).
 
 1. **A Kubernetes cluster:** You must use Kubernetes v1.14 or later.
 
@@ -210,8 +212,8 @@ To specify a different ServiceType for all newly created RabbitMQ clusters:
 
 1. Open `manifests/operator.yaml` in a text editor.
 1. Find the `p-rmq-operator-config` ConfigMap definition.
-1. Change `TYPE: "ClusterIP"` to `TYPE: "NodePort"` or `TYPE: "LoadBalancer"`.
-For example below:
+1. Change `TYPE: "ClusterIP"` to `TYPE: "NodePort"` or `TYPE: "LoadBalancer"`.<br>
+For example:
 
     ```yaml
     ---

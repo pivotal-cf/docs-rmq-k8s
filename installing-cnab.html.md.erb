@@ -19,15 +19,18 @@ For information about CNAB, see [Cloud Native Application Bundle](https://cnab.i
 
 Before you install and configure <%= vars.product_name %>, you must install and configure:
 
-1. **kubectl:** For installation instructions, see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes documentation.
+1. **kubectl:** For installation instructions,
+see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes documentation.
 
-1. **The Docker CLI:** For installation instructions, see the [Docker documentation](https://docs.docker.com/install/).
+1. **The Docker CLI:** For installation instructions,
+see the [Docker documentation](https://docs.docker.com/install/).
 
-1. **Duffle:** For installation instructions, see [duffle](https://github.com/deislabs/duffle) on GitHub. <%# should we say install the latest version of duffle %>
+1. **Duffle:** For installation instructions,
+see [duffle](https://github.com/deislabs/duffle) on GitHub. <%# should we say install the latest version of duffle %>
 
 1. **A Kubernetes cluster:** You must use Kubernetes v1.14 or later.
 
-1. **A private image registry:** Pivotal recommends that you keep the CNAB, operator, and
+1. **A private image registry:** Pivotal recommends that you keep the CNAB, RabbitMQ operator, and
 service-broker images private if your repository is publicly accessible.
 If you do not have access to a private image registry, email the team at
 rabbitmq-for-k8s@pivotal.io for help.
@@ -391,7 +394,7 @@ see [Register a Broker in Cloud Foundry documentation](https://docs.cloudfoundry
 
 The steps below allow you to verify the installation and to provision an instance without registering the service broker with <%= vars.app_runtime %>.
 
-1. Verify the operator and broker have been installed successfully and get the
+1. Verify the RabbitMQ operator and broker have been installed successfully and get the
 address for the broker from the service object by running:
 
     ```
