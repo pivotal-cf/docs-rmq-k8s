@@ -25,7 +25,7 @@ Before you install and configure <%= vars.product_name %>, you must install and 
 
 1. **A Kubernetes cluster:** You must use Kubernetes v1.14 or later.
 
-1. **A private image registry:** Pivotal recommends that you keep the operator and
+1. **A private image registry:** Pivotal recommends that you keep the RabbitMQ operator and
 service broker images private if your repository is publicly accessible.
 If you do not have access to a private image registry, email the team at
 rabbitmq-for-k8s@pivotal.io for help.
@@ -40,14 +40,14 @@ To install and configure <%= vars.product_name %>:
 1. [Configure the Image Repository](#image-repo)
 1. [(Optional) Configure the Service Type](#config-service-type)
 1. [Create Broker Credentials](#broker-creds)
-1. [Deploy the Operator and the Broker and Install RabbitMQCluster](#deploy-op-and-broker)
+1. [Deploy the RabbitMQ Operator and the Broker and Install RabbitMQCluster](#deploy-op-and-broker)
 1. [Register the Broker with Cloud Foundry](#register-broker)
 
 ## <a id='artifact'></a> Download Pivotal RabbitMQ for Kubernetes
 
 Download the <%= vars.product_name %> artifact from
 [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/). The artifact contains
-three docker images as well as deployment manifests for the operator and the broker. The three images are:
+three docker images as well as deployment manifests for the RabbitMQ operator and the broker. The three images are:
 
 1. RabbitMQ
 2. RabbitMQ Operator
@@ -94,13 +94,15 @@ docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION
 
 ## <a id='private-images'></a> (Optional) Configure Kubernetes Cluster Access to Private Images
 
-<p class=note><strong>Note:</strong> If your repository is publicly accessible, Pivotal recommends that you keep your operator and service broker images in a private image repository.</p>
-
 If you require authentication to pull images from your private image registry, you must authorize access to the images from the `pivotal-rabbitmq-system` namespace.
+
+<p class=note><strong>Note:</strong> If your repository is publicly accessible, 
+  Pivotal recommends that you keep your RabbitMQ operator and service broker images in a private image repository.
+</p>
 
 To authorize access to images:
 
-1. Create a secret for private image registry by running: 
+1. Create a secret for your private image registry by running: 
 
     ```
     kubectl -n pivotal-rabbitmq-system create secret \ 
@@ -112,7 +114,7 @@ To authorize access to images:
     
     Where:
     + `DOCKER-SERVER` is the server URL for your private image registry.
-    + `DOCKER-USERNAME` is your username for private registry authentication.
+    + `DOCKER-USERNAME` is your username for your private image registry authentication.
     + `DOCKER-PASSWORD` is your password for your private image registry authentication.
     
     For example
@@ -134,7 +136,7 @@ To authorize access to images:
 
 To configure the image repository:
 
-1. Provide your repository URL in the operator manifest `manifests/operator.yaml`.
+1. Provide your repository URL in the RabbitMQ operator manifest `manifests/operator.yaml`.
 1. Replace all instances of REPLACE-WITH-RABBITMQ-IMAGE-REFERENCE with your image repository host. If you use a private image registry, also replace the image pull secret as in the example below:
 
 ```
@@ -151,7 +153,7 @@ metadata:
   namespace: pivotal-rabbitmq-system
 ```
 
-1. Replace all instances of REPLACE-WITH-OPERATOR-IMAGE-URL with the full operator image reference. This reference looks similar to the below.
+1. Replace all instances of REPLACE-WITH-OPERATOR-IMAGE-URL with the full RabbitMQ operator image reference. This reference looks similar to the below.
 
   `YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION`
 
@@ -166,10 +168,9 @@ The <%= vars.product_short %> service broker is an Open Service Broker API (OSBA
 solutions, such as [Service Catalog](https://github.com/kubernetes-sigs/service-catalog).
 
 When the service broker is deployed, you must expose the service broker using a Kubernetes ServiceType. 
-This enables API clients to reach the service broker endpoint. 
+This enables API clients to reach the service broker endpoint. By default, <%= vars.product_short %> configures a `LoadBalancer` ServiceType. 
 
-
-By default, <%= vars.product_short %> configures a `LoadBalancer` ServiceType. For more information, see [Publishing Services (ServiceTypes)](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) in the Kubernetes documentation.
+For more information, see [Publishing Services (ServiceTypes)](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) in the Kubernetes documentation.
 
 To configure your service broker ServiceType:
 
@@ -202,7 +203,7 @@ To configure your service broker ServiceType:
 
 ## <a id='config-service-type'></a> (Optional) Configure the RabbitMQ Instance ServiceType
 
-For each RabbitMQ cluster deployed by the operator, you must configure a Service to enable RabbitMQ client connections.
+For each RabbitMQ cluster deployed by the RabbitMQ operator, you must configure a ServiceType to enable RabbitMQ client connections.
 By default, <%= vars.product_short %> configures a `ClusterIP` ServiceType.
 
 To specify a different ServiceType for all newly created RabbitMQ clusters:
@@ -256,17 +257,15 @@ the `pivotal-rabbitmq-system` namespace. To create a secret:
     <a href="https://kubernetes.io/docs/concepts/configuration/secret">the Kubernetes documentation</a>.
   </p>
 
-## <a id='deploy-op-and-broker'></a> Deploy the Operator and the Broker and Install RabbitMQCluster
+## <a id='deploy-op-and-broker'></a> Deploy the RabbitMQ Operator and the Broker and Install RabbitMQCluster
 
-To deploy the operator and the broker, and install the `RabbitmqCluster` custom resource definition, run:
+To deploy the RabbitMQ operator and the broker, and install the `RabbitmqCluster` custom resource definition, run:
 
   ```
   kubectl apply -f manifests/
   ```
 
 ## <a id='register-broker'></a> Register the Broker with Cloud Foundry
-
-
 
 1. Register the service broker by running:
 
@@ -293,7 +292,7 @@ To deploy the operator and the broker, and install the `RabbitmqCluster` custom 
 
 The section describes <%= vars.product_short %> limitations.
 
-### <a id='update-rmq-cluster'></a> Updating the RabbitMQ Cluster
+### <a id='update-rmq-cluster'></a> RabbitMQ Cluster Updates
 
 Currently, after you create a RabbitMQ Cluster, you cannot update the cluster or any of its child objects. Child objects include `StatefulSet`, `ConfigMap`, `Service`, and `Secret`. If you try to update any of the configurations, there is no effect. 
 
