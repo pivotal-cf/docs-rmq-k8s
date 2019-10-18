@@ -5,11 +5,11 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to use Pivotal RabbitMQ for Kubernetes with Pivotal Platform and Cloud Foundry.
+This topic describes how to use <%= vars.product_name %> with Pivotal Platform and Cloud Foundry.
 
 ## <a id='overview'></a> Overview
 
-You can use RabbitMQ for Kubernetes to:
+You can use <%= vars.product_name %> to:
 
 1. [Confirm Service Availability](#marketplace)
 1. [Create a Service Instance](#create)
@@ -25,7 +25,7 @@ For an app to use a service, the service must be available in the Marketplace fo
 To confirm this availability:
 
 1. Run `cf marketplace`.
-1. Check that `p-rabbitmq-k8s` is in the `service` column. If it is, Pivotal RabbitMQ for Kubernetes is available. If it is not, ask your operator to install it.
+1. Check that `p-rabbitmq-k8s` is in the `service` column. If it is, <%= vars.product_name %> is available. If it is not, ask your operator to install it.
 
     <pre class="terminal">
     $ cf marketplace
@@ -43,7 +43,7 @@ For an app to use a service, an instance of the service must exist in its space.
 Services are created asynchronously, not immediately.
 The `watch` command shows you when your service instance is ready to bind and use.
 
-To create an instance of the RabbitMQ for Kubernetes service:
+To create an instance of the <%= vars.product_name %> service:
 
 1. Check to see if there is an existing service by running:
 
@@ -74,9 +74,9 @@ To create an instance of the RabbitMQ for Kubernetes service:
     + `HA` is the plan.
     You can replace it with any of the other plans listed in the Marketplace for the
     `p-rabbitmq-k8s` service.
-    
+
     For example:
-    
+
     <pre class="terminal">$ cf create-service p-rabbitmq-k8s single-node my-instance
     Creating service my-instance in org my-org / space my-space as user<span>@</span>example.com...
     OK</pre>
@@ -96,8 +96,8 @@ To create an instance of the RabbitMQ for Kubernetes service:
     my-instance   p-rabbitmq-k8s ha                           create succeeded
     </pre>
    If you encounter an error, contact your operator or email the team at rabbitmq-for-k8s@pivotal.io for help.
-   Specifically, make sure that your Kubernetes cluster has a default storage class configured or that a correct storage class is configured in the RabbitMQ for Kubernetes Operator config map.
-   
+   Specifically, ensure that your Kubernetes cluster has a default storage class configured or that a correct storage class is configured in the RabbitMQ for Kubernetes Operator config map.
+
    <%# HOW DO PEOPLE CONFIGURE THE OPERATOR CONFIG MAP? CAN WE GET A LINK? WHAT IS THE CORRECT/DEFAULT STORAGE CLASS? WHAT IS A TYPICAL ERROR? WHAT COMMAND WOULD OUTPUT THIS ERROR?%>
 
 ## <a id='binding'></a> Bind Your Service Instance to an App
@@ -128,7 +128,7 @@ OK
 Apps running in Cloud Foundry gain access to the bound service instances through an environment variable called `VCAP_SERVICES`.
 
 Apps that have been bound to a service instance can read `VCAP_SERVICES` from their environment.
-To see the `VCAP_SERVICES` for an app, run `cf env APP-NAME` with the name of an app bound to the Pivotal RabbitMQ for Kubernetes instance. An example hash is shown below:
+To see the `VCAP_SERVICES` for an app, run `cf env APP-NAME` with the name of an app bound to the <%= vars.product_name %> instance. An example hash is shown below:
 <%# ARE THE BELOW VALUES DUMMYS? CAN BE MORE OBVIOUSLY DUMMIES %>
 
 ```json
@@ -201,7 +201,7 @@ To see the `VCAP_SERVICES` for an app, run `cf env APP-NAME` with the name of an
 }
 
 ```
-  
+
 
 
 ## <a id="unbind"></a>Unbind a Service Instance From Your App
