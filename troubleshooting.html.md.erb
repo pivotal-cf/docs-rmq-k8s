@@ -39,10 +39,10 @@ To solve this problem:
 Follow the steps in the sections below to check that CNAB was installed successfully and that you can provision
 an instance without registering the service broker with <%= vars.app_runtime %>.
 
-### <a id='verify-operator-and-broker'></a> Verify That the RabbitMQ Operator and Broker Are Installed
+### <a id='verify-operator-and-broker'></a> Verify Kubernetes Operator and Service Broker Installation
 
-Verify that the RabbitMQ operator and broker have been installed successfully and get the
-address for the broker from the service object by running:
+Verify that the Kubernetes Operator and service broker have been installed successfully and get the
+address for the service broker from the service object by running:
 
     ```
     kubectl -n pivotal-rabbitmq-system get all

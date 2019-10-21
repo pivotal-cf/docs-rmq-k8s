@@ -30,8 +30,8 @@ see [duffle](https://github.com/deislabs/duffle) on GitHub.
 
 1. **A Kubernetes cluster:** You must use Kubernetes v1.14 or later.
 
-1. **A private image registry:** Pivotal recommends that you keep the CNAB, RabbitMQ operator, and
-service-broker images private even if your repository is publicly accessible.
+1. **A private image registry:** Pivotal recommends that you keep the CNAB, Kubernetes Operator, and
+service broker images private even if your repository is publicly accessible.
 If you do not have access to a private image registry, email the team at
 rabbitmq-for-k8s@pivotal.io for help.
 
@@ -162,8 +162,8 @@ If the authentication token has expired, an error message appears when you run t
     ```
 
     Where:
-    * `BROKER-USERNAME` is a username you specify for your broker
-    * `BROKER-PASSWORD` is a password you specify for your broker
+    * `BROKER-USERNAME` is a username you specify for your service broker
+    * `BROKER-PASSWORD` is a password you specify for your service broker
 
     For example:
 
@@ -396,7 +396,7 @@ To register the service broker:
 </p>
 
 For more information about registering service brokers,
-see [Register a Broker in Cloud Foundry documentation](https://docs.cloudfoundry.org/services/managing-service-brokers.html#register-broker).
+see [Register a Broker](https://docs.cloudfoundry.org/services/managing-service-brokers.html#register-broker) in Cloud Foundry documentation.
 
 ## <a id='troubleshooting'></a> Troubleshoot the Installation
 
