@@ -53,13 +53,28 @@ three docker images as well as deployment manifests for the RabbitMQ operator an
 2. RabbitMQ Operator
 3. Service Broker
 
+## <a id='set-ver-var'></a> Set a Version Variable
+
+Set a version variable by running:
+
+  ```
+  export version=NUMBER-build.NUMBER
+  ```
+
+  Where NUMBER is the CNAB artifact version listed in the name of the file downloaded in the previous step.
+
+  For example:
+  ```
+  export version=0.4.0-build.32
+  ```
+
 ## <a id='relocate'></a> Move the Images
 
 Load the images to your local Docker by running the following commands:
 
 ```bash
-tar xvf PATH-TO-RABBITMQ-FOR-KUBERNETES-VERSION.tar
-cd RABBITMQ-FOR-KUBERNETES-VERSION
+tar xvf PATH-TO-RABBITMQ-FOR-KUBERNETES-$version.tar
+cd RABBITMQ-FOR-KUBERNETES-$version
 docker load -i images/rabbitmq-for-kubernetes-operator
 docker load -i images/rabbitmq
 docker load -i images/rabbitmq-for-kubernetes-servicebroker
@@ -69,19 +84,19 @@ Tag each image to point to your own image repository by running these commands:
 
 ```bash
 ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq \
->  YOUR-REPOSITORY/rabbitmq:VERSION
+>  YOUR-REPOSITORY/rabbitmq:$version
 ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-operator \
->  YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION
+>  YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
 ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-servicebroker \
->  YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION
+>  YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
 ```
 
 Push each image to your own image repository by running these commands:
 
 ```bash
-docker push YOUR-REPOSITORY/rabbitmq:VERSION
-docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION
-docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION
+docker push YOUR-REPOSITORY/rabbitmq:$version
+docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
+docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
 ```
 
 ## <a id='private-images'></a> Create the Namespace
@@ -155,12 +170,12 @@ metadata:
 
 1. Replace all instances of REPLACE-WITH-OPERATOR-IMAGE-URL with the full RabbitMQ operator image reference. This reference looks similar to the below.
 
-  `YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION`
+  `YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version`
 
 1. Provide your repository URL in the service broker manifest `manifests/broker.yaml`
 1. Replace all instances of REPLACE-WITH-BROKER-IMAGE-URL with the full broker image URL. This URL looks similar to the below.
 
-  `YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION`
+  `YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version`
 
 ## <a id='config-service-type'></a> (Optional) Configure the Service Broker ServiceType
 
@@ -288,3 +303,8 @@ To deploy the RabbitMQ operator and the broker, and install the `RabbitmqCluster
 ## <a id='uninstall-bundle'></a> Uninstall the Bundle
 
 Follow the steps in [Uninstall the Bundle](./upgrading.html#uninstall-bundle)
+
+
+## <a id='troubleshooting'></a> Troubleshoot the Installation
+
+To troubleshoot the installation, follow the steps in [Troubleshoot the Installation](./troubleshooting.html#ts-install).

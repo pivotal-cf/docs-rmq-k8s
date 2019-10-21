@@ -34,7 +34,7 @@ To solve this problem:
 
 2.
 
-## <a id='ts-install'></a> Troubleshoot the Cloud Native Application Bundle (CNAB) Installation
+## <a id='ts-install'></a> Troubleshoot the Installation
 
 Follow the steps in the sections below to check that CNAB was installed successfully and that you can provision
 an instance without registering the service broker with <%= vars.app_runtime %>.
@@ -45,17 +45,18 @@ Verify that the RabbitMQ operator and broker have been installed successfully an
 address for the broker from the service object by running:
 
     ```
-    kubectl -n pivotal-rabbitmq-system get services
+    kubectl -n pivotal-rabbitmq-system get all
     ```
     For example:
 
     <pre class="terminal">
-      $ kubectl -n pivotal-rabbitmq-system get services
+      $ kubectl -n pivotal-rabbitmq-system get all
+      <%# Update this example for `get all`
       NAME                          TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)          AGE
       p-rmq-servicebroker-ingress   LoadBalancer   10.109.111.3   172.17.255.1   8080:30444/TCP   58m
-    </pre>
+    </pre> %>
 
-### <a id='check-ids'></a> Check the Service and Plan IDs
+### <a id='check-connect'></a> Check Connectivity to the Service Broker
 
 1. View the catalog to see the service and plan IDs by running:
 
@@ -66,11 +67,9 @@ address for the broker from the service object by running:
     ```
 
     Where:
-    * `BROKER-USERNAME` is the `broker_username` you specified in the `duffle install` command during the
-    CNAB bundle installation. For more information, see [Install the CNAB Bundle](installing-cnab.html#install).
-    * `BROKER-PASSWORD` is the `broker_password` you specified in the `duffle install` command during the
-    CNAB bundle installation. For more information, see [Install the CNAB Bundle](installing-cnab.html#install).
-    * `IP-ADDRESS` is found in the output of `kubectl get services` command
+    * `BROKER-USERNAME` is the broker username you set during installation.
+    * `BROKER-PASSWORD` is the broker password you set during installation.
+    * `IP-ADDRESS` is found in the output of the `kubectl get services` command.
 
     For example:
 
@@ -79,7 +78,11 @@ address for the broker from the service object by running:
       {"services":[{"id":"00000000-0000-0000-0000-000000000000","name":"p-rabbitmq-k8s","description":"RabbitMQ on K8s","bindable":true,"tags":["rabbitmq","amqp"],"plan_updateable":false,"plans":[{"id":"22222222-2222-2222-2222-222222222222","name":"single","description":"Single-node RabbitMQ on K8s"},{"id":"33333333-3333-3333-3333-333333333333","name":"ha","description":"3-node RabbitMQ on K8s"}]}]}
     </pre>
 
-1. Provision a service instance by running:
+### <a id='prov-instance'></a> Provision an Instance Using the Service Broker
+
+You can validate that the service broker works by manually triggering a service instance provision.
+
+Provision a service instance by running:
 
     ```
     curl -X PUT -H "X-Broker-API-Version: 2.14" \
@@ -104,20 +107,26 @@ address for the broker from the service object by running:
       {}
     </pre>
 
-1. Retrieve the instance ID by running:
+### <a id='find-namespace'></a> Find the Namespace If Using the Service Broker
 
-    ```
-    kubectl get namespaces
-    ```
-<%# how do they know which namespace is the instance ID to use? also get example. %>
+When the service broker provisions an instance it creates a namespace. The pattern for that namespace is `p-rmq-GUID`.
 
-1. Check that the RabbitMQ cluster was created by running:
+To retrieve the instance ID run `cf service INSTANCE-NAME --guid `.
 
-    ```
-    kubectl -n p-rmq-INSTANCE-ID get all
-    ```
-    Where `INSTANCE-ID` is the name you specified in the step above.
-    <br><br>
+For example:
+  <pre class="terminal">
+    $ cf service rmq1 --guid 
+      9ec22161-c935-4fab-a3fa-66f5446dc434
+  </pre>
+
+### <a id='check-instance-status'></a> Check the Status of an Instance
+
+1. To check the status of an instance, run `kubectl -n NAMESPACE get all`.
+
+Where NAMESPACE is the Kubernetes namespace of the instance.
+
+If you do not know the namespace, follow the steps in [Find the Namespace If Using the Service Broker](#find-namespace).
+
     For example:
 
     <pre class="terminal">
@@ -132,3 +141,5 @@ address for the broker from the service object by running:
       NAME                                       READY   AGE
       statefulset.apps/pivotal-rabbitmq-server   1/1     2m28s
     </pre>
+
+1. Check for any status other than `Running`.

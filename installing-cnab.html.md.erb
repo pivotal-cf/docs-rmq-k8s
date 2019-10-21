@@ -25,8 +25,8 @@ see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-
 1. **The Docker CLI:** For installation instructions,
 see the [Docker documentation](https://docs.docker.com/install/).
 
-1. **Duffle:** For installation instructions,
-see [duffle](https://github.com/deislabs/duffle) on GitHub. <%# should we say install the latest version of duffle %>
+1. **Duffle:** Install v0.3.3-beta.1 or later. For installation instructions,
+see [duffle](https://github.com/deislabs/duffle) on GitHub.
 
 1. **A Kubernetes cluster:** You must use Kubernetes v1.14 or later.
 
@@ -60,18 +60,24 @@ To download and import <%= vars.product_name %>:
 
 1. Download the <%= vars.product_name %> CNAB artifact from [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
 
+1. Set a version variable by running:
+
+  ```
+  export version=NUMBER-build.NUMBER
+  ```
+
+  Where NUMBER is the CNAB artifact version listed in the name of the file downloaded in the previous step.
+
+  For example:
+  ```
+  export version=0.4.0-build.32
+  ```
+
 1. Extract the tarball that you downloaded to gain access to `bundle.json` by running:
 
     ```
-    duffle import rabbitmq-for-kubernetes-cnab-VERSION.tgz
+    duffle import rabbitmq-for-kubernetes-cnab-$version.tgz
     ```
-    Where `VERSION` is the version of <%= vars.product_name %> that you downloaded.
-    <br><br>
-    For example:
-
-    <pre class="terminal">
-      $ duffle import rabbitmq-for-kubernetes-cnab-0.4.0-build.32.tgz
-    </pre>
 
 ## <a id='generate-credentials'></a>Configure Kubernetes Cluster Access to your Private Image Registry
 
@@ -81,10 +87,9 @@ To generate credentials to grant the Kubernetes cluster access to images in your
 
     ```
     duffle credentials generate rabbitmq-creds \
-     -f rabbitmq-for-kubernetes-cnab-VERSION/bundle.json
+     -f rabbitmq-for-kubernetes-cnab-$version/bundle.json
     ```
 
-    Where `VERSION` is the version of <%= vars.product_name %> that you downloaded.
     <p class="note"><strong>Note:</strong>
      For more options on how to generate duffle credentials, run <code>duffle credentials --help</code>.
     </p>
@@ -106,7 +111,7 @@ To move the images to your private image registry:
 1. Run the following command:
 
     ```
-    duffle relocate rabbitmq-for-kubernetes-cnab-VERSION.tgz -f \
+    duffle relocate rabbitmq-for-kubernetes-cnab-$version.tgz -f \
       --repository-prefix=REGISTRY-HOST/ACCOUNT-NAME \
       --relocation-mapping=relmap.json
     ```
@@ -136,17 +141,20 @@ To move the images to your private image registry:
 
 To install the CNAB bundle:
 
-1. Ensure that your Kubernetes authentication token has not expired by running:
+1. Ensure that your Kubernetes authentication token has not expired by running any kubectl command that connects
+with the Kubernetes cluster.
 
+For example:
     ```
     kubectl get nodes
     ```
-<%# what would you see if the auth has/hasn't expired? %>
+
+If the authentication token has expired, an error message appears when you run the command in the next step.
 
 1. Run the following command:
 
     ```
-    duffle install rabbitmq rabbitmq-for-kubernetes-cnab-VERSION.tgz -f \
+    duffle install rabbitmq rabbitmq-for-kubernetes-cnab-$version.tgz -f \
       --relocation-mapping=relmap.json \
       --credentials rabbitmq-creds \
       --set broker_username=BROKER-USERNAME \
