@@ -70,3 +70,15 @@ for the version that **master** was targeting during that time.
 A corresponding section in **config.yml** in the [docs-book-pcfservices][docs-book-pcfservices] repository would also need to be made.
 
 After this point, **master** will then be the target for the next version of the RabbitMQ product.
+
+
+
+## Style Guide
+
+This is a word list for terminology and word usage specific to the RabbitMQ for Kubernetes for docs.
+
+| Word | Explanation |
+|------|-------------|
+| Kuberenetes Operator |This operator refers to an Operator pattern, which is a Kubernetes concept. You can have a container image for the Operator code but it is not an image itself. Always capitalize it to help differentiate the term from the Alana persona operator.|
+| service broker |Unless you are specifically refering to the Open Source Service Broker API, do not capitalize service broker.|
+
