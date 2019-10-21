@@ -9,9 +9,9 @@ This topic describes how to install and configure <%= vars.product_name %>.
 
 There are two methods to install <%= vars.product_name %>. Use one of the following:
 
-* **Kubernetes Manifests:** This method requires manually editing YAML but is more flexible than the CNAB method. 
+* **Kubernetes Manifests:** This method requires manually editing YAML but is more flexible than the CNAB method.
 Pivotal recommends this method for advanced users.
-* **CNAB:** This method uses CNAB to automate the installation process. 
+* **CNAB:** This method uses CNAB to automate the installation process.
 For instructions, see [Installing and Configuring Using CNAB](./installing-cnab.html).
 For information about CNAB, see [Cloud Native Application Bundle](https://cnab.io).
 
@@ -54,13 +54,28 @@ Download the <%= vars.product_name %> artifact from
 + The Kubernetes Operator
 + The Service Broker
 
+## <a id='set-ver-var'></a> Set a Version Variable
+
+Set a version variable by running:
+
+  ```
+  export version=NUMBER-build.NUMBER
+  ```
+
+  Where NUMBER is the CNAB artifact version listed in the name of the file downloaded in the previous step.
+
+  For example:
+  ```
+  export version=0.4.0-build.32
+  ```
+
 ## <a id='relocate'></a> Move the Images
 
 Load the images to your local Docker by running the following commands:
 
 ```bash
-tar xvf PATH-TO-RABBITMQ-FOR-KUBERNETES-VERSION.tar
-cd RABBITMQ-FOR-KUBERNETES-VERSION
+tar xvf PATH-TO-RABBITMQ-FOR-KUBERNETES-$version.tar
+cd RABBITMQ-FOR-KUBERNETES-$version
 docker load -i images/rabbitmq-for-kubernetes-operator
 docker load -i images/rabbitmq
 docker load -i images/rabbitmq-for-kubernetes-servicebroker
@@ -70,19 +85,19 @@ Tag each image to point to your own image repository by running these commands:
 
 ```bash
 ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq \
->  YOUR-REPOSITORY/rabbitmq:VERSION
+>  YOUR-REPOSITORY/rabbitmq:$version
 ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-operator \
->  YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION
+>  YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
 ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-servicebroker \
->  YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION
+>  YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
 ```
 
 Push each image to your own image repository by running these commands:
 
 ```bash
-docker push YOUR-REPOSITORY/rabbitmq:VERSION
-docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION
-docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION
+docker push YOUR-REPOSITORY/rabbitmq:$version
+docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
+docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
 ```
 
 ## <a id='private-images'></a> Create the Namespace
@@ -156,12 +171,12 @@ metadata:
 
 1. Replace all instances of REPLACE-WITH-OPERATOR-IMAGE-URL with the full Kubernetes Operator image reference. This reference looks similar to the below.
 
-  `YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:VERSION`
+  `YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version`
 
 1. Provide your repository URL in the service broker manifest `manifests/broker.yaml`
 1. Replace all instances of REPLACE-WITH-BROKER-IMAGE-URL with the full service broker image URL. This URL looks similar to the below.
 
-  `YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:VERSION`
+  `YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version`
 
 ## <a id='config-service-type'></a> (Optional) Configure the Service Broker ServiceType
 
@@ -261,14 +276,14 @@ the `pivotal-rabbitmq-system` namespace. To create a secret:
 ## <a id='deploy-op-and-broker'></a> Install <%= vars.product_short %>
 
 To install <%= vars.product_short %>, you must apply the Kubernetes manifests you configured in the above steps.
-When you apply the manifests, kubectl: 
+When you apply the manifests, kubectl:
 
- + Deploys the Kubernetes Operator 
+ + Deploys the Kubernetes Operator
  + Deploys the service broker
  + Installs the `RabbitmqCluster` custom resource definition
- 
+
 To install <%= vars.product_short %>:
- 
+
  1. Run the following command:
 
     ```
@@ -322,5 +337,9 @@ Due to the eventually-consistent design of Kubernetes, the service broker cannot
 
 Because of this, the service broker never returns a `deployment failed` status and instead returns `create in progress`.
 
-If the service instance provision status is `create in progress` for more than a few minutes, the RabbitMQ cluster might have failed permanently. Check the status of the RabbitMQ cluster resources in your Kubernetes cluster for more details about the failure.
-<%# HOW DO YOU DO THIS %>
+Follow the steps in [Uninstall the Bundle](./upgrading.html#uninstall-bundle)
+
+
+## <a id='troubleshooting'></a> Troubleshoot the Installation
+
+To troubleshoot the installation, follow the steps in [Troubleshoot the Installation](./troubleshooting.html#ts-install).
