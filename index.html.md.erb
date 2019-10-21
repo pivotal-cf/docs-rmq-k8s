@@ -60,12 +60,35 @@ The following table provides version and version-support information about <%= v
 
 ## <a id="limitations"></a> Limitations
 
+### <a id="gen-limits"></a> General Limitations
+
 * This product is currently in beta. Pivotal does not currently provide commercial support.
 * This product is intended to be used with any Kubernetes distribution.
   However, given the number of Kubernetes vendors, versions and configurations, not all of them have been
   tested with <%= vars.product_name %>.
-* Product upgrades are currently not supported.
-If you want to test a newer version, delete the previous version first.
+* Product upgrades are currently not supported. If you want to test a newer version, delete the previous version first.
+
+### <a id='update-rmq-cluster'></a> RabbitMQ Cluster Updates
+
+Currently, after you create a RabbitMQ Cluster, you cannot update the cluster or any of its child objects.
+Child objects include `StatefulSet`, `ConfigMap`, `Service`, and `Secret`. If you try to update any of the configurations, there is no effect.
+`StatefulSet`, `ConfigMap` and `Service` objects are re-created if you delete them.
+However, `Secret` objects are not re-created automatically.
+If you delete `Secret` objects, you must manually re-create the secret or delete and re-create the cluster.
+
+### <a id='rmq-image'></a> RabbitMQ Image
+
+Currently Pivotal does not support pulling the RabbitMQ image from a repository that requires authentication.
+
+### <a id='prov-status'></a> Provision Status of Service Instance
+
+Due to the eventually-consistent design of Kubernetes, the service broker cannot detect the following about a deployment:
+
++ If it is taking a long time but will eventually succeed.
++ If it failed temporarily but could succeed on another attempt.
++ If it failed permanently and needs human intervention to succeed. For example, this could happen if the deployment refers to a non-existent `storageClass`.
+
+Because of this, the service broker never returns a `deployment failed` status and instead returns `create in progress`.
 
 ## <a id="feedback"></a> Feedback
 

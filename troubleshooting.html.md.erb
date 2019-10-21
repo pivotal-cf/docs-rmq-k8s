@@ -17,7 +17,10 @@ NOTE TO AUTHORS: Write an intro sentence about this issue
 
 ###<a id='symptom1'></a>Symptom
 
-NOTE TO AUTHORS: Describe the symptom that users see.
+If the service instance provision status is `create in progress` for more than a few minutes, the RabbitMQ cluster might have failed permanently.
+Check the status of the RabbitMQ cluster resources in your Kubernetes cluster for more details about the failure.
+
+<%# HOW DO YOU DO THIS %>
 
 
 ###<a id='explanation-1'></a>Explanation
@@ -27,7 +30,105 @@ NOTE TO AUTHORS: Describe the symptom that users see.
 
 To solve this problem:
 
-1. 
+1.
 
-2. 
+2.
 
+## <a id='ts-install'></a> Troubleshoot the Cloud Native Application Bundle (CNAB) Installation
+
+Follow the steps in the sections below to check that CNAB was installed successfully and that you can provision
+an instance without registering the service broker with <%= vars.app_runtime %>.
+
+### <a id='verify-operator-and-broker'></a> Verify That the RabbitMQ Operator and Broker Are Installed
+
+Verify that the RabbitMQ operator and broker have been installed successfully and get the
+address for the broker from the service object by running:
+
+    ```
+    kubectl -n pivotal-rabbitmq-system get services
+    ```
+    For example:
+
+    <pre class="terminal">
+      $ kubectl -n pivotal-rabbitmq-system get services
+      NAME                          TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)          AGE
+      p-rmq-servicebroker-ingress   LoadBalancer   10.109.111.3   172.17.255.1   8080:30444/TCP   58m
+    </pre>
+
+### <a id='check-ids'></a> Check the Service and Plan IDs
+
+1. View the catalog to see the service and plan IDs by running:
+
+    ```
+    curl -H "X-Broker-API-Version: 2.14" \
+      -H "Content-Type: application/json" \
+      BROKER-USERNAME:BROKER-PASSWORD@IP-ADDRESS:8080/v2/catalog
+    ```
+
+    Where:
+    * `BROKER-USERNAME` is the `broker_username` you specified in the `duffle install` command during the
+    CNAB bundle installation. For more information, see [Install the CNAB Bundle](installing-cnab.html#install).
+    * `BROKER-PASSWORD` is the `broker_password` you specified in the `duffle install` command during the
+    CNAB bundle installation. For more information, see [Install the CNAB Bundle](installing-cnab.html#install).
+    * `IP-ADDRESS` is found in the output of `kubectl get services` command
+
+    For example:
+
+    <pre class="terminal">
+      $ curl -H "X-Broker-API-Version: 2.14"   -H "Content-Type: application/json"   BROKER-USERNAME:BROKER-PASSWORD@p-rmq-servicebroker-ingress:8080/v2/catalog
+      {"services":[{"id":"00000000-0000-0000-0000-000000000000","name":"p-rabbitmq-k8s","description":"RabbitMQ on K8s","bindable":true,"tags":["rabbitmq","amqp"],"plan_updateable":false,"plans":[{"id":"22222222-2222-2222-2222-222222222222","name":"single","description":"Single-node RabbitMQ on K8s"},{"id":"33333333-3333-3333-3333-333333333333","name":"ha","description":"3-node RabbitMQ on K8s"}]}]}
+    </pre>
+
+1. Provision a service instance by running:
+
+    ```
+    curl -X PUT -H "X-Broker-API-Version: 2.14" \
+      -H "Content-Type: application/json" \
+      BROKER-USERNAME:BROKER-PASSWORD@IP-ADDRESS:8080/v2/service_instances/INSTANCE-NAME?accepts_incomplete=true -d '{
+      "service_id": "00000000-0000-0000-0000-000000000000",
+      "plan_id": "22222222-2222-2222-2222-222222222222"
+    }'
+    ```
+
+    Where is `INSTANCE-NAME` is a name you define for your instance.
+    <br><br>
+    For example:
+
+    <pre class="terminal">
+      $ curl -X PUT -H "X-Broker-API-Version: 2.14" \
+        -H "Content-Type: application/json" \
+        user1:password123@10.25.18.2:8080/v2/service_instances/instance-1?accepts_incomplete=true -d '{
+        "service_id": "00000000-0000-0000-0000-000000000000",
+        "plan_id": "22222222-2222-2222-2222-222222222222"
+      }'
+      {}
+    </pre>
+
+1. Retrieve the instance ID by running:
+
+    ```
+    kubectl get namespaces
+    ```
+<%# how do they know which namespace is the instance ID to use? also get example. %>
+
+1. Check that the RabbitMQ cluster was created by running:
+
+    ```
+    kubectl -n p-rmq-INSTANCE-ID get all
+    ```
+    Where `INSTANCE-ID` is the name you specified in the step above.
+    <br><br>
+    For example:
+
+    <pre class="terminal">
+      $ kubectl -n p-rmq-instance-1 get all
+      NAME                            READY   STATUS    RESTARTS   AGE
+      pod/pivotal-rabbitmq-server-0   1/1     Running   0          2m27s
+
+      NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                        AGE
+      service/pivotal-rabbitmq-headless   ClusterIP   None             <none>        4369/TCP                       2m27s
+      service/pivotal-rabbitmq-ingress    ClusterIP   10.111.202.183   <none>        5672/TCP,15672/TCP,15692/TCP   2m28s
+
+      NAME                                       READY   AGE
+      statefulset.apps/pivotal-rabbitmq-server   1/1     2m28s
+    </pre>

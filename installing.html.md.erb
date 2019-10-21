@@ -285,30 +285,6 @@ To deploy the RabbitMQ operator and the broker, and install the `RabbitmqCluster
     cf enable-service-access p-rabbitmq-k8s -b SERVICE-BROKER-NAME
     ```
 
-<%# THIS SHOULD PROBS BE ON THE INDEX PAGE %>
-## <a id='limitations'></a> Limitations
+## <a id='uninstall-bundle'></a> Uninstall the Bundle
 
-The section describes <%= vars.product_short %> limitations.
-
-### <a id='update-rmq-cluster'></a> RabbitMQ Cluster Updates
-
-Currently, after you create a RabbitMQ Cluster, you cannot update the cluster or any of its child objects. Child objects include `StatefulSet`, `ConfigMap`, `Service`, and `Secret`. If you try to update any of the configurations, there is no effect.
-
-`StatefulSet`, `ConfigMap` and `Service` objects are re-created if you delete them. However, `Secret` objects are not re-created automatically. If you delete `Secret` objects, you must manually re-create the secret or delete and re-create the cluster.
-
-### <a id='rmq-image'></a> RabbitMQ Image
-
-Currently Pivotal does not support pulling the RabbitMQ image from a repository that requires authentication.
-
-### <a id='prov-status'></a> Provision Status of Service Instance
-
-Due to the eventually-consistent design of Kubernetes, the service broker cannot detect the following about a deployment:
-
-+ If it is taking a long time but will eventually succeed.
-+ If it failed temporarily but could succeed on another attempt.
-+ If it failed permanently and needs human intervention to succeed. For example, this could happen if the deployment refers to a non-existent `storageClass`.
-
-Because of this, the service broker never returns a `deployment failed` status and instead returns `create in progress`.
-
-If the service instance provision status is `create in progress` for more than a few minutes, the RabbitMQ cluster might have failed permanently. Check the status of the RabbitMQ cluster resources in your Kubernetes cluster for more details about the failure.
-<%# HOW DO YOU DO THIS %>
+Follow the steps in [Uninstall the Bundle](./upgrading.html#uninstall-bundle)
