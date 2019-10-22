@@ -11,28 +11,25 @@ This topic describes how to troubleshoot common problems with Pivotal RabbitMQ f
 
 <%# Add intro text %>
 
-##<a id='Issue-1'></a> Name of Issue
+##<a id='failed-instance'></a> RabbitMQ Cluster Fails to Deploy
 
-NOTE TO AUTHORS: Write an intro sentence about this issue
+After creating a RabbitMQ instance, it is not available within a few minutes.
 
-###<a id='symptom1'></a>Symptom
+###<a id='failed-instance-symptom'></a>Symptom
 
-If the service instance provision status is `create in progress` for more than a few minutes, the RabbitMQ cluster might have failed permanently.
-Check the status of the RabbitMQ cluster resources in your Kubernetes cluster for more details about the failure.
+When not using a service broker: RabbitMQ pods are not running.
 
-<%# HOW DO YOU DO THIS %>
+When using a service broker: service instance provision status is `create in progress` for more than a few minutes.
 
+###<a id='failed-instance-explanation'></a>Explanation
 
-###<a id='explanation-1'></a>Explanation
+Common reasons for such failure are:
+* incorrect IMAGE_PULL_SECRET configuration - image cannot be pulled from a Docker registry
+* incorrect STORAGE_CLASS_NAME configuration - no default storage class has been configured in the Kubernetes cluster and `p-rmq-operator-config` does not contain a valid STORAGE_CLASS_NAME value
 
+###<a id='failed-instance-solution'></a>Solution
 
-###<a id='soln-1'></a>Solution
-
-To solve this problem:
-
-1.
-
-2.
+[Check the status of the RabbitMQ cluster resources](#check-instance-status) in your Kubernetes cluster for more details about the failure.
 
 ## <a id='ts-install'></a> Troubleshoot the Installation
 
@@ -51,9 +48,20 @@ address for the service broker from the service object by running:
 
     <pre class="terminal">
       $ kubectl -n pivotal-rabbitmq-system get all
-      <%# Update this example for `get all`
-      NAME                          TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)          AGE
-      p-rmq-servicebroker-ingress   LoadBalancer   10.109.111.3   172.17.255.1   8080:30444/TCP   58m
+      NAME                                      READY   STATUS    RESTARTS   AGE
+      pod/p-rmq-operator-bdb96497b-5wq9q        1/1     Running   0          27m
+      pod/p-rmq-servicebroker-56f68f4df-g9rlb   1/1     Running   0          26m
+
+      NAME                                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+      service/p-rmq-servicebroker-ingress   ClusterIP   10.110.249.16   <none>        8080/TCP   26m
+
+      NAME                                  READY   UP-TO-DATE   AVAILABLE   AGE
+      deployment.apps/p-rmq-operator        1/1     1            1           27m
+      deployment.apps/p-rmq-servicebroker   1/1     1            1           26m
+
+      NAME                                            DESIRED   CURRENT   READY   AGE
+      replicaset.apps/p-rmq-operator-bdb96497b        1         1         1       27m
+      replicaset.apps/p-rmq-servicebroker-56f68f4df   1         1         1       26m
     </pre> %>
 
 ### <a id='check-connect'></a> Check Connectivity to the Service Broker

@@ -75,19 +75,16 @@ Child objects include `StatefulSet`, `ConfigMap`, `Service`, and `Secret`. If yo
 However, `Secret` objects are not re-created automatically.
 If you delete `Secret` objects, you must manually re-create the secret or delete and re-create the cluster.
 
-### <a id='rmq-image'></a> RabbitMQ Image
-
-Currently Pivotal does not support pulling the RabbitMQ image from a repository that requires authentication.
-
 ### <a id='prov-status'></a> Provision Status of Service Instance
 
 Due to the eventually-consistent design of Kubernetes, the service broker cannot detect the following about a deployment:
 
 + If it is taking a long time but will eventually succeed.
 + If it failed temporarily but could succeed on another attempt.
-+ If it failed permanently and needs human intervention to succeed. For example, this could happen if the deployment refers to a non-existent `storageClass`.
++ If it failed permanently and needs human intervention to succeed.
 
 Because of this, the service broker never returns a `deployment failed` status and instead returns `create in progress`.
+Please refer to the [Troubleshooting guide](./troubleshooting.html#failed-instance) for more information.
 
 ## <a id="feedback"></a> Feedback
 
