@@ -5,10 +5,10 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to install and configure <%= vars.product_name %>
+This topic describes how to install and configure <%= vars.product_full %>
 using Cloud Native Application Bundle (CNAB).
 
-There are two methods to install <%= vars.product_name %>. Use one of the following:
+There are two methods to install <%= vars.product_short %>. Use one of the following:
 
 * **Kubernetes Manifests:** This method requires manually editing YAML but is more flexible than the CNAB method. Pivotal recommends this method for advanced users.
 For instructions, see [Installing and Configuring Using Kubernetes Manifests](./installing.html).
@@ -17,7 +17,7 @@ For information about CNAB, see [Cloud Native Application Bundle](https://cnab.i
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before you install and configure <%= vars.product_name %>, you must install and configure:
+Before you install and configure <%= vars.product_short %>, you must install and configure:
 
 1. **kubectl:** For installation instructions,
 see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes documentation.
@@ -37,7 +37,7 @@ rabbitmq-for-k8s@pivotal.io for help.
 
 ## <a id='overview'></a> Overview
 
-To install and configure <%= vars.product_name %>:
+To install and configure <%= vars.product_short %>:
 
 1. [Download and Import Pivotal RabbitMQ for Kubernetes](#import)
 2. [Configure Kubernetes Cluster Access to your Private Image Registry](#generate-credentials)
@@ -54,11 +54,11 @@ To install and configure <%= vars.product_name %>:
   Otherwise, you see a 404 error.
 </p>
 
-To download and import <%= vars.product_name %>:
+To download and import <%= vars.product_short %>:
 
 1. Sign in to [Pivotal Network](https://login.run.pivotal.io/login).
 
-1. Download the <%= vars.product_name %> CNAB artifact from [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
+1. Download the <%= vars.product_short %> CNAB artifact from [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
 
 1. Set a version variable by running:
 
