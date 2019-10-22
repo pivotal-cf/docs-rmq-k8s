@@ -5,11 +5,11 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to use <%= vars.product_name %> with Pivotal Platform and Cloud Foundry.
+This topic describes how to use <%= vars.product_full %> with Pivotal Platform and Cloud Foundry.
 
 ## <a id='overview'></a> Overview
 
-You can use <%= vars.product_name %> to:
+You can use <%= vars.product_short %> to:
 
 1. [Confirm Service Availability](#marketplace)
 1. [Create a Service Instance](#create)
@@ -25,7 +25,7 @@ For an app to use a service, the service must be available in the Marketplace fo
 To confirm this availability:
 
 1. Run `cf marketplace`.
-1. Check that `p-rabbitmq-k8s` is in the `service` column. If it is, <%= vars.product_name %> is available. If it is not, ask your operator to install it.
+1. Check that `p-rabbitmq-k8s` is in the `service` column. If it is, <%= vars.product_short %> is available. If it is not, ask your operator to install it.
 
     <pre class="terminal">
     $ cf marketplace
@@ -43,7 +43,7 @@ For an app to use a service, an instance of the service must exist in its space.
 Services are created asynchronously, not immediately.
 The `watch` command shows you when your service instance is ready to bind and use.
 
-To create an instance of the <%= vars.product_name %> service:
+To create an instance of the <%= vars.product_short %> service:
 
 1. Check to see if there is an existing service by running:
 
@@ -127,7 +127,7 @@ OK
 Apps running in Cloud Foundry gain access to the bound service instances through an environment variable called `VCAP_SERVICES`.
 
 Apps that have been bound to a service instance can read `VCAP_SERVICES` from their environment.
-To see the `VCAP_SERVICES` for an app, run `cf env APP-NAME` with the name of an app bound to the <%= vars.product_name %> instance. An example hash is shown below:
+To see the `VCAP_SERVICES` for an app, run `cf env APP-NAME` with the name of an app bound to the <%= vars.product_short %> instance. An example hash is shown below:
 
 
 ```json

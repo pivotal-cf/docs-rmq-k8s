@@ -7,15 +7,15 @@ owner: RMQ for k8s
 
 <%= partial vars.path_to_partials + "/services/beta-notice" %>
 
-<%= vars.product_name %> is a Kubernetes Operator that automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.
+<%= vars.product_full %> is a Kubernetes Operator that automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.
 
 ## <a id='overview'></a> Overview
 
-<%= vars.product_name %> provides a consistent and easy way to deploy RabbitMQ clusters to Kubernetes and
+<%= vars.product_short %> provides a consistent and easy way to deploy RabbitMQ clusters to Kubernetes and
 manage their lifecycle. RabbitMQ clusters can be accessed by apps running on Kubernetes,
 <%= vars.app_runtime %>, or elsewhere.
 
-<%= vars.product_name %> has two main components:
+<%= vars.product_short %> has two main components:
 
 * A Kubernetes Operator that automates the provision, management, and operations of RabbitMQ clusters
 * (Optional) An OSBAPI-compliant service broker for integration with <%= vars.platform_name %>
@@ -25,7 +25,7 @@ Run `cf create-service` to create RabbitMQ clusters and run `cf bind-service` to
 
 ## <a id='features'></a> Key Features
 
-<%= vars.product_name %> includes the following key features:
+<%= vars.product_short %> includes the following key features:
 
 * Provisioning of single-node and 3-node RabbitMQ clusters
 * Automatic reconciliation of deployed clusters whenever their actual state does not match the expected state
@@ -38,7 +38,7 @@ Automated upgrading of RabbitMQ clusters, another key feature, is planned for a 
 
 ## <a id="snapshot"></a> Product Snapshot
 
-The following table provides version and version-support information about <%= vars.product_name %>.
+The following table provides version and version-support information about <%= vars.product_short %>.
 
 <table class="nice">
     <th>Element</th>
@@ -71,7 +71,7 @@ The following table provides version and version-support information about <%= v
 * This product is currently in beta. Pivotal does not currently provide commercial support.
 * This product is intended to be used with any Kubernetes distribution.
   However, given the number of Kubernetes vendors, versions and configurations, not all of them have been
-  tested with <%= vars.product_name %>.
+  tested with <%= vars.product_short %>.
 * Product upgrades are currently not supported. If you want to test a newer version, delete the previous version first.
 
 ### <a id='update-rmq-cluster'></a> RabbitMQ Cluster Updates

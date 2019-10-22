@@ -5,9 +5,9 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to install and configure <%= vars.product_name %>.
+This topic describes how to install and configure <%= vars.product_full %>.
 
-There are two methods to install <%= vars.product_name %>. Use one of the following:
+There are two methods to install <%= vars.product_short %>. Use one of the following:
 
 * **Kubernetes Manifests:** This method requires manually editing YAML but is more flexible than the CNAB method.
 Pivotal recommends this method for advanced users.
@@ -17,7 +17,7 @@ For information about CNAB, see [Cloud Native Application Bundle](https://cnab.i
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before you install and configure <%= vars.product_name %>, you must install and configure the following software:
+Before you install and configure <%= vars.product_short %>, you must install and configure the following software:
 
 1. **kubectl:** For installation instructions,
 see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes documentation.
@@ -34,7 +34,7 @@ rabbitmq-for-k8s@pivotal.io for help.
 
 ## <a id='overview'></a> Overview
 
-To install and configure <%= vars.product_name %>:
+To install and configure <%= vars.product_short %>:
 
 1. [Download Pivotal RabbitMQ for Kubernetes](#artifact)
 1. [Move the Images](#relocate)
@@ -42,12 +42,12 @@ To install and configure <%= vars.product_name %>:
 1. [Configure the Image Repository](#image-repo)
 1. [(Optional) Configure the Service Type](#config-service-type)
 1. [Create Service Broker Credentials](#broker-creds)
-1. [Install <%= vars.product_name %>](#deploy-op-and-broker)
+1. [Install <%= vars.product_short %>](#deploy-op-and-broker)
 1. [Register the Service Broker with Cloud Foundry](#register-broker)
 
-## <a id='artifact'></a> Download Pivotal RabbitMQ for Kubernetes
+## <a id='artifact'></a> Download <%= vars.product_short %>
 
-Download the <%= vars.product_name %> artifact from
+Download the <%= vars.product_short %> artifact from
 [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/). The artifact contains Docker images and deployment manifests for the Kubernetes Operator and the service broker. The images are for:
 
 + RabbitMQ
@@ -62,9 +62,10 @@ Set a version variable by running:
   export version=NUMBER-build.NUMBER
   ```
 
-  Where NUMBER is the CNAB artifact version listed in the name of the file downloaded in the previous step.
+  Where `NUMBER` is the CNAB artifact version listed in the name of the file downloaded in the previous step.
 
   For example:
+
   ```
   export version=0.4.0-build.32
   ```
@@ -133,13 +134,15 @@ To authorize access to images:
     + `DOCKER-USERNAME` is your username for your private image registry authentication.
     + `DOCKER-PASSWORD` is your password for your private image registry authentication.
 
-    For example
-    <pre class="terminal">$ kubectl -n pivotal-rabbitmq-system create secret \
-      docker-registry p-rmq-registry-access \
-      --docker-server=docker.io/my-registry \
-      --docker-username=my-username \
-      --docker-password=password1
-     secret/p-rmq-registry-access created</pre>
+    For example:
+    <pre class="terminal">
+    $ kubectl -n pivotal-rabbitmq-system create secret \
+    docker-registry p-rmq-registry-access \
+    --docker-server=docker.io/my-registry \
+    --docker-username=my-username \
+    --docker-password=password1
+    secret/p-rmq-registry-access created
+    </pre>
 
 1. Update your service account by running:
 
@@ -153,35 +156,39 @@ To authorize access to images:
 To configure the image repository:
 
 1. Provide your repository URL in the Kubernetes Operator manifest `manifests/operator.yaml`.
-1. Replace all instances of REPLACE-WITH-RABBITMQ-IMAGE-REFERENCE with your image repository host. If you use a private image registry, also replace the image pull secret as in the example below:
+1. Replace all instances of `REPLACE-WITH-RABBITMQ-IMAGE-REFERENCE` with your image repository host. If you use a private image registry, also replace the image pull secret as in the example below:
 
-```
-apiVersion: v1
-data:
-  CONFIG: |
-    SERVICE:
-      TYPE: "ClusterIP"
-    IMAGE: "example-registry.pivotal.io/example-rabbitmq/rabbitmq:3.8.0"
-    IMAGE_PULL_SECRET: "example-secret"
-kind: ConfigMap
-metadata:
-  name: p-rmq-operator-config
-  namespace: pivotal-rabbitmq-system
-```
+    ```
+    apiVersion: v1
+    data:
+      CONFIG: |
+        SERVICE:
+          TYPE: "ClusterIP"
+        IMAGE: "example-registry.pivotal.io/example-rabbitmq/rabbitmq:3.8.0"
+        IMAGE_PULL_SECRET: "example-secret"
+    kind: ConfigMap
+    metadata:
+      name: p-rmq-operator-config
+      namespace: pivotal-rabbitmq-system
+    ```
 
-1. Replace all instances of REPLACE-WITH-OPERATOR-IMAGE-URL with the full Kubernetes Operator image reference. This reference looks similar to the below.
+1. Replace all instances of `REPLACE-WITH-OPERATOR-IMAGE-URL` with the full Kubernetes Operator image reference. This reference looks similar to the below:
 
-  `YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version`
+    ```
+    YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
+    ```
 
-1. Provide your repository URL in the service broker manifest `manifests/broker.yaml`
-1. Replace all instances of REPLACE-WITH-BROKER-IMAGE-URL with the full service broker image URL. This URL looks similar to the below.
+1. Provide your repository URL in the service broker manifest `manifests/broker.yaml`.
+1. Replace all instances of `REPLACE-WITH-BROKER-IMAGE-URL` with the full broker image URL. This URL looks similar to the below:
 
-  `YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version`
+    ```
+    YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
+    ```
 
 ## <a id='config-service-type'></a> (Optional) Configure the Service Broker ServiceType
 
 The <%= vars.product_short %> service broker is an Open Service Broker API (OSBAPI)-compliant component that enables integration with <%= vars.platform_name %> and other OSBAPI-based
-solutions, such as [Service Catalog](https://github.com/kubernetes-sigs/service-catalog).
+solutions, such as Service Catalog. For more information, see [Service Catalog](https://github.com/kubernetes-sigs/service-catalog) in GitHub.
 
 When the service broker is deployed, you must expose the service broker using a Kubernetes ServiceType.
 This enables API clients to reach the service broker endpoint. By default, <%= vars.product_short %> configures a `LoadBalancer` ServiceType.
@@ -254,10 +261,10 @@ The `ANNOTATIONS` property is optional and enables vendor-specific `LoadBalancer
 
 ## <a id='broker-creds'></a> Create Service Broker Credentials
 
-The <%= vars.product_short %> service broker looks for its username and password in a Kubernetes secret called `broker-credentials` in
-the `pivotal-rabbitmq-system` namespace. To create a secret:
+The <%= vars.product_short %> service broker looks for its username and password in a Kubernetes secret called
+`broker-credentials` in the `pivotal-rabbitmq-system` namespace.
 
-1. Run the following commands:
+1. To create a secret, run the following commands:
 
   ```
   echo -n BROKER-USERNAME > ./username
@@ -282,13 +289,11 @@ When you apply the manifests, kubectl:
  + Deploys the service broker
  + Installs the `RabbitmqCluster` custom resource definition
 
-To install <%= vars.product_short %>:
+1. Install <%= vars.product_short %> by running:
 
- 1. Run the following command:
-
-    ```
-    kubectl apply -f manifests/
-    ```
+  ```
+  kubectl apply -f manifests/
+  ```
 
 ## <a id='register-broker'></a> Register the Service Broker with Cloud Foundry
 
@@ -337,7 +342,7 @@ Due to the eventually-consistent design of Kubernetes, the service broker cannot
 
 Because of this, the service broker never returns a `deployment failed` status and instead returns `create in progress`.
 
-Follow the steps in [Uninstall the Bundle](./upgrading.html#uninstall-bundle)
+Follow the steps in [Uninstall the Bundle](./upgrading.html#uninstall-bundle).
 
 
 ## <a id='troubleshooting'></a> Troubleshoot the Installation
