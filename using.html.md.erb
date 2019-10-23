@@ -1,3 +1,4 @@
+
 ---
 title: Using Pivotal RabbitMQ for Kubernetes
 owner: RMQ for k8s
@@ -5,234 +6,110 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to use <%= vars.product_full %> with Pivotal Platform and Cloud Foundry.
+This topic describes how to use <%= vars.product_full %> using standard Kubernetes tooling (kubectl and YAML).
+If you want to use it with Pivotal Platform and Cloud Foundry, please refer to [Using with Pivotal Platform](using-servicebroker.html) instead.
 
 ## <a id='overview'></a> Overview
 
-You can use <%= vars.product_short %> to:
-
-1. [Confirm Service Availability](#marketplace)
-1. [Create a Service Instance](#create)
-1. [Bind Your Service Instance to an App](#binding)
-1. [Use the RabbitMQ Service in Your App](#use)
-1. [Unbind a Service Instance From Your App](#unbind)
-1. [Delete a Service Instance](#delete)
-
-## <a id='marketplace'></a>Confirm Service Availability
+## <a id='availability'></a>Confirm Service Availability
 
 For an app to use a service, the service must be available in the Marketplace for its space.
 
 To confirm this availability:
 
-1. Run `cf marketplace`.
-1. Check that `p-rabbitmq-k8s` is in the `service` column. If it is, <%= vars.product_short %> is available. If it is not, ask your operator to install it.
+1. Run `kubectl get customresourcedefinitions.apiextensions.k8s.io`.
+1. Check that `rabbitmqclusters.rabbitmq.pivotal.io` is on the list. If it is, <%= vars.product_short %> is available. If it is not, ask your operator to install it.
 
     <pre class="terminal">
-    $ cf marketplace
-    Getting services from marketplace in org my-org / space my-space as user<span>@</span>example.com...
-    OK
-    service      plans         description
-    [...]
-    p-rabbitmq-k8s   single, ha   RabbitMQ on K8s
-    [...]
+    $ kubectl get customresourcedefinitions.apiextensions.k8s.io
+    NAME                                   CREATED AT
+    rabbitmqclusters.rabbitmq.pivotal.io   2019-10-23T10:11:06Z
     </pre>
 
-## <a id='create'></a>Create a Service Instance
+## <a id='create'></a>Create a RabbitMQ instance
 
-For an app to use a service, an instance of the service must exist in its space.
-Services are created asynchronously, not immediately.
-The `watch` command shows you when your service instance is ready to bind and use.
+To create a RabbitMQ instance, you need to create a `RabbitmqCluster` resource definition and apply it.
+RabbitMQ Operator will create the necessary resources (services, statefulset, etc) in the same namespace
+that the `RabbitmqCluster` was defined.
 
-To create an instance of the <%= vars.product_short %> service:
-
-1. Check to see if there is an existing service by running:
+1. Create a YAML file to describe a RabbitmqCluster resource (eg. `simple.yaml`). The simplest definition looks like this:
+    ```
+    apiVersion: rabbitmq.pivotal.io/v1beta1
+    kind: RabbitmqCluster
+    metadata:
+      name: simple
+   ```
+1. Apply the definition using `kubectl`:
 
     ```
-    cf services
+    kubectl apply -f simple.yaml
     ```
-    Look for instances that have `p-rabbitmq-k8s` in the `service` column.
-    If there is an existing instance that you want to use, skip to the [Bind a Service Instance to Your App](#bind) section below.
-    <br><br>
-    For example:
-    <pre class="terminal">
-    $ cf services
-    Getting services in org my-org / space my-space as user<span>@</span>example.com...
-    OK
-    name          service          plan          bound apps    last operation
-    my-instance   p-rabbitmq-k8s   ha                          create succeeded
-    </pre>
-
-1. Create the service instance by running:
-
-    ```
-    cf create-service p-rabbitmq-k8s HA SERVICE-INSTANCE
-    ```
-
-    Where:
-    + `SERVICE-INSTANCE` is a name you choose to identify the service instance.
-    This name appears under `name` in the output from `cf services`.
-    + `HA` is the plan.
-    You can replace it with any of the other plans listed in the Marketplace for the
-    `p-rabbitmq-k8s` service.
-
-    For example:
-
-    <pre class="terminal">$ cf create-service p-rabbitmq-k8s single-node my-instance
-    Creating service my-instance in org my-org / space my-space as user<span>@</span>example.com...
-    OK</pre>
 
 1. Check that the process was successful by running:
 
     ```
-    watch cf services
+    kubectl get all -l app=simple
     ```
 
-    If successful, `last operation` for your instance is reported as `create succeeded`.<br><br>
+    If successful, you should see a running pod and a service that exposes the instance.<br><br>
     For example:
-    <pre class="terminal">$ watch cf services
-    Getting services in org my-org / space my-space as user<span>@</span>example.com...
-    OK
-    name          service        plan           bound apps    last operation
-    my-instance   p-rabbitmq-k8s ha                           create succeeded
+    <pre class="terminal">
+    $ kubectl get all -l app=simple
+    NAME                           READY   STATUS    RESTARTS   AGE
+    pod/simple-rabbitmq-server-0   1/1     Running   0          112s
+
+    NAME                               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                        AGE
+    service/simple-rabbitmq-headless   ClusterIP   None             <none>        4369/TCP                       113s
+    service/simple-rabbitmq-ingress    ClusterIP   10.103.214.196   <none>        5672/TCP,15672/TCP,15692/TCP   113s
     </pre>
 
-    Please refer to the [Troubleshooting guide](./troubleshooting.html#failed-instance) if you don't see `create succeeded` within a few minutes.
+    Please refer to the [Troubleshooting guide](./troubleshooting.html#failed-instance) if the pod is not running within a few minutes.
     If you cannot solve the problem, contact your operator or email the team at rabbitmq-for-k8s@pivotal.io for help.
 
-## <a id='binding'></a> Bind Your Service Instance to an App
+## <a id='connect'></a> Connect an App to RabbitMQ
 
-For an app to use a service, you must bind it to a service instance.
-Do this after you push or re-push the app using `cf push`.
+For an app to use RabbitMQ, you must configure it with the correct service name and credentials.
 
-To bind an app to a RabbitMQ instance, run
+The service name is `INSTANCE-rabbitmq-ingress` in the namespace where RabbitMQ is deployed, where INSTANCE is the name of your instance.
+For example, for the `RabbitmqCluster` created [in the section above](#create), the service name is `simple-rabbitmq-ingress`.
 
+Admin credentials for a RabbitMQ cluster are stored in a Kubernetes secret called `INSTANCE-rabbitmq-admin`. Kubernetes encodes secrets using base64.
+To retrieve credentials, and display them in plain-text, run the following command:
 ```
-cf bind-service APP SERVICE-INSTANCE
+# display the username
+kubectl -n NAMESPACE get secret INSTANCE-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
+# display the password
+kubectl - NAMESPACE get secret INSTANCE-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
 ```
 
-Where `APP` is the app you want to use the RabbitMQ service instance and `SERVICE-INSTANCE` is the name you supplied when you ran `cf create-service`.
+Where `INSTANCE` is the name if your `RabbitmqCluster` and `NAMESPACE` is the Kubernetes namespace it is located in.
 
 See an example below.
 
 <pre class="terminal">
-$ cf bind-service my-app my-instance<br>
-Binding service mydb to my-app in org my-org / space test as user<span>@</span>example.com...
-OK
+$ kubectl get secret simple-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
+DbjXnPjLt82DbZC-xr5i_UiBx7nDRRqI
+$ kubectl get secret simple-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
+SB6sezvZfSR4Yu36KC2n8dokmFcCXLWv
 </pre>
 
 ## <a id='use'></a> Use the RabbitMQ Service in Your App
 
-<%# CAN WE HAVE A CALL TO ACTION IN THIS SECTION? HOW DO I USE THIS INFO TO MODIFY MY APPS OR DO OTHER THINGS? DO WE NEED TO DO SOMETHING WITH CONNECTION STRINGS? CREDENTIALS?%>
+Please follow [RabbitMQ tutorials](https://www.rabbitmq.com/getstarted.html) to start using RabbitMQ in your applications.
 
-Apps running in Cloud Foundry gain access to the bound service instances through an environment variable called `VCAP_SERVICES`.
+## <a id="delete"></a>Delete a RabbitMQ Instance
 
-Apps that have been bound to a service instance can read `VCAP_SERVICES` from their environment.
-To see the `VCAP_SERVICES` for an app, run `cf env APP-NAME` with the name of an app bound to the <%= vars.product_short %> instance. An example hash is shown below:
+To delete a service instance, use `kubectl delete rabbitmqcluster INSTANCE` or `kubectl delete -f INSTANCE.yaml`
 
-
-```json
-{
-    "p-rabbitmq-k8s": [{
-      "binding_name": null,
-      "credentials": {
-          "dashboard_url": "http://IP-ADDRESS:15672/#/login/username/password",
-          "hostname": "IP-ADDRESS",
-          "hostnames": [
-            "IP-ADDRESS"
-          ],
-          "http_api_uri": "http://username:password@IP-ADDRESS:15672/api/",
-          "http_api_uris": [
-            "http://username:password@IP-ADDRESS:15672/api/"
-          ],
-          "password": "password",
-          "protocols": {
-            "amqp": {
-              "host": "IP-ADDRESS",
-              "hosts": [
-                "IP-ADDRESS"
-              ],
-              "password": "password",
-              "port": 5672,
-              "ssl": false,
-              "uri": "amqp://username:password@IP-ADDRESS:5672/%2F",
-              "uris": [
-                "amqp://username:password@IP-ADDRESS:5672/%2F"
-              ],
-              "username": "username",
-              "vhost": "%2F"
-            },
-            "management": {
-              "host": "IP-ADDRESS",
-              "hosts": [
-                "IP-ADDRESS"
-              ],
-              "password": "password",
-              "path": "/api/",
-              "port": 15672,
-              "ssl": false,
-              "uri": "http://username:password@IP-ADDRESS:15672/api/",
-              "uris": [
-                "http://username:password@IP-ADDRESS:15672/api/"
-              ],
-              "username": "username"
-            }
-          },
-          "ssl": false,
-          "uri": "amqp://username:password@IP-ADDRESS/%2F",
-          "uris": [
-            "amqp://username:password@IP-ADDRESS/%2F"
-          ],
-          "username": "username",
-          "vhost": "%2F"
-      },
-      "instance_name": "my-instance",
-      "label": "p-rabbitmq-k8s",
-      "name": "my-instance",
-      "plan": "ha",
-      "provider": null,
-      "syslog_drain_url": null,
-      "tags": [
-        "rabbitmq",
-        "amqp"
-      ],
-      "volume_mounts": []
-    }]
-}
-
-```
-
-
-
-## <a id="unbind"></a>Unbind a Service Instance From Your App
-
-To stop an app from using a service it no longer needs, unbind it from the service instance by running:
-
+For example:
 <pre class="terminal">
-$ cf unbind-service APP SERVICE-INSTANCE
+$ kubectl delete rabbitmqclusters.rabbitmq.pivotal.io simple
+rabbitmqcluster.rabbitmq.pivotal.io "simple" deleted
 </pre>
 
-Where `APP` is the app you want to stop using the RabbitMQ service instance and `SERVICE-INSTANCE` is the name you supplied when you ran `cf create-service`.
-
-See an example below.
+or
 
 <pre class="terminal">
-$ cf unbind-service my-app my-instance<br>
-Unbinding app my-app from service my-instance in org my-org / space my-space as user<span>@</span>example.com...
-OK
+$ kubectl delete -f simple.yaml
+rabbitmqcluster.rabbitmq.pivotal.io "simple" deleted
 </pre>
-
-## <a id="delete"></a>Delete a Service Instance
-
-To delete a service instance, use `cf delete-service`.
-
-1. Run `cf delete-service SERVICE-INSTANCE`, where `SERVICE-INSTANCE` is the name of the service to delete. See an example below.
-  <pre class="terminal">
-   $ cf delete-service my-instance<br>
-    Are you sure you want to delete the service my-instance ? y
-    Deleting service my-service in org my-org / space my-space as user<span>@</span>example.com...
-    OK
-  </pre>
-
-1. Run `watch cf service SERVICE-INSTANCE` and wait for a `Service instance not found` error indicating that the instance no longer exists.
-
-You cannot delete a service instance that an app is bound to.
