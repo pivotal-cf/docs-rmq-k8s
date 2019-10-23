@@ -66,6 +66,30 @@ that the `RabbitmqCluster` was defined.
     Please refer to the [Troubleshooting guide](./troubleshooting.html#failed-instance) if the pod is not running within a few minutes.
     If you cannot solve the problem, contact your operator or email the team at rabbitmq-for-k8s@pivotal.io for help.
 
+## <a id='configure'></a>Configure a RabbitMQ instance
+
+`RabbitmqCluster` definition may include multiple additional settings. When these settings are not specified, [Operator configuration](configuring.html) provides default values.
+
+Here's an example with all settings specified explicitly:
+
+```
+apiVersion: rabbitmq.pivotal.io/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmqcluster-sample
+spec:
+  replicas: 3
+  service:
+    type: LoadBalancer
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+  image: rabbitmq:3.8
+  imagePullSecret: some-secret
+  persistence:
+    storageClassName: fast
+    storage: 20Gi
+```
+
 ## <a id='connect'></a> Connect an App to RabbitMQ
 
 For an app to use RabbitMQ, you must configure it with the correct service name and credentials.
