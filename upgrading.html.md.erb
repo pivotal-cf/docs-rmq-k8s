@@ -9,6 +9,8 @@ owner: RMQ for k8s
 
 Product upgrades are currently not supported. If you want to test a newer version, uninstall the previous version first.
 
+Based on the installation method used, please use the corresponding method to uninstall.
+
 ## <a id='uninstall-bundle'></a> Uninstall the Cloud Native Application Bundle (CNAB)
 
 To uninstall the CNAB, run the following command:
@@ -99,3 +101,11 @@ For example:
       + kubectl delete --ignore-not-found -f /cnab/app/manifests/namespace.yaml
       namespace "pivotal-rabbitmq-system" deleted
     </pre>
+
+## <a id='uninstall-manifests'></a> Uninstall Using the Manifests
+
+To uninstall the product installed using the Kubernetes manifests, run the following commands:
+```
+cd rabbitmq-for-kubernetes-$version
+kubectl delete -f manifests/
+```

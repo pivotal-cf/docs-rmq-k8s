@@ -74,7 +74,7 @@ Load the images to your local Docker by running the following commands:
 
 ```bash
 tar xvf PATH-TO-RABBITMQ-FOR-KUBERNETES-$version.tar
-cd RABBITMQ-FOR-KUBERNETES-$version
+cd rabbitmq-for-kubernetes-$version
 docker load -i images/rabbitmq-for-kubernetes-operator
 docker load -i images/rabbitmq
 docker load -i images/rabbitmq-for-kubernetes-servicebroker
@@ -220,41 +220,6 @@ To configure your service broker ServiceType:
     ---
     ```
 
-## <a id='config-service-type'></a> (Optional) Configure the RabbitMQ Instance ServiceType
-
-For each RabbitMQ cluster deployed by the Kubernetes Operator, you must configure a ServiceType to enable RabbitMQ client connections.
-By default, <%= vars.product_short %> configures a `ClusterIP` ServiceType.
-
-To specify a different ServiceType for all newly created RabbitMQ clusters:
-
-1. Open `manifests/operator.yaml` in a text editor.
-1. Find the `p-rmq-operator-config` ConfigMap definition.
-1. Change `TYPE: "ClusterIP"` to `TYPE: "NodePort"` or `TYPE: "LoadBalancer"`.<br>
-For example:
-
-    ```yaml
-    ---
-    apiVersion: v1
-    data:
-      IMAGE_PULL_SECRET: ""
-      IMAGE: "example-registry.pivotal.io/example-rabbitmq/rabbitmq:3.8.0"
-      SERVICE: |
-        TYPE: "LoadBalancer"
-        ANNOTATIONS:
-          service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
-    kind: ConfigMap
-    metadata:
-      name: p-rmq-operator-config
-      namespace: pivotal-rabbitmq-system
-    ---
-    ```
-
-The `ANNOTATIONS` property is optional and enables vendor-specific `LoadBalancer` configuration.
-
-<p class="note">
-  <strong>Note:</strong> <%= vars.product_short %> currently does not support the <code>ExternalName</code> ServiceType.
-</p>
-
 ## <a id='broker-creds'></a> Create Service Broker Credentials
 
 The <%= vars.product_short %> service broker looks for its username and password in a Kubernetes secret called
@@ -313,6 +278,10 @@ When you apply the manifests, kubectl:
     cf enable-service-access p-rabbitmq-k8s -b SERVICE-BROKER-NAME
     ```
 
-## <a id='uninstall-bundle'></a> Uninstall the Bundle
+## <a id='configure'></a> (Optional) Configure the Operator
 
-Follow the steps in [Uninstall the Bundle](./upgrading.html#uninstall-bundle).
+Please refer to [Configuration] page for more information about configuring the Operator.
+
+## <a id='uninstall'></a> Uninstall <%= vars.product_short %>
+
+If you want to uninstall the product, follow the steps in [Uninstall using Manifests](./upgrading.html#uninstall-manifests).

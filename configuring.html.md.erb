@@ -55,6 +55,9 @@ The following parameters are supported:
                 <li><code>NodePort</code></li>
                 <li><code>LoadBalancer</code></li>
               </ul>
+              <p class="note">
+                <strong>Note:</strong> <%= vars.product_short %> currently does not support the <code>ExternalName</code> ServiceType.
+              </p>
               </td>
           </tr>
           <tr>
@@ -78,4 +81,8 @@ The following parameters are supported:
       </tr>
     </table>
 
-All settings can be overwritten on a per-instance basis.
+Configuration changes take effect when the operator is restarted. If you edit the configmap, you have to restart the operator by running:
+
+```
+kubectl -n pivotal-rabbitmq-system rollout restart deployment.apps/p-rmq-operator
+```
