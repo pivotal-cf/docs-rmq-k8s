@@ -1,0 +1,88 @@
+---
+title: Configuring Pivotal RabbitMQ for Kubernetes
+owner: RMQ for k8s
+---
+
+The Kubernetes Operator is configured using a configmap in the `pivotal-rabbitmq-system` namespace. Initial values are
+populated automatically based on the parameters provided to the `duffle install` command (`--set` argument) if you
+installed through Cloud Native Application Bundle (CNAB). If you want to see or change these settings after the
+installation you can run:
+
+```
+kubectl -n pivotal-rabbitmq-system edit configmap p-rmq-operator-config
+```
+
+The configmap looks like this:
+
+  ```
+  data:
+    CONFIG: |
+      IMAGE: eu.gcr.io/my-account/p-rabbitmq-for-kubernetes-staging-rabbitmq-228ecdc119f602d199fa39cc0326057e@sha256:6709cafde00784361b231f6c94b6dbecb8fefd3d3195676ed81823e007e37449
+      IMAGE_PULL_SECRET: p-rmq-registry-access
+      SERVICE:
+        TYPE: NodePort
+        ANNOTATIONS:
+          service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+      PERSISTENCE:
+        STORAGE_CLASS_NAME: azurefile
+        STORAGE: 20Gi
+  ```
+
+The following parameters are supported:
+    <table>
+      <tr>
+        <th width="35%">Parameter</th>
+        <th width="65%">Description</th>
+      </tr>
+      <tr>
+        <td><code>IMAGE</code></td>
+        <td>The RabbitMQ image to be used for RabbitMQ instances. If you <a href="./installing-cnab.html">installed using CNAB</a>, it should be configured automatically.</td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>IMAGE_PULL_SECRET</code></td>
+        <td>If your registry requires authentication, this is the name of the secret used to pull images. You can create it using <code>kubectl -n pivotal-rabbitmq-system create secret docker-registry</code>.</td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>SERVICE</code></td>
+        <td>
+          The Kubernetes service for the <code>RabbitmqCluster</code> service.
+          Available settings are <code>TYPE</code> and <code>ANNOTATIONS</code>.
+          <tr>
+            <td>(Optional) <code>TYPE</code></td>
+              <td>
+              <ul>
+                <li><code>ClusterIP</code> (default)</li>
+                <li><code>NodePort</code></li>
+                <li><code>LoadBalancer</code></li>
+              </ul>
+              <p class="note">
+                <strong>Note:</strong> <%= vars.product_short %> currently does not support the <code>ExternalName</code> ServiceType.
+              </p>
+              </td>
+          </tr>
+          <tr>
+            <td>(Optional) <code>ANNOTATIONS</code></td>
+            <td>Service annotations can be used to configure cloud-specific properties of a LoadBalancer service.</td>
+          </tr>
+      <tr>
+        <td>(Optional) <code>PERSISTENCE</code></td>
+        <td>
+          These are persistence settings for <code>RabbitmqClusters</code>.
+          Available settings are <code>STORAGE_CLASS_NAME</code> and <code>STORAGE</code>.
+          <tr>
+            <td>(Optional) <code>STORAGE_CLASS_NAME</code></td>
+            <td>This is the name of the Kubernetes storage class to use. If not configured, the default <code>storageclass</code> is used.</td>
+          </tr>
+          <tr>
+            <td>(Optional) <code>STORAGE</code></td>
+            <td>This is the default capacity of the persistent volume.</td>
+          </tr>
+        </td>
+      </tr>
+    </table>
+
+Configuration changes take effect when the operator is restarted. If you edit the configmap, you have to restart the operator by running:
+
+  ```
+  kubectl -n pivotal-rabbitmq-system rollout restart deployment.apps/p-rmq-operator
+  ```

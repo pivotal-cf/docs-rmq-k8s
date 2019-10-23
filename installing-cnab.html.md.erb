@@ -66,7 +66,7 @@ To download and import <%= vars.product_short %>:
   export version=NUMBER-build.NUMBER
   ```
 
-  Where NUMBER is the CNAB artifact version listed in the name of the file downloaded in the previous step.
+  Where `NUMBER` is the CNAB artifact version listed in the name of the file downloaded in the previous step.
 
   For example:
   ```
@@ -559,106 +559,7 @@ address for the service broker from the service object by running:
       NAME                            READY   STATUS    RESTARTS   AGE
       pod/pivotal-rabbitmq-server-0   1/1     Running   0          2m27s
 
-      NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                        AGE
-      service/pivotal-rabbitmq-headless   ClusterIP   None             <none>        4369/TCP                       2m27s
-      service/pivotal-rabbitmq-ingress    ClusterIP   10.111.202.183   <none>        5672/TCP,15672/TCP,15692/TCP   2m28s
-
-      NAME                                       READY   AGE
-      statefulset.apps/pivotal-rabbitmq-server   1/1     2m28s
-    </pre>
-
-<%# the uninstall section should be on the upgrade page as an upgrade step -- you have to uninstall this before you install the next version
-
-## <a id='uninstall'></a>Uninstall Bundle
-
-If you want to uninstall the product, run the following command:
-```
-duffle uninstall rabbitmq --credentials rabbitmq-creds --relocation-mapping=relmap.json
-```
-
-For example:
-    <pre class="terminal">
-      $ duffle uninstall rabbitmq --credentials rabbitmq-creds --relocation-mapping relmap.json
-      Executing uninstall action...
-      + action=uninstall
-      + name=rabbitmq
-      + case ${action} in
-      + kapp delete -n pivotal-rabbitmq-system --yes -a rabbitmq-operator
-      Changes
-
-      Namespace                Name                             Kind                Conds.  Age  Op      Wait to  Rs  Ri
-      -                        p-rmq-operator-role              ClusterRole         -       1h   delete  delete   ok  -
-      ~                        p-rmq-operator-rolebinding       ClusterRoleBinding  -       1h   delete  delete   ok  -
-      pivotal-rabbitmq-system  p-rmq-operator                   Deployment          2/2 t   1h   delete  delete   ok  -
-      ~                        p-rmq-operator-5d76f588dd        ReplicaSet          -       1h   -       delete   ok  -
-      ~                        p-rmq-operator-5d76f588dd-fs4nf  Pod                 4/4 t   1h   -       delete   ok  -
-
-      Op:      0 create, 3 delete, 0 update, 2 noop
-      Wait to: 0 reconcile, 5 delete, 0 noop
-
-      2:28:42PM: ---- applying 5 changes [0/5 done] ----
-      2:28:42PM: delete clusterrole/p-rmq-operator-role (rbac.authorization.k8s.io/v1) cluster
-      2:28:42PM: delete deployment/p-rmq-operator (apps/v1) namespace: pivotal-rabbitmq-system
-      2:28:42PM: delete clusterrolebinding/p-rmq-operator-rolebinding (rbac.authorization.k8s.io/v1) cluster
-      2:28:42PM: noop replicaset/p-rmq-operator-5d76f588dd (apps/v1) namespace: pivotal-rabbitmq-system
-      2:28:42PM: noop pod/p-rmq-operator-5d76f588dd-fs4nf (v1) namespace: pivotal-rabbitmq-system
-      2:28:42PM: ---- waiting on 5 changes [0/5 done] ----
-      2:28:42PM: ok: delete clusterrole/p-rmq-operator-role (rbac.authorization.k8s.io/v1) cluster
-      2:28:42PM: ok: delete deployment/p-rmq-operator (apps/v1) namespace: pivotal-rabbitmq-system
-      2:28:42PM: ok: delete clusterrolebinding/p-rmq-operator-rolebinding (rbac.authorization.k8s.io/v1) cluster
-      2:28:42PM: ongoing: delete replicaset/p-rmq-operator-5d76f588dd (apps/v1) namespace: pivotal-rabbitmq-system
-      2:28:42PM: ongoing: delete pod/p-rmq-operator-5d76f588dd-fs4nf (v1) namespace: pivotal-rabbitmq-system
-      2:28:42PM: ---- waiting on 2 changes [3/5 done] ----
-      2:28:43PM: ok: delete replicaset/p-rmq-operator-5d76f588dd (apps/v1) namespace: pivotal-rabbitmq-system
-      2:28:43PM: ---- waiting on 1 changes [4/5 done] ----
-      2:28:45PM: ok: delete pod/p-rmq-operator-5d76f588dd-fs4nf (v1) namespace: pivotal-rabbitmq-system
-      2:28:45PM: ---- applying complete [5/5 done] ----
-      2:28:45PM: ---- waiting complete [5/5 done] ----
-
-      Succeeded
-      + kapp delete -n pivotal-rabbitmq-system --yes -a rabbitmq-broker
-      Changes
-
-      Namespace                Name                                  Kind                Conds.  Age  Op      Wait to  Rs  Ri
-      -                        p-rmq-servicebroker-role              ClusterRole         -       1h   delete  delete   ok  -
-      ~                        p-rmq-servicebroker-rolebinding       ClusterRoleBinding  -       1h   delete  delete   ok  -
-      pivotal-rabbitmq-system  p-rmq-servicebroker                   Deployment          2/2 t   1h   delete  delete   ok  -
-      ~                        p-rmq-servicebroker-6d5f6b4df7        ReplicaSet          -       1h   -       delete   ok  -
-      ~                        p-rmq-servicebroker-6d5f6b4df7-hxrbm  Pod                 4/4 t   1h   -       delete   ok  -
-      ~                        p-rmq-servicebroker-ingress           Endpoints           -       1h   -       delete   ok  -
-      ~                        p-rmq-servicebroker-ingress           Service             -       1h   delete  delete   ok  -
-
-      Op:      0 create, 4 delete, 0 update, 3 noop
-      Wait to: 0 reconcile, 7 delete, 0 noop
-
-      2:28:46PM: ---- applying 7 changes [0/7 done] ----
-      2:28:46PM: noop pod/p-rmq-servicebroker-6d5f6b4df7-hxrbm (v1) namespace: pivotal-rabbitmq-system
-      2:28:46PM: delete service/p-rmq-servicebroker-ingress (v1) namespace: pivotal-rabbitmq-system
-      2:28:46PM: delete clusterrolebinding/p-rmq-servicebroker-rolebinding (rbac.authorization.k8s.io/v1) cluster
-      2:28:46PM: noop endpoints/p-rmq-servicebroker-ingress (v1) namespace: pivotal-rabbitmq-system
-      2:28:46PM: delete deployment/p-rmq-servicebroker (apps/v1) namespace: pivotal-rabbitmq-system
-      2:28:46PM: noop replicaset/p-rmq-servicebroker-6d5f6b4df7 (apps/v1) namespace: pivotal-rabbitmq-system
-      2:28:46PM: delete clusterrole/p-rmq-servicebroker-role (rbac.authorization.k8s.io/v1) cluster
-      2:28:46PM: ---- waiting on 7 changes [0/7 done] ----
-      2:28:46PM: ongoing: delete pod/p-rmq-servicebroker-6d5f6b4df7-hxrbm (v1) namespace: pivotal-rabbitmq-system
-      2:28:46PM: ok: delete service/p-rmq-servicebroker-ingress (v1) namespace: pivotal-rabbitmq-system
-      2:28:46PM: ok: delete clusterrolebinding/p-rmq-servicebroker-rolebinding (rbac.authorization.k8s.io/v1) cluster
-      2:28:46PM: ok: delete endpoints/p-rmq-servicebroker-ingress (v1) namespace: pivotal-rabbitmq-system
-      2:28:46PM: ok: delete deployment/p-rmq-servicebroker (apps/v1) namespace: pivotal-rabbitmq-system
-      2:28:46PM: ok: delete replicaset/p-rmq-servicebroker-6d5f6b4df7 (apps/v1) namespace: pivotal-rabbitmq-system
-      2:28:46PM: ok: delete clusterrole/p-rmq-servicebroker-role (rbac.authorization.k8s.io/v1) cluster
-      2:28:46PM: ---- waiting on 1 changes [6/7 done] ----
-      2:28:54PM: ok: delete pod/p-rmq-servicebroker-6d5f6b4df7-hxrbm (v1) namespace: pivotal-rabbitmq-system
-      2:28:54PM: ---- applying complete [7/7 done] ----
-      2:28:54PM: ---- waiting complete [7/7 done] ----
-
-      Succeeded
-      + kubectl delete -n pivotal-rabbitmq-system --ignore-not-found -f /cnab/app/manifests/crd.yaml
-      warning: deleting cluster-scoped resources, not scoped to the provided namespace
-      customresourcedefinition.apiextensions.k8s.io "rabbitmqclusters.rabbitmq.pivotal.io" deleted
-      + kubectl delete --ignore-not-found -f /cnab/app/manifests/namespace.yaml
-      namespace "pivotal-rabbitmq-system" deleted
-    </pre>
+For more information about configuring the Operator, see [Configuring <%= vars.product_full %>](./configuring.html).
 
 Because upgrades are currently not supported, you should also uninstall the product before installing a newer version.
 
