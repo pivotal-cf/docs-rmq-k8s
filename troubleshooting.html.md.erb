@@ -41,28 +41,29 @@ an instance without registering the service broker with <%= vars.app_runtime %>.
 Verify that the Kubernetes Operator and service broker have been installed successfully and get the
 address for the service broker from the service object by running:
 
-    ```
-    kubectl -n pivotal-rabbitmq-system get all
-    ```
-    For example:
+  ```
+  kubectl -n pivotal-rabbitmq-system get all
+  ```
 
-    <pre class="terminal">
-      $ kubectl -n pivotal-rabbitmq-system get all
-      NAME                                      READY   STATUS    RESTARTS   AGE
-      pod/p-rmq-operator-bdb96497b-5wq9q        1/1     Running   0          27m
-      pod/p-rmq-servicebroker-56f68f4df-g9rlb   1/1     Running   0          26m
+For example:
 
-      NAME                                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-      service/p-rmq-servicebroker-ingress   ClusterIP   10.110.249.16   <none>        8080/TCP   26m
+  <pre class="terminal">
+    $ kubectl -n pivotal-rabbitmq-system get all
+    NAME                                      READY   STATUS    RESTARTS   AGE
+    pod/p-rmq-operator-bdb96497b-5wq9q        1/1     Running   0          27m
+    pod/p-rmq-servicebroker-56f68f4df-g9rlb   1/1     Running   0          26m
 
-      NAME                                  READY   UP-TO-DATE   AVAILABLE   AGE
-      deployment.apps/p-rmq-operator        1/1     1            1           27m
-      deployment.apps/p-rmq-servicebroker   1/1     1            1           26m
+    NAME                                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+    service/p-rmq-servicebroker-ingress   ClusterIP   10.110.249.16   <none>        8080/TCP   26m
 
-      NAME                                            DESIRED   CURRENT   READY   AGE
-      replicaset.apps/p-rmq-operator-bdb96497b        1         1         1       27m
-      replicaset.apps/p-rmq-servicebroker-56f68f4df   1         1         1       26m
-    </pre> %>
+    NAME                                  READY   UP-TO-DATE   AVAILABLE   AGE
+    deployment.apps/p-rmq-operator        1/1     1            1           27m
+    deployment.apps/p-rmq-servicebroker   1/1     1            1           26m
+
+    NAME                                            DESIRED   CURRENT   READY   AGE
+    replicaset.apps/p-rmq-operator-bdb96497b        1         1         1       27m
+    replicaset.apps/p-rmq-servicebroker-56f68f4df   1         1         1       26m
+  </pre>
 
 ### <a id='check-connect'></a> Check Connectivity to the Service Broker
 
@@ -101,9 +102,9 @@ Provision a service instance by running:
     }'
     ```
 
-    Where is `INSTANCE-NAME` is a name you define for your instance.
-    <br><br>
-    For example:
+Where is `INSTANCE-NAME` is a name you define for your instance.
+
+For example:
 
     <pre class="terminal">
       $ curl -X PUT -H "X-Broker-API-Version: 2.14" \
@@ -131,9 +132,9 @@ For example:
 
 1. To check the status of an instance, run `kubectl -n NAMESPACE get all`.
 
-Where NAMESPACE is the Kubernetes namespace of the instance.
+Where `NAMESPACE` is the Kubernetes namespace of the instance.
 
-If you do not know the namespace, follow the steps in [Find the Namespace If Using the Service Broker](#find-namespace). <%# After giving the anchor, state whether it is "above" or "below". %>
+If you do not know the namespace, follow the steps in [Find the Namespace If Using the Service Broker](#find-namespace) above.
 
     For example:
 

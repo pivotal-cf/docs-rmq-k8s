@@ -87,145 +87,147 @@ To create an instance of the <%= vars.product_short %> service:
     watch cf services
     ```
 
-    If successful, `last operation` for your instance is reported as `create succeeded`.<br><br>
+If successful, `last operation` for your instance is reported as `create succeeded`.
+
     For example:
-    <pre class="terminal">$ watch cf services
-    Getting services in org my-org / space my-space as user<span>@</span>example.com...
-    OK
-    name          service        plan           bound apps    last operation
-    my-instance   p-rabbitmq-k8s ha                           create succeeded
+
+    <pre class="terminal">
+      $ watch cf services
+      Getting services in org my-org / space my-space as user<span>@</span>example.com...
+      OK
+      name          service        plan           bound apps    last operation
+      my-instance   p-rabbitmq-k8s ha                           create succeeded
     </pre>
 
-    Please refer to the [Troubleshooting guide](./troubleshooting.html#failed-instance) if you don't see `create succeeded` within a few minutes.
-    If you cannot solve the problem, contact your operator or email the team at rabbitmq-for-k8s@pivotal.io for help.
+If `create succeeded` does not appear within a few minutes, follow the relevant steps in [Troubleshooting <%= vars.product_full %>](./troubleshooting.html#failed-instance).
 
 ## <a id='binding'></a> Bind Your Service Instance to an App
 
 For an app to use a service, you must bind it to a service instance.
 Do this after you push or re-push the app using `cf push`.
 
-To bind an app to a RabbitMQ instance, run
+To bind an app to a RabbitMQ instance, run:
 
-```
-cf bind-service APP SERVICE-INSTANCE
-```
+  ```
+  cf bind-service APP SERVICE-INSTANCE
+  ```
 
 Where `APP` is the app you want to use the RabbitMQ service instance and `SERVICE-INSTANCE` is the name you supplied when you ran `cf create-service`.
 
 See an example below.
 
-<pre class="terminal">
-$ cf bind-service my-app my-instance<br>
-Binding service mydb to my-app in org my-org / space test as user<span>@</span>example.com...
-OK
-</pre>
+  <pre class="terminal">
+  $ cf bind-service my-app my-instance<br>
+  Binding service mydb to my-app in org my-org / space test as user<span>@</span>example.com...
+  OK
+  </pre>
 
 ## <a id='use'></a> Use the RabbitMQ Service in Your App
 
 <%# CAN WE HAVE A CALL TO ACTION IN THIS SECTION? HOW DO I USE THIS INFO TO MODIFY MY APPS OR DO OTHER THINGS? DO WE NEED TO DO SOMETHING WITH CONNECTION STRINGS? CREDENTIALS?%>
 
+For information about how to start using RabbitMQ in your apps, see the [RabbitMQ documentation](https://www.rabbitmq.com/getstarted.html).
+
 Apps running in Cloud Foundry gain access to the bound service instances through an environment variable called `VCAP_SERVICES`.
 
 Apps that have been bound to a service instance can read `VCAP_SERVICES` from their environment.
-To see the `VCAP_SERVICES` for an app, run `cf env APP-NAME` with the name of an app bound to the <%= vars.product_short %> instance. An example hash is shown below:
+To see the `VCAP_SERVICES` for an app, run `cf env APP-NAME` with the name of an app bound to the <%= vars.product_short %> instance.
+An example hash is shown below:
 
-
-```json
-{
-    "p-rabbitmq-k8s": [{
-      "binding_name": null,
-      "credentials": {
-          "dashboard_url": "http://IP-ADDRESS:15672/#/login/username/password",
-          "hostname": "IP-ADDRESS",
-          "hostnames": [
-            "IP-ADDRESS"
-          ],
-          "http_api_uri": "http://username:password@IP-ADDRESS:15672/api/",
-          "http_api_uris": [
-            "http://username:password@IP-ADDRESS:15672/api/"
-          ],
-          "password": "password",
-          "protocols": {
-            "amqp": {
-              "host": "IP-ADDRESS",
-              "hosts": [
-                "IP-ADDRESS"
-              ],
-              "password": "password",
-              "port": 5672,
-              "ssl": false,
-              "uri": "amqp://username:password@IP-ADDRESS:5672/%2F",
-              "uris": [
-                "amqp://username:password@IP-ADDRESS:5672/%2F"
-              ],
-              "username": "username",
-              "vhost": "%2F"
+  ```json
+  {
+      "p-rabbitmq-k8s": [{
+        "binding_name": null,
+        "credentials": {
+            "dashboard_url": "http://IP-ADDRESS:15672/#/login/username/password",
+            "hostname": "IP-ADDRESS",
+            "hostnames": [
+              "IP-ADDRESS"
+            ],
+            "http_api_uri": "http://username:password@IP-ADDRESS:15672/api/",
+            "http_api_uris": [
+              "http://username:password@IP-ADDRESS:15672/api/"
+            ],
+            "password": "password",
+            "protocols": {
+              "amqp": {
+                "host": "IP-ADDRESS",
+                "hosts": [
+                  "IP-ADDRESS"
+                ],
+                "password": "password",
+                "port": 5672,
+                "ssl": false,
+                "uri": "amqp://username:password@IP-ADDRESS:5672/%2F",
+                "uris": [
+                  "amqp://username:password@IP-ADDRESS:5672/%2F"
+                ],
+                "username": "username",
+                "vhost": "%2F"
+              },
+              "management": {
+                "host": "IP-ADDRESS",
+                "hosts": [
+                  "IP-ADDRESS"
+                ],
+                "password": "password",
+                "path": "/api/",
+                "port": 15672,
+                "ssl": false,
+                "uri": "http://username:password@IP-ADDRESS:15672/api/",
+                "uris": [
+                  "http://username:password@IP-ADDRESS:15672/api/"
+                ],
+                "username": "username"
+              }
             },
-            "management": {
-              "host": "IP-ADDRESS",
-              "hosts": [
-                "IP-ADDRESS"
-              ],
-              "password": "password",
-              "path": "/api/",
-              "port": 15672,
-              "ssl": false,
-              "uri": "http://username:password@IP-ADDRESS:15672/api/",
-              "uris": [
-                "http://username:password@IP-ADDRESS:15672/api/"
-              ],
-              "username": "username"
-            }
-          },
-          "ssl": false,
-          "uri": "amqp://username:password@IP-ADDRESS/%2F",
-          "uris": [
-            "amqp://username:password@IP-ADDRESS/%2F"
-          ],
-          "username": "username",
-          "vhost": "%2F"
-      },
-      "instance_name": "my-instance",
-      "label": "p-rabbitmq-k8s",
-      "name": "my-instance",
-      "plan": "ha",
-      "provider": null,
-      "syslog_drain_url": null,
-      "tags": [
-        "rabbitmq",
-        "amqp"
-      ],
-      "volume_mounts": []
-    }]
-}
+            "ssl": false,
+            "uri": "amqp://username:password@IP-ADDRESS/%2F",
+            "uris": [
+              "amqp://username:password@IP-ADDRESS/%2F"
+            ],
+            "username": "username",
+            "vhost": "%2F"
+        },
+        "instance_name": "my-instance",
+        "label": "p-rabbitmq-k8s",
+        "name": "my-instance",
+        "plan": "ha",
+        "provider": null,
+        "syslog_drain_url": null,
+        "tags": [
+          "rabbitmq",
+          "amqp"
+        ],
+        "volume_mounts": []
+      }]
+  }
+  ```
 
-```
-
-
-
-## <a id="unbind"></a>Unbind a Service Instance From Your App
+## <a id="unbind"></a> Unbind a Service Instance From Your App
 
 To stop an app from using a service it no longer needs, unbind it from the service instance by running:
 
-<pre class="terminal">
-$ cf unbind-service APP SERVICE-INSTANCE
-</pre>
+  <pre class="terminal">
+  $ cf unbind-service APP SERVICE-INSTANCE
+  </pre>
 
 Where `APP` is the app you want to stop using the RabbitMQ service instance and `SERVICE-INSTANCE` is the name you supplied when you ran `cf create-service`.
 
 See an example below.
 
-<pre class="terminal">
-$ cf unbind-service my-app my-instance<br>
-Unbinding app my-app from service my-instance in org my-org / space my-space as user<span>@</span>example.com...
-OK
-</pre>
+  <pre class="terminal">
+  $ cf unbind-service my-app my-instance<br>
+  Unbinding app my-app from service my-instance in org my-org / space my-space as user<span>@</span>example.com...
+  OK
+  </pre>
 
-## <a id="delete"></a>Delete a Service Instance
+## <a id="delete"></a> Delete a Service Instance
 
 To delete a service instance, use `cf delete-service`.
 
 1. Run `cf delete-service SERVICE-INSTANCE`, where `SERVICE-INSTANCE` is the name of the service to delete. See an example below.
+
   <pre class="terminal">
    $ cf delete-service my-instance<br>
     Are you sure you want to delete the service my-instance ? y

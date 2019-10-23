@@ -1,4 +1,3 @@
-
 ---
 title: Using Pivotal RabbitMQ for Kubernetes
 owner: RMQ for k8s
@@ -11,14 +10,16 @@ If you want to use it with Pivotal Platform and Cloud Foundry, please refer to [
 
 ## <a id='overview'></a> Overview
 
-## <a id='availability'></a>Confirm Service Availability
+<%# Insert TOC from the headers below %>
 
-For an app to use a service, the service must be available in the Marketplace for its space.
+## <a id='availability'></a> Confirm Service Availability
+
+For an app to use <%= vars.product_short %>, the product must be deployed to your Kubernetes cluster.
 
 To confirm this availability:
 
 1. Run `kubectl get customresourcedefinitions.apiextensions.k8s.io`.
-1. Check that `rabbitmqclusters.rabbitmq.pivotal.io` is on the list. If it is, <%= vars.product_short %> is available. If it is not, ask your operator to install it.
+1. Check that `rabbitmqclusters.rabbitmq.pivotal.io` is on the list, as in the example below.
 
     <pre class="terminal">
     $ kubectl get customresourcedefinitions.apiextensions.k8s.io
@@ -26,20 +27,24 @@ To confirm this availability:
     rabbitmqclusters.rabbitmq.pivotal.io   2019-10-23T10:11:06Z
     </pre>
 
-## <a id='create'></a>Create a RabbitMQ instance
+    If it is, <%= vars.product_short %> is available. If it is not, ask your operator to install it by following the steps in [Installing and Configuring Using CNAB](./installing-cnab.html) or [Installing and Configuring Using Kubernetes Manifests](./installing.html).
+
+## <a id='create'></a> Create a RabbitMQ instance
 
 To create a RabbitMQ instance, you need to create a `RabbitmqCluster` resource definition and apply it.
-RabbitMQ Operator will create the necessary resources (services, statefulset, etc) in the same namespace
-that the `RabbitmqCluster` was defined.
+RabbitMQ Operator will create the necessary resources (such as `services`, `statefulset`) in the same namespace
+in which the `RabbitmqCluster` was defined.
 
-1. Create a YAML file to describe a RabbitmqCluster resource (eg. `simple.yaml`). The simplest definition looks like this:
+1. Create a YAML file to describe a RabbitmqCluster resource, for example, `simple.yaml`. The simplest definition looks like this:
+
     ```
     apiVersion: rabbitmq.pivotal.io/v1beta1
     kind: RabbitmqCluster
     metadata:
       name: simple
    ```
-1. Apply the definition using `kubectl`:
+
+1. Apply the definition by running:
 
     ```
     kubectl apply -f simple.yaml
@@ -63,77 +68,84 @@ that the `RabbitmqCluster` was defined.
     service/simple-rabbitmq-ingress    ClusterIP   10.103.214.196   <none>        5672/TCP,15672/TCP,15692/TCP   113s
     </pre>
 
-    Please refer to the [Troubleshooting guide](./troubleshooting.html#failed-instance) if the pod is not running within a few minutes.
-    If you cannot solve the problem, contact your operator or email the team at rabbitmq-for-k8s@pivotal.io for help.
+    Please refer to [Troubleshooting Pivotal RabbitMQ for Kubernetes](./troubleshooting.html#failed-instance) if the pod is not running within a few minutes.
+    If you cannot solve the problem, please contact your operator or email <%# insert general Pivotal support email address. %>.
 
 ## <a id='configure'></a>Configure a RabbitMQ instance
 
-`RabbitmqCluster` definition may include multiple additional settings. When these settings are not specified, [Operator configuration](configuring.html) provides default values.
+The `RabbitmqCluster` definition might include multiple additional settings. When these settings are not specified, [Operator configuration](configuring.html) provides default values.
 
-Here's an example with all settings specified explicitly:
+Here is an example with all settings specified explicitly:
 
-```
-apiVersion: rabbitmq.pivotal.io/v1beta1
-kind: RabbitmqCluster
-metadata:
-  name: rabbitmqcluster-sample
-spec:
-  replicas: 3
-  service:
-    type: LoadBalancer
-    annotations:
-      service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
-  image: rabbitmq:3.8
-  imagePullSecret: some-secret
-  persistence:
-    storageClassName: fast
-    storage: 20Gi
-```
+  ```
+  apiVersion: rabbitmq.pivotal.io/v1beta1
+  kind: RabbitmqCluster
+  metadata:
+    name: rabbitmqcluster-sample
+  spec:
+    replicas: 3
+    service:
+      type: LoadBalancer
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+    image: rabbitmq:3.8
+    imagePullSecret: some-secret
+    persistence:
+      storageClassName: fast
+      storage: 20Gi
+  ```
+
+These properties are described in [Configuring Pivotal RabbitMQ for Kubernetes](./configuring.html).
+
 
 ## <a id='connect'></a> Connect an App to RabbitMQ
 
 For an app to use RabbitMQ, you must configure it with the correct service name and credentials.
 
-The service name is `INSTANCE-rabbitmq-ingress` in the namespace where RabbitMQ is deployed, where INSTANCE is the name of your instance.
+The service name is `INSTANCE-rabbitmq-ingress` in the namespace where RabbitMQ is deployed, where `INSTANCE` is the name of your instance.
 For example, for the `RabbitmqCluster` created [in the section above](#create), the service name is `simple-rabbitmq-ingress`.
 
 Admin credentials for a RabbitMQ cluster are stored in a Kubernetes secret called `INSTANCE-rabbitmq-admin`. Kubernetes encodes secrets using base64.
 To retrieve credentials, and display them in plain-text, run the following command:
-```
-# display the username
-kubectl -n NAMESPACE get secret INSTANCE-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
-# display the password
-kubectl - NAMESPACE get secret INSTANCE-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
-```
 
-Where `INSTANCE` is the name if your `RabbitmqCluster` and `NAMESPACE` is the Kubernetes namespace it is located in.
+  <pre class="terminal">
+  # display the username
+  kubectl -n NAMESPACE get secret INSTANCE-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
+  # display the password
+  kubectl -n NAMESPACE get secret INSTANCE-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
+  </pre>
+
+Where `INSTANCE` is the name of your `RabbitmqCluster` and `NAMESPACE` is the Kubernetes namespace it is located in.
 
 See an example below.
 
-<pre class="terminal">
-$ kubectl get secret simple-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
-DbjXnPjLt82DbZC-xr5i_UiBx7nDRRqI
-$ kubectl get secret simple-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
-SB6sezvZfSR4Yu36KC2n8dokmFcCXLWv
-</pre>
+  <pre class="terminal">
+  $ kubectl get secret simple-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
+  DbjXnPjLt82DbZC-xr5i_UiBx7nDRRqI
+  $ kubectl get secret simple-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
+  SB6sezvZfSR4Yu36KC2n8dokmFcCXLWv
+  </pre>
 
 ## <a id='use'></a> Use the RabbitMQ Service in Your App
 
-Please follow [RabbitMQ tutorials](https://www.rabbitmq.com/getstarted.html) to start using RabbitMQ in your applications.
+Please follow [RabbitMQ tutorials](https://www.rabbitmq.com/getstarted.html) to start using RabbitMQ in your apps.
 
-## <a id="delete"></a>Delete a RabbitMQ Instance
+## <a id="delete"></a> Delete a RabbitMQ Instance
 
 To delete a service instance, use `kubectl delete rabbitmqcluster INSTANCE` or `kubectl delete -f INSTANCE.yaml`
 
+Where `INSTANCE` is the name of your `RabbitmqCluster`.
+
 For example:
-<pre class="terminal">
-$ kubectl delete rabbitmqclusters.rabbitmq.pivotal.io simple
-rabbitmqcluster.rabbitmq.pivotal.io "simple" deleted
-</pre>
+
+  <pre class="terminal">
+  $ kubectl delete rabbitmqclusters.rabbitmq.pivotal.io simple
+  rabbitmqcluster.rabbitmq.pivotal.io "simple" deleted
+  </pre>
 
 or
 
-<pre class="terminal">
-$ kubectl delete -f simple.yaml
-rabbitmqcluster.rabbitmq.pivotal.io "simple" deleted
-</pre>
+  <pre class="terminal">
+  $ kubectl delete -f simple.yaml
+  rabbitmqcluster.rabbitmq.pivotal.io "simple" deleted
+  </pre>
