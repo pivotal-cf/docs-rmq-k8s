@@ -3,10 +3,11 @@ title: Configuring Pivotal RabbitMQ for Kubernetes
 owner: RMQ for k8s
 ---
 
-The Kubernetes Operator is configured using a configmap in the `pivotal-rabbitmq-system` namespace. Initial values are
-populated automatically based on the parameters provided to the `duffle install` command (`--set` argument) if you
-installed through Cloud Native Application Bundle (CNAB). If you want to see or change these settings after the
-installation you can run:
+The Kubernetes Operator is configured using a configmap in the `pivotal-rabbitmq-system` namespace.
+Initial values are populated automatically based on the parameters provided to the `--set` argument in the
+`duffle install` command if you installed through the Cloud Native Application Bundle (CNAB).
+
+To see or change these settings after the installation, run:
 
 ```
 kubectl -n pivotal-rabbitmq-system edit configmap p-rmq-operator-config
@@ -36,7 +37,7 @@ The following parameters are supported:
       </tr>
       <tr>
         <td><code>IMAGE</code></td>
-        <td>The RabbitMQ image to be used for RabbitMQ instances. If you <a href="./installing-cnab.html">installed using CNAB</a>, it should be configured automatically.</td>
+        <td>This is the RabbitMQ image to be used for RabbitMQ instances. If you installed using CNAB, it should be configured automatically.</td>
       </tr>
       <tr>
         <td>(Optional) <code>IMAGE_PULL_SECRET</code></td>

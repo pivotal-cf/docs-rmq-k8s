@@ -54,50 +54,50 @@ Download the <%= vars.product_short %> artifact from
 
 ## <a id='set-ver-var'></a> Set a Version Variable
 
-Set a version variable by running:
+1. Set a version variable by running:
 
-  ```
-  export version=NUMBER-build.NUMBER
-  ```
+    ```
+    export version=NUMBER-build.NUMBER
+    ```
 
-  Where `NUMBER` is the CNAB artifact version listed in the name of the file downloaded in the previous step.
+    Where `NUMBER` is the CNAB artifact version listed in the name of the file downloaded in the previous step.
 
-  For example:
+    For example:
 
-  ```
-  export version=0.4.0-build.32
-  ```
+    ```
+    export version=0.4.0-build.32
+    ```
 
 ## <a id='relocate'></a> Move the Images
 
-Load the images to your local Docker by running the following commands:
+1. Load the images to your local Docker by running the following commands:
 
-```bash
-tar xvf PATH-TO-RABBITMQ-FOR-KUBERNETES-$version.tar
-cd rabbitmq-for-kubernetes-$version
-docker load -i images/rabbitmq-for-kubernetes-operator
-docker load -i images/rabbitmq
-docker load -i images/rabbitmq-for-kubernetes-servicebroker
-```
+    ```bash
+    tar xvf PATH-TO-RABBITMQ-FOR-KUBERNETES-$version.tar
+    cd rabbitmq-for-kubernetes-$version
+    docker load -i images/rabbitmq-for-kubernetes-operator
+    docker load -i images/rabbitmq
+    docker load -i images/rabbitmq-for-kubernetes-servicebroker
+    ```
 
-Tag each image to point to your own image repository by running these commands:
+1. Tag each image to point to your own image repository by running these commands:
 
-```bash
-~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq \
->  YOUR-REPOSITORY/rabbitmq:$version
-~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-operator \
->  YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
-~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-servicebroker \
->  YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
-```
+    ```bash
+    ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq \
+    >  YOUR-REPOSITORY/rabbitmq:$version
+    ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-operator \
+    >  YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
+    ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-servicebroker \
+    >  YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
+    ```
 
-Push each image to your own image repository by running these commands:
+1. Push each image to your own image repository by running these commands:
 
-```bash
-docker push YOUR-REPOSITORY/rabbitmq:$version
-docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
-docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
-```
+    ```bash
+    docker push YOUR-REPOSITORY/rabbitmq:$version
+    docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
+    docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
+    ```
 
 ## <a id='private-images'></a> Create the Namespace
 
@@ -196,8 +196,8 @@ For more information, see [Publishing Services (ServiceTypes)](https://kubernete
 To configure your service broker ServiceType:
 
 1. Open `manifests/broker.yaml` in a text editor.
-1. Edit the `Service` definition to meet your requirements.<br>
-  For example, in the below code snippet, the value of `spec.type` is changed from `LoadBalancer` to `NodePort`:
+1. Edit the `Service` definition to meet your requirements.<br><br>
+    For example, in the below code snippet, the value of `spec.type` is changed from `LoadBalancer` to `NodePort`:
 
     ```yaml
     ---
@@ -227,34 +227,35 @@ The <%= vars.product_short %> service broker looks for its username and password
 
 1. To create a secret, run the following commands:
 
-  ```
-  echo -n BROKER-USERNAME > ./username
-  echo -n BROKER-PASSWORD > ./password
-  kubectl create secret generic broker-credentials -n pivotal-rabbitmq-system --from-file=./username --from-file=./password
-  ```
+    ```
+    echo -n BROKER-USERNAME > ./username
+    echo -n BROKER-PASSWORD > ./password
+    kubectl create secret generic broker-credentials -n pivotal-rabbitmq-system --from-file=./username --from-file=./password
+    ```
 
-  <p class="note">
-    <strong>Note:</strong>
-    The secret name must be <code>broker-credentials</code> and must be in the <code>pivotal-rabbitmq-system</code>
-    namespace with the username and password as part of the data. If not, the service broker fails to deploy.
-    To read about other ways to create a secret, see
-    <a href="https://kubernetes.io/docs/concepts/configuration/secret">the Kubernetes documentation</a>.
-  </p>
+<p class="note">
+  <strong>Note:</strong>
+  The secret name must be <code>broker-credentials</code> and must be in the <code>pivotal-rabbitmq-system</code>
+  namespace with the username and password as part of the data. If not, the service broker fails to deploy.
+  To read about other ways to create a secret, see
+  <a href="https://kubernetes.io/docs/concepts/configuration/secret">the Kubernetes documentation</a>.
+</p>
 
 ## <a id='deploy-op-and-broker'></a> Install <%= vars.product_short %>
 
-To install <%= vars.product_short %>, you must apply the Kubernetes manifests you configured in the above steps.
-When you apply the manifests, kubectl:
+To install <%= vars.product_short %>:
 
- + Deploys the Kubernetes Operator
- + Deploys the service broker
- + Installs the `RabbitmqCluster` custom resource definition
+1. Run:
 
-1. Install <%= vars.product_short %> by running:
+    ```
+    kubectl apply -f manifests/
+    ```
 
-  ```
-  kubectl apply -f manifests/
-  ```
+1. Apply the Kubernetes manifests you configured in the above steps. When you do so, kubectyl:
+
++ Deploys the Kubernetes Operator
++ Deploys the service broker
++ Installs the `RabbitmqCluster` custom resource definition
 
 ## <a id='register-broker'></a> Register the Service Broker with Cloud Foundry
 
@@ -264,6 +265,7 @@ When you apply the manifests, kubectl:
     cf create-service-broker SERVICE-BROKER-NAME BROKER-USERNAME BROKER-PASSWORD \
     http://SERVICE-BROKER-IP:8080
     ```
+
     Where:
       * `SERVICE-BROKER-NAME` is a name you choose for the service broker
       * `SERVICE-BROKER-IP` is the external IP assigned to the `LoadBalancer` named `p-rmq-servicebroker`. `LoadBalancer` is deployed in namespace `pivotal-rabbitmq-system`.
@@ -280,7 +282,7 @@ When you apply the manifests, kubectl:
 
 ## <a id='configure'></a> (Optional) Configure the Operator
 
-For more information about configuring the Operator, see [Configuring <%= vars.product_full %>](./configuring.html).
+For more information about configuring the Kubernetes Operator, see [Configuring <%= vars.product_full %>](./configuring.html).
 
 ## <a id='uninstall'></a> Uninstall <%= vars.product_short %>
 

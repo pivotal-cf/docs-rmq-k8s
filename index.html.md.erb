@@ -9,9 +9,10 @@ owner: RMQ for k8s
 
 <%= vars.product_full %> is a Kubernetes Operator that automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.
 
-The Kubernetes Operator is an operator pattern, an extension of Kubernetes.
-For general information about operators,
-see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/extend-kubernetes/operator).
+Kubernetes Operators are software extensions to Kubernetes that make use of custom resources to manage applications
+and their components.
+For general information about operators, see the
+[Kubernetes documentation](https://kubernetes.io/docs/concepts/extend-kubernetes/operator).
 
 ## <a id='overview'></a> Overview
 
@@ -73,7 +74,7 @@ The following table provides version and version-support information about <%= v
 
 ### <a id='update-rmq-cluster'></a> RabbitMQ Cluster Updates
 
-Currently, after you create a RabbitMQ Cluster, you cannot update the cluster or any of its child objects.
+Currently, after you create a RabbitMQ cluster, you cannot update the cluster or any of its child objects.
 Child objects include `StatefulSet`, `ConfigMap`, `Service`, and `Secret`. If you try to update any of the configurations, there is no effect.
 `StatefulSet`, `ConfigMap` and `Service` objects are re-created if you delete them.
 However, `Secret` objects are not re-created automatically.
@@ -81,11 +82,11 @@ If you delete `Secret` objects, you must manually re-create the secret or delete
 
 ### <a id='prov-status'></a> Provision Status of Service Instance
 
-Due to the eventually-consistent design of Kubernetes, the service broker cannot detect the following about a deployment:
+Due to the eventually-consistent design of Kubernetes, the service broker cannot detect when a deployment:
 
-+ If it is taking a long time but will eventually succeed.
-+ If it failed temporarily but could succeed on another attempt.
-+ If it failed permanently and needs human intervention to succeed.
++ Is taking a long time but will eventually succeed
++ Has failed temporarily but could succeed on another attempt
++ Has failed permanently and needs human intervention to succeed
 
 Because of this, the service broker never returns a `deployment failed` status and instead returns `create in progress`.
 For more information, see [Troubleshooting <%= vars.product_full %>](./troubleshooting.html#failed-instance).
