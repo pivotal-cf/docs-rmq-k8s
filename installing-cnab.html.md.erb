@@ -62,16 +62,17 @@ To download and import <%= vars.product_short %>:
 
 1. Set a version variable by running:
 
-  ```
-  export version=NUMBER-build.NUMBER
-  ```
+    ```
+    export version=NUMBER-build.NUMBER
+    ```
 
-  Where `NUMBER` is the CNAB artifact version listed in the name of the file downloaded in the previous step.
+    Where `NUMBER` is the CNAB artifact version listed in the name of the file downloaded in the previous step.
 
-  For example:
-  ```
-  export version=0.4.0-build.32
-  ```
+    For example:
+
+    ```
+    export version=0.4.0-build.32
+    ```
 
 1. Extract the tarball that you downloaded to gain access to `bundle.json` by running:
 
@@ -83,21 +84,16 @@ To download and import <%= vars.product_short %>:
 
 To generate credentials to grant the Kubernetes cluster access to images in your private image registry:
 
-1. Run the following command:
+1. Run:
 
     ```
     duffle credentials generate rabbitmq-creds \
      -f rabbitmq-for-kubernetes-cnab-$version/bundle.json
     ```
 
-    <p class="note"><strong>Note:</strong>
-     For more options on how to generate duffle credentials, run <code>duffle credentials --help</code>.
+    <p class="note">
+      <strong>Note:</strong> For more options on how to generate duffle credentials, run <code>duffle credentials --help</code>.
     </p>
-
-    <pre class="terminal">
-      $ duffle credentials generate rabbitmq-creds \
-       -f rabbitmq-for-kubernetes-cnab-0.4.0-build.32/bundle.json
-    </pre>
 
 1. When prompted, enter the following:
     * The absolute path to the kubeconfig that points to your target Kubernetes cluster
@@ -108,7 +104,7 @@ To generate credentials to grant the Kubernetes cluster access to images in your
 
 To move the images to your private image registry:
 
-1. Run the following command:
+1. Run:
 
     ```
     duffle relocate rabbitmq-for-kubernetes-cnab-$version.tgz -f \
@@ -132,26 +128,27 @@ To move the images to your private image registry:
       writing registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-servicebroker@sha256:a36eb92cf2152c13c9cb420bc46722c8499d2b1bcdf0f84bb1549c6b93e83822 to eu.gcr.io/my-account/p-rabbitmq-for-kubernetes-staging-rabbitmq-for-kubernetes-servicebroker-180ccfcfb779e0c8b093dd44ae168157@sha256:a36eb92cf2152c13c9cb420bc46722c8499d2b1bcdf0f84bb1549c6b93e83822
     </pre>
 
-    <p class="note"><strong>Note:</strong>
-      <code>--relocation-mapping</code> specifies the name of the file that is
-      created to store relocation mappings.
+    <p class="note">
+      <strong>Note:</strong> <code>--relocation-mapping</code> specifies the name of the file that is created
+      to store relocation mappings.
     </p>
 
 ## <a id='install'></a>Install the CNAB Bundle
 
 To install the CNAB bundle:
 
-1. Ensure that your Kubernetes authentication token has not expired by running any kubectl command that connects
-with the Kubernetes cluster.
+1. Run any kubectl command that connects with the Kubernetes cluster to check that your Kubernetes authentication
+token has not expired.
 
-For example:
+    For example:
+
     ```
     kubectl get nodes
     ```
 
-If the authentication token has expired, an error message appears when you run the command in the next step.
+    If the authentication token has expired, an error message appears when you run the command in the next step.
 
-1. Run the following command:
+1. Run:
 
     ```
     duffle install rabbitmq rabbitmq-for-kubernetes-cnab-$version.tgz -f \
@@ -297,74 +294,73 @@ If the authentication token has expired, an error message appears when you run t
       Succeeded
     </pre>
 
-    The <code>set</code> flag refers to CNAB parameters that configure your CNAB installation.
-    The table below lists the RabbitMQ for Kubernetes CNAB parameters that are
-    available to use with the `--set` flag.
+The <code>set</code> flag refers to CNAB parameters that configure your CNAB installation.
+The table below lists the RabbitMQ for Kubernetes CNAB parameters that are available to use with the `--set` flag.
 
-    <p class="note"><strong>Note:</strong>
-      You can also pass CNAB parameters using a JSON file with the <code>--parameters FILENAME</code> flag.
-    </p>
+<p class="note">
+  <strong>Note:</strong> You can also pass CNAB parameters using a JSON file with the <code>--parameters FILENAME</code> flag.
+</p>
 
-    <table>
-      <tr>
-        <th width="35%">Parameter</th>
-        <th width="65%">Description</th>
-      </tr>
-      <tr>
-        <td><code>broker_username</code></td>
-        <td>Username for the service broker</td>
-      </tr>
-      <tr>
-        <td><code>broker_password</code></td>
-        <td>Password for the service broker</td>
-      </tr>
-      <tr>
-        <td>(Optional) <code>rabbitmq_service_type</code></td>
-        <td>
-          Kubernetes service type for the RabbitmqCluster service.
-          Available values are:
-          <ul>
-            <li><code>ClusterIP</code></li>
-            <li><code>NodePort</code></li>
-            <li><code>LoadBalance</code></li>
-          </ul>
-        </td>
-      </tr>
-      <tr>
-        <td>(Optional) <code>broker_service_type</code></td>
-        <td>
-          Kubernetes Service type for the service broker.
-          Available values are:
-          <ul>
-            <li><code>ClusterIP</code></li>
-            <li><code>NodePort</code></li>
-            <li><code>LoadBalance</code></li>
-          </ul>
-        </td>
-      </tr>
-      <tr>
-        <td>(Optional) <code>service_annotations</code></td>
-        <td>
-          Kubernetes annotations for service metadata such as for IaaS configuration.
-          If the configuration you want requires multiple key-value pairs,
-          add them as a <code>\n</code> separated string. <br>For example:
-          <code>--set service_annotations="service.k8s.io/cert: arn:aws:acm:us-east-1\nservice.k8s.io/ports: 443,889"</code>
-        </td>
-      </tr>
-      <tr>
-        <td>(Optional) <code>storage_class_name</code></td>
-        <td>Name of the Kubernetes StorageClass to use for provisioning RabbitmqCluster PersistentVolumes</td>
-      </tr>
-      <tr>
-        <td>(Optional) <code>storage_capacity</code></td>
-        <td>Capacity set in the RabbitmqCluster PersistentVolumeClaims</td>
-      </tr>
-    </table>
+<table>
+  <tr>
+    <th width="35%">Parameter</th>
+    <th width="65%">Description</th>
+  </tr>
+  <tr>
+    <td><code>broker_username</code></td>
+    <td>Username for the service broker</td>
+  </tr>
+  <tr>
+    <td><code>broker_password</code></td>
+    <td>Password for the service broker</td>
+  </tr>
+  <tr>
+    <td>(Optional) <code>rabbitmq_service_type</code></td>
+    <td>
+      Kubernetes service type for the RabbitmqCluster service.
+      Available values are:
+      <ul>
+        <li><code>ClusterIP</code></li>
+        <li><code>NodePort</code></li>
+        <li><code>LoadBalance</code></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>(Optional) <code>broker_service_type</code></td>
+    <td>
+      Kubernetes Service type for the service broker.
+      Available values are:
+      <ul>
+        <li><code>ClusterIP</code></li>
+        <li><code>NodePort</code></li>
+        <li><code>LoadBalance</code></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>(Optional) <code>service_annotations</code></td>
+    <td>
+      Kubernetes annotations for service metadata such as for IaaS configuration.
+      If the configuration you want requires multiple key-value pairs,
+      add them as a <code>\n</code> separated string. <br>For example:
+      <code>--set service_annotations="service.k8s.io/cert: arn:aws:acm:us-east-1\nservice.k8s.io/ports: 443,889"</code>
+    </td>
+  </tr>
+  <tr>
+    <td>(Optional) <code>storage_class_name</code></td>
+    <td>Name of the Kubernetes <code>StorageClass</code> to use for provisioning RabbitmqCluster <code>PersistentVolumes</code></td>
+  </tr>
+  <tr>
+    <td>(Optional) <code>storage_capacity</code></td>
+    <td>Capacity set in the RabbitmqCluster <code>PersistentVolumeClaims</code></td>
+  </tr>
+</table>
 
 ## <a id='register'></a>(Optional) Register the Service Broker with Cloud Foundry
 
-The service broker is an optional component that allows integration with Cloud Foundry,
-such as <%= vars.app_runtime %>.
+The service broker is an optional component that enables integration with Cloud Foundry, such as
+<%= vars.app_runtime %>.
 
 To register the service broker:
 
@@ -376,12 +372,6 @@ To register the service broker:
   cf create-service-broker SERVICE-BROKER-NAME BROKER-USERNAME BROKER-PASSWORD https://IP-ADDRESS:8080
     ```
 
-    Where:
-    * `SERVICE-BROKER-NAME` is
-    * `BROKER-USERNAME` is
-    * `BROKER-PASSWORD` is
-    * `IP-ADDRESS` is
-
     For example:
 
     <pre class="terminal">
@@ -392,174 +382,17 @@ To register the service broker:
 <p class="note">
   <strong>Note:</strong>
   To register a service broker this way, you need to be logged in as Cloud Foundry admin.
-  If you want, you can register a space-scoped service broker as a normal user by adding <code>--space-scoped</code> parameter to the command above.
+  If you want, you can register a space-scoped service broker as a normal user by adding <code>--space-scoped</code>
+  parameter to the command above.
 </p>
 
 For more information about registering service brokers,
-see [Register a Broker](https://docs.cloudfoundry.org/services/managing-service-brokers.html#register-broker) in Cloud Foundry documentation.
+see [Register a Broker](https://docs.cloudfoundry.org/services/managing-service-brokers.html#register-broker)
+in Cloud Foundry documentation.
 
-## <a id='configuration'></a> Configuration
+## <a id='configure'></a> (Optional) Configure the Kubernetes Operator
 
-Kubernetes Operator is configured using a configmap in the `pivotal-rabbitmq-system` namespace. Initial values are populated automatically
-based on the parameters provided to the `duffle install` command (`--set` argument). If you want to see or change these settings after the installation
-you can run:
-
-```
-kubectl -n pivotal-rabbitmq-system edit configmap p-rmq-operator-config
-```
-
-The configmap looks like this:
-<code>
-data:
-  CONFIG: |
-    IMAGE: eu.gcr.io/my-account/p-rabbitmq-for-kubernetes-staging-rabbitmq-228ecdc119f602d199fa39cc0326057e@sha256:6709cafde00784361b231f6c94b6dbecb8fefd3d3195676ed81823e007e37449
-    IMAGE_PULL_SECRET: p-rmq-registry-access
-    SERVICE:
-      TYPE: NodePort
-      ANNOTATIONS:
-        service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
-    PERSISTENCE:
-      STORAGE_CLASS_NAME: azurefile
-      STORAGE: 20Gi
-</code>
-The following parameters are supported:
-    <table>
-      <tr>
-        <th width="35%">Parameter</th>
-        <th width="65%">Description</th>
-      </tr>
-      <tr>
-        <td><code>IMAGE</code></td>
-        <td>RabbitMQ image to be used to for RabbitMQ instances. If you [installed using CNAB](installing-cnab.html), it should be configured automatically.</td>
-      </tr>
-      <tr>
-        <td>(Optional) <code>IMAGE_PULL_SECRET</code></td>
-        <td>If your registry requires authentication, this is the name of the secret used to pull images (You can create it using <code>kubectl -n pivotal-rabbitmq-system create secret docker-registry</code>) </td>
-      </tr>
-      <tr>
-        <td>(Optional) <code>SERVICE</code></td>
-        <td>
-          Kubernetes service for the RabbitmqCluster service.
-          Available settings are:
-          <tr>
-            <td>(Optional) <code>TYPE</code></td>
-              <ul>
-                <li><code>ClusterIP</code> (default)</li>
-                <li><code>NodePort</code></li>
-                <li><code>LoadBalance</code></li>
-              </ul>
-            <td>
-          </tr>
-          <tr>
-            <td>(Optional) <code>ANNOTATIONS</code></td>
-            Service annotations. Usually used to configure cloud-specific properties of a LoadBalancer service.
-            <td>
-          </tr>
-        </td>
-      </tr>
-      <tr>
-        <td>(Optional) <code>PERSISTENCE</code></td>
-        <td>
-          Persistence settings for RabbitmqClusters.
-          Available settings are:
-          <tr>
-            <td>(Optional) <code>STORAGE_CLASS_NAME</code></td>
-            <td>Name of the Kubernetes storage class to use (default storageclass is used if not configured)</td>
-          </tr>
-          <tr>
-            <td>(Optional) <code>STORAGE</code></td>
-            <td>Default capactity of the persistent volume.</td>
-          </tr>
-        </td>
-      </tr>
-    </table>
-
-    All settings can be overwritten on a per-instance basis.
-
-## <a id='troubleshooting'></a> Troubleshoot the Installation
-
-The steps below allow you to verify the installation and to provision an instance without registering the service broker with <%= vars.app_runtime %>.
-
-1. Verify the Kubernetes Operator and service broker have been installed successfully and get the
-address for the service broker from the service object by running:
-
-    ```
-    kubectl -n pivotal-rabbitmq-system get services
-    ```
-    For example:
-
-    <pre class="terminal">
-      $ kubectl -n pivotal-rabbitmq-system get services
-      NAME                          TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)          AGE
-      p-rmq-servicebroker-ingress   LoadBalancer   10.109.111.3   172.17.255.1   8080:30444/TCP   58m
-    </pre>
-
-1. View the catalog to confirm the service and plan IDs:
-
-    ```
-    curl -H "X-Broker-API-Version: 2.14" \
-      -H "Content-Type: application/json" \
-      BROKER-USERNAME:BROKER-PASSWORD@IP-ADDRESS:8080/v2/catalog
-    ```
-
-    Where:
-    * `BROKER-USERNAME` is the `broker_username` you specified in the `duffle install` command above
-    * `BROKER-PASSWORD` is the `broker_password` you specified in the `duffle install` command above
-    * `IP-ADDRESS` is found in the output of `kubectl get services` command
-
-    For example:
-
-    <pre class="terminal">
-      $ curl -H "X-Broker-API-Version: 2.14"   -H "Content-Type: application/json"   BROKER-USERNAME:BROKER-PASSWORD@p-rmq-servicebroker-ingress:8080/v2/catalog
-      {"services":[{"id":"00000000-0000-0000-0000-000000000000","name":"p-rabbitmq-k8s","description":"RabbitMQ on K8s","bindable":true,"tags":["rabbitmq","amqp"],"plan_updateable":false,"plans":[{"id":"22222222-2222-2222-2222-222222222222","name":"single","description":"Single-node RabbitMQ on K8s"},{"id":"33333333-3333-3333-3333-333333333333","name":"ha","description":"3-node RabbitMQ on K8s"}]}]}
-    </pre>
-
-1. Provision a service instance by running:
-
-    ```
-    curl -X PUT -H "X-Broker-API-Version: 2.14" \
-      -H "Content-Type: application/json" \
-      BROKER-USERNAME:BROKER-PASSWORD@IP-ADDRESS:8080/v2/service_instances/INSTANCE-NAME?accepts_incomplete=true -d '{
-      "service_id": "00000000-0000-0000-0000-000000000000",
-      "plan_id": "22222222-2222-2222-2222-222222222222"
-    }'
-    ```
-
-    Where is `INSTANCE-NAME` is a name you define for your instance.
-    <br><br>
-    For example:
-
-    <pre class="terminal">
-      $ curl -X PUT -H "X-Broker-API-Version: 2.14" \
-        -H "Content-Type: application/json" \
-        user1:password123@10.25.18.2:8080/v2/service_instances/instance-1?accepts_incomplete=true -d '{
-        "service_id": "00000000-0000-0000-0000-000000000000",
-        "plan_id": "22222222-2222-2222-2222-222222222222"
-      }'
-      {}
-    </pre>
-
-1. Retrieve the instance ID by running:
-
-    ```
-    kubectl get namespaces
-    ```
-<%# how do they know which namespace is the instance ID to use? also get example. %>
-1. Verify the RabbitMQ cluster has been created by running:
-
-    ```
-    kubectl -n p-rmq-INSTANCE-ID get all
-    ```
-    Where `INSTANCE-ID` is the name you specified in the step above.
-    <br><br>
-    For example:
-
-    <pre class="terminal">
-      $ kubectl -n p-rmq-instance-1 get all
-      NAME                            READY   STATUS    RESTARTS   AGE
-      pod/pivotal-rabbitmq-server-0   1/1     Running   0          2m27s
-
-For more information about configuring the Operator, see [Configuring <%= vars.product_full %>](./configuring.html).
+For more information about configuring the Kubernetes Operator, see [Configuring <%= vars.product_full %>](./configuring.html).
 
 Because upgrades are currently not supported, you should also uninstall the product before installing a newer version.
 

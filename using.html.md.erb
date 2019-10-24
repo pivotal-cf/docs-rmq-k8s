@@ -5,7 +5,8 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to use <%= vars.product_full %> with Pivotal Platform and Cloud Foundry.
+This topic describes how to use <%= vars.product_full %> using kubectl and YAML.
+If you want to use it with <%= vars.platform_name %> and Cloud Foundry, see [Using with Pivotal Platform](using-servicebroker.html) instead.
 
 ## <a id='overview'></a> Overview
 
@@ -42,7 +43,7 @@ To confirm this availability:
 ## <a id='create'></a> Create a RabbitMQ instance
 
 To create a RabbitMQ instance, you need to create a `RabbitmqCluster` resource definition and apply it.
-RabbitMQ Operator will create the necessary resources (such as `services`, `statefulset`) in the same namespace
+RabbitMQ Operator creates the necessary resources (such as `services`, `statefulset`) in the same namespace
 in which the `RabbitmqCluster` was defined.
 
 1. Create a YAML file to describe a RabbitmqCluster resource, for example, `simple.yaml`. The simplest definition looks like this:
@@ -52,7 +53,7 @@ in which the `RabbitmqCluster` was defined.
     kind: RabbitmqCluster
     metadata:
       name: simple
-   ```
+    ```
 
 1. Apply the definition by running:
 
@@ -86,8 +87,8 @@ in which the `RabbitmqCluster` was defined.
 
     For example:
 
-    Please refer to [Troubleshooting Pivotal RabbitMQ for Kubernetes](./troubleshooting.html#failed-instance) if the pod is not running within a few minutes.
-    If you cannot solve the problem, please contact your operator or email <%# insert general Pivotal support email address. %>.
+    If the pod is not running within a few minutes, see [Troubleshooting Pivotal RabbitMQ for Kubernetes](./troubleshooting.html#failed-instance).
+    If you cannot solve the problem, please contact your operator or email <%# insert general Pivotal support email address, not the KR8s one. %>.
 
 1. Check that the process was successful by running:
 
@@ -122,10 +123,11 @@ For an app to use a service, you must bind it to a service instance.
 Do this after you push or re-push the app using `cf push`.
 
 The service name is `INSTANCE-rabbitmq-ingress` in the namespace where RabbitMQ is deployed, where `INSTANCE` is the name of your instance.
-For example, for the `RabbitmqCluster` created [in the section above](#create), the service name is `simple-rabbitmq-ingress`.
+For example, for the `RabbitmqCluster` created above in [Create a RabbitMQ instance](#create), the service name is `simple-rabbitmq-ingress`.
 
-Admin credentials for a RabbitMQ cluster are stored in a Kubernetes secret called `INSTANCE-rabbitmq-admin`. Kubernetes encodes secrets using base64.
-To retrieve credentials, and display them in plain-text, run the following command:
+Admin credentials for a RabbitMQ cluster are stored in a Kubernetes secret called `INSTANCE-rabbitmq-admin`.
+Kubernetes encodes secrets using base64.
+To retrieve credentials, and display them in plaintext, run the following commands:
 
   <pre class="terminal">
   # display the username
@@ -147,7 +149,7 @@ See an example below.
 
 ## <a id='use'></a> Use the RabbitMQ Service in Your App
 
-Please follow [RabbitMQ tutorials](https://www.rabbitmq.com/getstarted.html) to start using RabbitMQ in your apps.
+For information about how to start using your apps, see the [RabbitMQ documentation](https://www.rabbitmq.com/getstarted.html).
 
 ## <a id="delete"></a> Delete a RabbitMQ Instance
 
