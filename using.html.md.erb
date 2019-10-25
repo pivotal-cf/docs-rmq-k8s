@@ -144,13 +144,10 @@ Kubernetes encodes secrets using base64.
 
   See an example below.
 
-  <%# Replace example below with one that uses -n as above %>
-  <%# Are the commands in the example below run one after the other? %>
-
   <pre class="terminal">
-  $ kubectl get secret simple-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
+  $ kubectl -n p-rmq-9ec22161-c935-4fab-a3fa-66f5446dc434 get secret simple-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
   DbjXnPjLt82DbZC-xr5i_UiBx7nDRRqI
-  $ kubectl get secret simple-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
+  $ kubectl -n p-rmq-9ec22161-c935-4fab-a3fa-66f5446dc434 get secret simple-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
   SB6sezvZfSR4Yu36KC2n8dokmFcCXLWv
   </pre>
 
