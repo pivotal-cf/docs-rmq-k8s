@@ -40,10 +40,11 @@ rabbitmq-for-k8s@pivotal.io for help.
 To install and configure <%= vars.product_short %>:
 
 1. [Download and Import Pivotal RabbitMQ for Kubernetes](#import)
-2. [Configure Kubernetes Cluster Access to your Private Image Registry](#generate-credentials)
-3. [Move the Images](#relocate-images)
-4. [Install the CNAB Bundle](#install)
-5. [Verify the Installation](#verify)
+1. [Configure Kubernetes Cluster Access to your Private Image Registry](#generate-credentials)
+1. [Move the Images](#relocate-images)
+1. [Install the CNAB Bundle](#install)
+1. [(Optional) Register the Service Broker with Cloud Foundry](#register)
+1. [(Optional) Configure the Kubernetes Operator](#configure)
 
 ## <a id='import'></a>Download and Import Pivotal RabbitMQ for Kubernetes
 
@@ -393,7 +394,3 @@ in Cloud Foundry documentation.
 ## <a id='configure'></a> (Optional) Configure the Kubernetes Operator
 
 For more information about configuring the Kubernetes Operator, see [Configuring <%= vars.product_full %>](./configuring.html).
-
-Because upgrades are currently not supported, you should also uninstall the product before installing a newer version.
-
-%>

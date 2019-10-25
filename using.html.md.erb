@@ -6,7 +6,7 @@ owner: RMQ for k8s
 <strong><%= modified_date %></strong>
 
 This topic describes how to use <%= vars.product_full %> using kubectl and YAML.
-If you want to use it with <%= vars.platform_name %> and Cloud Foundry, see [Using with Pivotal Platform](using-servicebroker.html) instead.
+If you want to use it with <%= vars.platform_name %> and Cloud Foundry, see [Using with Pivotal Platform](using-service-broker.html) instead.
 
 ## <a id='overview'></a> Overview
 
@@ -40,13 +40,13 @@ To confirm this availability:
 
     If it is, <%= vars.product_short %> is available. If it is not, ask your operator to install it by following the steps in [Installing and Configuring Using CNAB](./installing-cnab.html) or [Installing and Configuring Using Kubernetes Manifests](./installing.html).
 
-## <a id='create'></a> Create a RabbitMQ instance
+## <a id='create'></a> Create a RabbitMQ Instance
 
 To create a RabbitMQ instance, you need to create a `RabbitmqCluster` resource definition and apply it.
 RabbitMQ Operator creates the necessary resources (such as `services`, `statefulset`) in the same namespace
 in which the `RabbitmqCluster` was defined.
 
-1. Create a YAML file to describe a RabbitmqCluster resource, for example, `simple.yaml`. The simplest definition looks like this:
+1. Create a YAML file to describe a `RabbitmqCluster` resource, for example, `simple.yaml`. The simplest definition looks like this:
 
     ```
     apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -88,11 +88,12 @@ in which the `RabbitmqCluster` was defined.
     For example:
 
     If the pod is not running within a few minutes, see [Troubleshooting Pivotal RabbitMQ for Kubernetes](./troubleshooting.html#failed-instance).
-    If you cannot solve the problem, please contact your operator or email <%# insert general Pivotal support email address, not the KR8s one. %>.
+    If you cannot solve the problem, please contact your operator or email pivotal-cf-feedback@pivotal.io.
 
-1. Check that the process was successful by running:
+## <a id='configure'></a>Configure a RabbitMQ Instance
 
-The `RabbitmqCluster` definition might include multiple additional settings. When these settings are not specified, [Operator configuration](configuring.html) provides default values.
+The `RabbitmqCluster` definition might include multiple additional settings.
+When these settings are not specified, [Operator configuration](configuring.html) provides default values.
 
 Here is an example with all settings specified explicitly:
 
@@ -127,7 +128,8 @@ For example, for the `RabbitmqCluster` created above in [Create a RabbitMQ insta
 
 Admin credentials for a RabbitMQ cluster are stored in a Kubernetes secret called `INSTANCE-rabbitmq-admin`.
 Kubernetes encodes secrets using base64.
-To retrieve credentials, and display them in plaintext, run the following commands:
+
+1. To retrieve credentials, and display them in plaintext, run the following commands:
 
   <pre class="terminal">
   # display the username
@@ -136,9 +138,14 @@ To retrieve credentials, and display them in plaintext, run the following comman
   kubectl -n NAMESPACE get secret INSTANCE-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
   </pre>
 
-Where `INSTANCE` is the name of your `RabbitmqCluster` and `NAMESPACE` is the Kubernetes namespace it is located in.
+  Where:
+  * `INSTANCE` is the name of your `RabbitmqCluster`
+  * `NAMESPACE` is the Kubernetes namespace that contains `RabbitmqCluster`
 
-See an example below.
+  See an example below.
+
+  <%# Replace example below with one that uses -n as above %>
+  <%# Are the commands in the example below run one after the other? %>
 
   <pre class="terminal">
   $ kubectl get secret simple-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
@@ -146,6 +153,9 @@ See an example below.
   $ kubectl get secret simple-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
   SB6sezvZfSR4Yu36KC2n8dokmFcCXLWv
   </pre>
+
+  <p class="note">
+    <strong>Note:</strong>
 
 ## <a id='use'></a> Use the RabbitMQ Service in Your App
 
