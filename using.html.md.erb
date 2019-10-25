@@ -139,8 +139,10 @@ Kubernetes encodes secrets using base64.
   </pre>
 
   Where:
-  * `INSTANCE` is the name of your `RabbitmqCluster`
-  * `NAMESPACE` is the Kubernetes namespace that contains `RabbitmqCluster`
+  <ul>
+    <li><code>INSTANCE</code> is the name of your <code>RabbitmqCluster</code>
+    <li><code>NAMESPACE</code> is the Kubernetes namespace that contains <code>RabbitmqCluster</code>
+  </ul>
 
   See an example below.
 
@@ -151,22 +153,22 @@ Kubernetes encodes secrets using base64.
   SB6sezvZfSR4Yu36KC2n8dokmFcCXLWv
   </pre>
 
-  <p class="note">
-    <strong>Note:</strong>
-
 ## <a id='use'></a> Use the RabbitMQ Service in Your App
 
 For information about how to start using your apps, see the [RabbitMQ documentation](https://www.rabbitmq.com/getstarted.html).
 
 ## <a id="delete"></a> Delete a RabbitMQ Instance
 
-## <a id="unbind"></a>Unbind a Service Instance From Your App
+To delete a service instance, run:
 
-To stop an app from using a service it no longer needs, unbind it from the service instance by running:
+  ```
+  kubectl delete rabbitmqcluster INSTANCE
+  ```
+  or
 
-<pre class="terminal">
-$ cf unbind-service APP SERVICE-INSTANCE
-</pre>
+  ```
+  kubectl delete -f INSTANCE.yaml
+  ```
 
 Where `INSTANCE` is the name of your `RabbitmqCluster`.
 
