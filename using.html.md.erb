@@ -8,17 +8,6 @@ owner: RMQ for k8s
 This topic describes how to use <%= vars.product_full %> using kubectl and YAML.
 If you want to use it with <%= vars.platform_name %> and Cloud Foundry, see [Using with Pivotal Platform](using-service-broker.html) instead.
 
-## <a id='overview'></a> Overview
-
-You can use <%= vars.product_short %> to:
-
-1. [Confirm Service Availability](#marketplace)
-1. [Create a Service Instance](#create)
-1. [Bind Your Service Instance to an App](#binding)
-1. [Use the RabbitMQ Service in Your App](#use)
-1. [Unbind a Service Instance From Your App](#unbind)
-1. [Delete a Service Instance](#delete)
-
 ## <a id='marketplace'></a>Confirm Service Availability
 
 For an app to use <%= vars.product_short %>, the product must be deployed to your Kubernetes cluster.
@@ -58,34 +47,26 @@ in which the `RabbitmqCluster` was defined.
 1. Apply the definition by running:
 
     ```
-    cf services
+    kubectl apply -f simple.yaml
     ```
-    Look for instances that have `p-rabbitmq-k8s` in the `service` column.
-    If there is an existing instance that you want to use, skip to the [Bind a Service Instance to Your App](#bind) section below.
-    <br><br>
+
+1. Check that the process was successful by running:
+
+    ```
+    kubectl get all -l app=simple
+    ```
+
+    If successful, you should see a running pod and a service that exposes the instance.<br><br>
     For example:
     <pre class="terminal">
-    $ cf services
-    Getting services in org my-org / space my-space as user<span>@</span>example.com...
-    OK
-    name          service          plan          bound apps    last operation
-    my-instance   p-rabbitmq-k8s   ha                          create succeeded
+    $ kubectl get all -l app=simple
+    NAME                           READY   STATUS    RESTARTS   AGE
+    pod/simple-rabbitmq-server-0   1/1     Running   0          112s
+
+    NAME                               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                        AGE
+    service/simple-rabbitmq-headless   ClusterIP   None             <none>        4369/TCP                       113s
+    service/simple-rabbitmq-ingress    ClusterIP   10.103.214.196   <none>        5672/TCP,15672/TCP,15692/TCP   113s
     </pre>
-
-1. Create the service instance by running:
-
-    ```
-    cf create-service p-rabbitmq-k8s HA SERVICE-INSTANCE
-    ```
-
-    Where:
-    + `SERVICE-INSTANCE` is a name you choose to identify the service instance.
-    This name appears under `name` in the output from `cf services`.
-    + `HA` is the plan.
-    You can replace it with any of the other plans listed in the Marketplace for the
-    `p-rabbitmq-k8s` service.
-
-    For example:
 
     If the pod is not running within a few minutes, see [Troubleshooting Pivotal RabbitMQ for Kubernetes](./troubleshooting.html#failed-instance).
     If you cannot solve the problem, please contact your operator or email pivotal-cf-feedback@pivotal.io.
@@ -118,10 +99,9 @@ Here is an example with all settings specified explicitly:
 These properties are described in [Configuring Pivotal RabbitMQ for Kubernetes](./configuring.html).
 
 
-## <a id='binding'></a> Bind Your Service Instance to an App
+## <a id='connect'></a> Connect an App to RabbitMQ
 
-For an app to use a service, you must bind it to a service instance.
-Do this after you push or re-push the app using `cf push`.
+For an app to use RabbitMQ, you must configure it with the correct service name and credentials.
 
 The service name is `INSTANCE-rabbitmq-ingress` in the namespace where RabbitMQ is deployed, where `INSTANCE` is the name of your instance.
 For example, for the `RabbitmqCluster` created above in [Create a RabbitMQ instance](#create), the service name is `simple-rabbitmq-ingress`.
@@ -179,9 +159,7 @@ For example:
   rabbitmqcluster.rabbitmq.pivotal.io "simple" deleted
   </pre>
 
-Where `APP` is the app you want to stop using the RabbitMQ service instance and `SERVICE-INSTANCE` is the name you supplied when you ran `cf create-service`.
-
-See an example below.
+or
 
   <pre class="terminal">
   $ kubectl delete -f simple.yaml
