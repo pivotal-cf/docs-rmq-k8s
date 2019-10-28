@@ -222,41 +222,6 @@ To configure your service broker ServiceType:
     ---
     ```
 
-## <a id='config-service-type'></a> (Optional) Configure the RabbitMQ Instance ServiceType
-
-For each RabbitMQ cluster deployed by the Kubernetes Operator, you must configure a ServiceType to enable RabbitMQ client connections.
-By default, <%= vars.product_short %> configures a `ClusterIP` ServiceType.
-
-To specify a different ServiceType for all newly created RabbitMQ clusters:
-
-1. Open `manifests/operator.yaml` in a text editor.
-1. Find the `p-rmq-operator-config` ConfigMap definition.
-1. Change `TYPE: "ClusterIP"` to `TYPE: "NodePort"` or `TYPE: "LoadBalancer"`.<br>
-For example:
-
-    ```yaml
-    ---
-    apiVersion: v1
-    data:
-      IMAGE_PULL_SECRET: ""
-      IMAGE: "example-registry.pivotal.io/example-rabbitmq/rabbitmq:3.8.0"
-      SERVICE: |
-        TYPE: "LoadBalancer"
-        ANNOTATIONS:
-          service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
-    kind: ConfigMap
-    metadata:
-      name: p-rmq-operator-config
-      namespace: pivotal-rabbitmq-system
-    ---
-    ```
-
-The `ANNOTATIONS` property is optional and enables vendor-specific `LoadBalancer` configuration.
-
-<p class="note">
-  <strong>Note:</strong> <%= vars.product_short %> currently does not support the <code>ExternalName</code> ServiceType.
-</p>
-
 ## <a id='broker-creds'></a> Create Service Broker Credentials
 
 The <%= vars.product_short %> service broker looks for its username and password in a Kubernetes secret called
@@ -317,35 +282,10 @@ To install <%= vars.product_short %>:
     cf enable-service-access p-rabbitmq-k8s -b SERVICE-BROKER-NAME
     ```
 
-<%# THIS SHOULD PROBS BE ON THE INDEX PAGE %>
-## <a id='limitations'></a> Limitations
-
-The section describes <%= vars.product_short %> limitations.
-
-### <a id='update-rmq-cluster'></a> RabbitMQ Cluster Updates
-
-Currently, after you create a RabbitMQ Cluster, you cannot update the cluster or any of its child objects. Child objects include `StatefulSet`, `ConfigMap`, `Service`, and `Secret`. If you try to update any of the configurations, there is no effect.
-
-`StatefulSet`, `ConfigMap` and `Service` objects are re-created if you delete them. However, `Secret` objects are not re-created automatically. If you delete `Secret` objects, you must manually re-create the secret or delete and re-create the cluster.
-
-### <a id='rmq-image'></a> RabbitMQ Image
-
-Currently Pivotal does not support pulling the RabbitMQ image from a repository that requires authentication.
-
-### <a id='prov-status'></a> Provision Status of Service Instance
-
-Due to the eventually-consistent design of Kubernetes, the service broker cannot detect the following about a deployment:
-
-+ If it is taking a long time but will eventually succeed.
-+ If it failed temporarily but could succeed on another attempt.
-+ If it failed permanently and needs human intervention to succeed. For example, this could happen if the deployment refers to a non-existent `storageClass`.
-
-Because of this, the service broker never returns a `deployment failed` status and instead returns `create in progress`.
-
-Follow the steps in [Uninstall the Bundle](./upgrading.html#uninstall-bundle).
+## <a id='configure'></a> (Optional) Configure the Operator
 
 For more information about configuring the Kubernetes Operator, see [Configuring <%= vars.product_full %>](./configuring.html).
 
-## <a id='troubleshooting'></a> Troubleshoot the Installation
+## <a id='uninstall'></a> Uninstall <%= vars.product_short %>
 
-To troubleshoot the installation, follow the steps in [Troubleshoot the Installation](./troubleshooting.html#ts-install).
+If you want to uninstall the product, follow the steps in [Uninstall using Manifests](./upgrading.html#uninstall-manifests).
