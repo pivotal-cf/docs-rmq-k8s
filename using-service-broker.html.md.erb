@@ -87,40 +87,40 @@ To create an instance of the <%= vars.product_short %> service:
     watch cf services
     ```
 
-If successful, `last operation` for your instance is reported as `create succeeded`.
+    If successful, `last operation` for your instance is reported as `create succeeded`.<br><br>
 
     For example:
 
     <pre class="terminal">
-      $ watch cf services
-      Getting services in org my-org / space my-space as user<span>@</span>example.com...
-      OK
-      name          service        plan           bound apps    last operation
-      my-instance   p-rabbitmq-k8s ha                           create succeeded
+    $ watch cf services
+    Getting services in org my-org / space my-space as user<span>@</span>example.com...
+    OK
+    name          service        plan           bound apps    last operation
+    my-instance   p-rabbitmq-k8s ha                           create succeeded
     </pre>
 
-If `create succeeded` does not appear within a few minutes, follow the relevant steps in [Troubleshooting <%= vars.product_full %>](./troubleshooting.html#failed-instance).
+    If `create succeeded` does not appear within a few minutes, follow the relevant steps in [Troubleshooting <%= vars.product_full %>](./troubleshooting.html#failed-instance).
 
 ## <a id='binding'></a> Bind Your Service Instance to an App
 
 For an app to use a service, you must bind it to a service instance.
 Do this after you push or re-push the app using `cf push`.
 
-To bind an app to a RabbitMQ instance, run:
+1. To bind an app to a RabbitMQ instance, run:
 
-  ```
-  cf bind-service APP SERVICE-INSTANCE
-  ```
+    ```
+    cf bind-service APP SERVICE-INSTANCE
+    ```
 
-Where `APP` is the app you want to use the RabbitMQ service instance and `SERVICE-INSTANCE` is the name you supplied when you ran `cf create-service`.
+    Where `APP` is the app you want to use the RabbitMQ service instance and `SERVICE-INSTANCE` is the name you supplied when you ran `cf create-service`.
 
-See an example below.
+    See an example below.
 
-  <pre class="terminal">
-  $ cf bind-service my-app my-instance<br>
-  Binding service mydb to my-app in org my-org / space test as user<span>@</span>example.com...
-  OK
-  </pre>
+    <pre class="terminal">
+    $ cf bind-service my-app my-instance<br>
+    Binding service mydb to my-app in org my-org / space test as user<span>@</span>example.com...
+    OK
+    </pre>
 
 ## <a id='use'></a> Use the RabbitMQ Service in Your App
 
@@ -206,21 +206,21 @@ An example hash is shown below:
 
 ## <a id="unbind"></a> Unbind a Service Instance From Your App
 
-To stop an app from using a service it no longer needs, unbind it from the service instance by running:
+1. To stop an app from using a service it no longer needs, unbind it from the service instance by running:
 
-  <pre class="terminal">
-  $ cf unbind-service APP SERVICE-INSTANCE
-  </pre>
+    <pre class="terminal">
+    $ cf unbind-service APP SERVICE-INSTANCE
+    </pre>
 
-Where `APP` is the app you want to stop using the RabbitMQ service instance and `SERVICE-INSTANCE` is the name you supplied when you ran `cf create-service`.
+    Where `APP` is the app you want to stop using the RabbitMQ service instance and `SERVICE-INSTANCE` is the name you supplied when you ran `cf create-service`.<br><br>
 
-See an example below.
+    See an example below.
 
-  <pre class="terminal">
-  $ cf unbind-service my-app my-instance<br>
-  Unbinding app my-app from service my-instance in org my-org / space my-space as user<span>@</span>example.com...
-  OK
-  </pre>
+    <pre class="terminal">
+    $ cf unbind-service my-app my-instance<br>
+    Unbinding app my-app from service my-instance in org my-org / space my-space as user<span>@</span>example.com...
+    OK
+    </pre>
 
 ## <a id="delete"></a> Delete a Service Instance
 
@@ -228,12 +228,12 @@ To delete a service instance, use `cf delete-service`.
 
 1. Run `cf delete-service SERVICE-INSTANCE`, where `SERVICE-INSTANCE` is the name of the service to delete. See an example below.
 
-  <pre class="terminal">
-   $ cf delete-service my-instance<br>
+    <pre class="terminal">
+    $ cf delete-service my-instance<br>
     Are you sure you want to delete the service my-instance ? y
     Deleting service my-service in org my-org / space my-space as user<span>@</span>example.com...
     OK
-  </pre>
+    </pre>
 
 1. Run `watch cf service SERVICE-INSTANCE` and wait for a `Service instance not found` error indicating that the instance no longer exists.
 
