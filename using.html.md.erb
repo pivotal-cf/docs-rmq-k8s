@@ -29,7 +29,29 @@ To confirm this availability:
 
     If it is, <%= vars.product_short %> is available. If it is not, ask your operator to install it by following the steps in [Installing and Configuring Using CNAB](./installing-cnab.html) or [Installing and Configuring Using Kubernetes Manifests](./installing.html).
 
-## <a id='create'></a> Create a RabbitMQ Instance
+
+## <a id='psp'></a>Pod Security Policies
+
+If you have [Pod Security Policies](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) enabled in the Kubernetes cluster,
+you have to create a `ClusterRole` and `ClusterRoleBinding` to allow the Pods to be scheduled. If you don't have Pod Security Policies
+enabled, skip to <a href="#create">Create a RabbitMQ Instance</a>
+
+### Minimum Pod Security Policy for Operator
+
+The Operator needs to run as `root` user and it needs to mount volumes of type `secret` and `configmap`.
+This [link has an example](examples-annex.html#operator-psp-example) of the minimum resources required to deploy the Operator successfully.
+
+### Minimum Pod Security Policy for Service Broker
+
+The Service Broker needs to run as `root` user and it needs to mount volumes of type `secret`.
+This [link has an example](examples-annex.html#servicebroker-psp-example) with minimum required resources to deploy the Service Broker successfully.
+
+### Minimum Pod Security Policies for RabbitMQ instance
+
+RabbitMQ instances need to run as `root` and to mount volumes of type `secret`, `configMap`, `persistentVolumeClaim` and `emptyDir`.
+This [link has an example](examples-annex.html#rabbitmq-psp-example) with the minimum required resources to deploy a RabbitMQ instance successfully.
+
+## <a id='create'></a>Create a RabbitMQ Instance
 
 To create a RabbitMQ instance, you need to create a `RabbitmqCluster` resource definition and apply it.
 RabbitMQ Operator creates the necessary resources (such as `services`, `statefulset`) in the same namespace
