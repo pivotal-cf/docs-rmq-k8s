@@ -7,11 +7,12 @@ owner: RMQ for k8s
 
 <%= partial vars.path_to_partials + "/services/beta-notice" %>
 
-<%= vars.product_full %> is a Kubernetes Operator that automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.
+<%= vars.product_name %> is a Kubernetes Operator that automates provisioning, managing, 
+and operating RabbitMQ clusters running on Kubernetes.
 
-Kubernetes Operators are software extensions to Kubernetes that make use of custom resources to manage applications
+Kubernetes Operators are software extensions to Kubernetes that make use of custom resources to manage apps
 and their components.
-For general information about operators, see the
+For general information about Operators, see the
 [Kubernetes documentation](https://kubernetes.io/docs/concepts/extend-kubernetes/operator).
 
 ## <a id='overview'></a> Overview
@@ -25,21 +26,23 @@ manage their lifecycle. RabbitMQ clusters can be accessed by apps running on Kub
 * A Kubernetes Operator that automates the provision, management, and operations of RabbitMQ clusters
 * (Optional) An OSBAPI-compliant service broker for integration with <%= vars.platform_name %>
 
-When combined with <%= vars.app_runtime %>, this product enables you to create and bind RabbitMQ clusters with single commands.
-Run `cf create-service` to create RabbitMQ clusters and run `cf bind-service` to bind them to a <%= vars.app_runtime %>-deployed application.
+When combined with <%= vars.app_runtime %>, <%= vars.product_short %> enables you to create and 
+bind RabbitMQ clusters with single commands.
+Run `cf create-service` to create RabbitMQ clusters 
+and run `cf bind-service` to bind them to a <%= vars.app_runtime %>-deployed app.
 
 ## <a id='features'></a> Key Features
 
 <%= vars.product_short %> includes the following key features:
 
-* Provisioning of single-node and 3-node RabbitMQ clusters
+* Provisioning of single-node and three-node RabbitMQ clusters
 * Automatic reconciliation of deployed clusters whenever their actual state does not match the expected state
 * Integration with <%= vars.platform_name %> through an OSBAPI-compliant service broker
 * Monitoring of RabbitMQ clusters through Prometheus and Grafana.
 For more information, see the [Prometheus](https://prometheus.io/docs/introduction/overview/)
 and [Grafana](https://grafana.com/docs/) documentation.
 
-Automated upgrading of RabbitMQ clusters, another key feature, is planned for a later update.
+Automated upgrades of RabbitMQ clusters, another key feature, is planned for a later update.
 
 ## <a id="snapshot"></a> Product Snapshot
 
@@ -64,18 +67,22 @@ The following table provides version and version-support information about <%= v
 
 ## <a id="limitations"></a> Limitations
 
+The following section lists limitations of <%= vars.product_short %>.
+
 ### <a id="gen-limits"></a> General Limitations
 
-* This product is currently in beta. Pivotal does not currently provide commercial support.
+* This product is currently in beta. Pivotal does not provide commercial support.
 * This product is intended to be used with any Kubernetes distribution.
-  However, given the number of Kubernetes vendors, versions and configurations, not all of them have been
+  However, given the number of Kubernetes vendors, versions, and configurations, not all of them have been
   tested with <%= vars.product_short %>.
-* Product upgrades are currently not supported. If you want to test a newer version, delete the previous version first.
+* Product upgrades are not supported. If you want to test a newer version, delete the previous version first.
 
 ### <a id='update-rmq-cluster'></a> RabbitMQ Cluster Updates
 
-Currently, after you create a RabbitMQ cluster, you cannot update the cluster or any of its child objects.
-Child objects include `StatefulSet`, `ConfigMap`, `Service`, and `Secret`. If you try to update any of the configurations, there is no effect.
+After you create a RabbitMQ cluster, you cannot update the cluster or any of its child objects.
+Child objects include `StatefulSet`, `ConfigMap`, `Service`, and `Secret`. 
+If you try to update any of the configurations, there is no effect.
+
 `StatefulSet`, `ConfigMap` and `Service` objects are re-created if you delete them.
 However, `Secret` objects are not re-created automatically.
 If you delete `Secret` objects, you must manually re-create the secret or delete and re-create the cluster.
