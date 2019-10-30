@@ -79,6 +79,6 @@ This is a word list for terminology and word usage specific to the RabbitMQ for 
 
 | Word | Explanation |
 |------|-------------|
-| Kuberenetes Operator |This operator refers to an Operator pattern, which is a Kubernetes concept. You can have a container image for the Operator code but it is not an image itself. Always capitalize it to help differentiate the term from the Alana persona operator.|
+| Kubernetes Operator |This operator refers to an Operator pattern, which is a Kubernetes concept. You can have a container image for the Operator code but it is not an image itself. Always capitalize it to help differentiate the term from the Alana persona operator.|
 | service broker |Unless you are specifically refering to the Open Source Service Broker API, do not capitalize service broker.|
 
