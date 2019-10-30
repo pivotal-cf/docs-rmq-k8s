@@ -6,7 +6,7 @@ owner: RMQ for k8s
 <strong><%= modified_date %></strong>
 
 This topic describes how to use <%= vars.product_full %> using kubectl and YAML.
-If you want to use it with <%= vars.platform_name %> and Cloud Foundry, see [Using with Pivotal Platform](using-service-broker.html) instead.
+To use it with <%= vars.platform_name %> and Cloud Foundry instead, see [Using with Pivotal Platform](using-service-broker.html).
 
 ## <a id='marketplace'></a>Confirm Service Availability
 
@@ -30,34 +30,39 @@ To confirm this availability:
     If it is, <%= vars.product_short %> is available. If it is not, ask your operator to install it by following the steps in [Installing and Configuring Using CNAB](./installing-cnab.html) or [Installing and Configuring Using Kubernetes Manifests](./installing.html).
 
 
-## <a id='psp'></a>Pod Security Policies
+## <a id='psp'></a> Pod Security Policies
 
-If you have [Pod Security Policies](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) enabled in the Kubernetes cluster,
-you have to create a `ClusterRole` and `ClusterRoleBinding` to allow the Pods to be scheduled. If you don't have Pod Security Policies
-enabled, skip to <a href="#create">Create a RabbitMQ Instance</a>
+If you have Pod security policies enabled in the Kubernetes cluster, you must create a `ClusterRole` and
+`ClusterRoleBinding` to enable the Pods to be scheduled.
+If you do not have Pod security policies enabled, skip to <a href="#create">Create a RabbitMQ Instance</a> below.
 
-### Minimum Pod Security Policy for Operator
+For more information about Pod security policies, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/policy/pod-security-policy/).
 
-The Operator needs to run as `root` user and it needs to mount volumes of type `secret` and `configmap`.
-This [link has an example](examples-annex.html#operator-psp-example) of the minimum resources required to deploy the Operator successfully.
+### <a id='psp-for-operator'></a> Minimum Pod Security Policy for the Operator
 
-### Minimum Pod Security Policy for Service Broker
+The Operator needs to run as a `root` user and it needs to mount volumes of the types `secret` and `configmap`.
+For the minimum resources required to deploy the Operator successfully, see
+[Pod Security Policy Example for the Operator](examples-annex.html#operator-psp-example).
 
-The Service Broker needs to run as `root` user and it needs to mount volumes of type `secret`.
-This [link has an example](examples-annex.html#servicebroker-psp-example) with minimum required resources to deploy the Service Broker successfully.
+### <a id='psp-for-sb'></a> Minimum Pod Security Policy for the Service Broker
 
-### Minimum Pod Security Policies for RabbitMQ instance
+The Service Broker needs to run as a `root` user and it needs to mount volumes of the `secret` type.
+For the minimum resources required to deploy the Service Broker successfully, see
+[Pod Security Policy Example for the Service Broker](examples-annex.html#servicebroker-psp-example).
 
-RabbitMQ instances need to run as `root` and to mount volumes of type `secret`, `configMap`, `persistentVolumeClaim` and `emptyDir`.
-This [link has an example](examples-annex.html#rabbitmq-psp-example) with the minimum required resources to deploy a RabbitMQ instance successfully.
+### <a id='psp-for-rmq-instance'></a> Minimum Pod Security Policies for RabbitMQ Instances
 
-## <a id='create'></a>Create a RabbitMQ Instance
+RabbitMQ instances need to run as a `root` user and mount volumes of the types `secret`, `configMap`, `persistentVolumeClaim`, and `emptyDir`.
+For the minimum resources required to deploy a RabbitMQ instance successfully, see
+[Pod Security Policy Example for a RabbitMQ Instance](examples-annex.html#rabbitmq-psp-example).
+
+## <a id='create'></a> Create a RabbitMQ Instance
 
 To create a RabbitMQ instance, you need to create a `RabbitmqCluster` resource definition and apply it.
-RabbitMQ Operator creates the necessary resources (such as `services`, `statefulset`) in the same namespace
+RabbitMQ Operator creates the necessary resources (such as `services` and `statefulset`) in the same namespace
 in which the `RabbitmqCluster` was defined.
 
-1. Create a YAML file to describe a `RabbitmqCluster` resource, for example, `simple.yaml`. The simplest definition looks like this:
+1. Create a YAML file to describe a `RabbitmqCluster` resource, such as `simple.yaml`. The simplest definition looks like this:
 
     ```
     apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -91,7 +96,7 @@ in which the `RabbitmqCluster` was defined.
     </pre>
 
     If the pod is not running within a few minutes, see [Troubleshooting Pivotal RabbitMQ for Kubernetes](./troubleshooting.html#failed-instance).
-    If you cannot solve the problem, please contact your operator or email pivotal-cf-feedback@pivotal.io.
+    If you cannot solve the problem, contact your operator or email pivotal-cf-feedback@pivotal.io.
 
 ## <a id='configure'></a>Configure a RabbitMQ Instance
 
