@@ -39,7 +39,7 @@ an instance without registering the service broker with <%= vars.app_runtime %>.
 
 ### <a id='verify-operator-and-broker'></a> Verify the Kubernetes Operator and Service Broker Installation
 
-If the Kubernetes Operator and service broker have been installed, the service object has a service broker address.
+If the Kubernetes Operator and service broker have been installed, the service broker has an IP address.
 Follow the step below to view the service broker address.
 
 1. Get the service broker address from the service object by running:
@@ -72,7 +72,7 @@ Follow the step below to view the service broker address.
 
 Follow the step below to check connectivity to the service broker.
 
-1. View the catalog to get the service and plan IDs by running:
+1. View the catalog to check that there are services and plans for <%= vars.product_short %> by running:
 
     ```
     curl -H "X-Broker-API-Version: 2.14" \
