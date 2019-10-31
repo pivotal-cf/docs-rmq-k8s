@@ -20,8 +20,8 @@ When using a service broker: service instance provision status is `create in pro
 ###<a id='failed-instance-explanation'></a>Explanation
 
 Common reasons for such failure are:
-* Incorrect `imagePullSecret` configuration - image cannot be pulled from a Docker registry
-* Incorrect `storageClassName` configuration - no default storage class has been configured in the Kubernetes cluster and `p-rmq-operator-config` does not contain a valid `storageClassName` value
+* Incorrect `IMAGE_PULL_SECRET` configuration - image cannot be pulled from a Docker registry
+* Incorrect `STORAGE_CLASS_NAME` configuration - no default storage class has been configured in the Kubernetes cluster and `p-rmq-operator-config` does not contain a valid `STORAGE_CLASS_NAME` value
 
 ###<a id='failed-instance-solution'></a>Solution
 

@@ -162,11 +162,11 @@ To configure the image repository:
     ```
     apiVersion: v1
     data:
-      config: |
-        service:
-          type: "ClusterIP"
-        image: "example-registry.pivotal.io/example-rabbitmq/rabbitmq:3.8.0"
-        imagePullSecret: "example-secret"
+      CONFIG: |
+        SERVICE:
+          TYPE: "ClusterIP"
+        IMAGE: "example-registry.pivotal.io/example-rabbitmq/rabbitmq:3.8.0"
+        IMAGE_PULL_SECRET: "example-secret"
     kind: ConfigMap
     metadata:
       name: p-rmq-operator-config
