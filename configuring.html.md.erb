@@ -27,6 +27,13 @@ The configmap looks like this:
       persistence:
         storageClassName: azurefile
         storage: 20Gi
+      resources:
+        limits:
+          memory: 2Gi
+          cpu: 500m
+        requests:
+          memory: 2Gi
+          cpu: 100m
   ```
 
 The following parameters are supported:
@@ -78,6 +85,38 @@ The following parameters are supported:
             <td>(Optional) <code>storage</code></td>
             <td>This is the default capacity of the persistent volume.</td>
           </tr>
+        </td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>resources</code></td>
+        <td>
+          This setting can be used to set the CPU and Memory Limits and Requests for <code>RabbitmqCluster</code> containers.
+          Available settings are <code>limits</code> and <code>requests</code>.
+        </td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>limits</code></td>
+        <td> This setting is used to set the resource limits for the RabbitMQ containers in Kubernetes.
+             Available settings are <code>cpu</code> and <code>memory</code>.
+        </td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>requests</code></td>
+        <td> This setting is used to set the resource requests for the RabbitMQ containers in Kubernetes.
+             Available settings are <code>cpu</code> and <code>memory</code>.
+        </td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>cpu</code></td>
+        <td>
+          This setting is used to set the cpu requests/limits for the RabbitMQ containers. Default values for requests: 100m , limits: 500m
+        </td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>memory</code></td>
+        <td>
+          This setting is used to set the memory requests/limits for the RabbitMQ containers. Default values for requests: 2Gi , limits: 2Gi.
+          RabbitMQ high watermark is set to 0.4 * available memory by default, and in this case it would consider the <code>limits</code> value. So we recommend to keep the requests and limits as the same value.
         </td>
       </tr>
     </table>
