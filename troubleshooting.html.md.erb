@@ -16,18 +16,22 @@ After creating a RabbitMQ instance, it is not available within a few minutes.
 Symptoms include:
 
 * When not using a service broker, RabbitMQ pods do not run.
-* When using a service broker, the service instance provision status is `create in progress` for more than a few minutes.
+* When using a service broker, the service instance provision status is `create in progress` for more than a few
+minutes.
 
 ### <a id='failed-instance-explanation'></a> Explanation
 
 Common reasons for such failure are:
 
 * Incorrect `IMAGE_PULL_SECRET` configuration. This prevents the image from being pulled from a Docker registry.
-* Incorrect `STORAGE_CLASS_NAME` configuration. More specifically, no default storage class has been configured in the Kubernetes cluster and `p-rmq-operator-config` does not contain a valid `STORAGE_CLASS_NAME` value.
+* Incorrect `STORAGE_CLASS_NAME` configuration. More specifically, no default storage class has been configured in
+the Kubernetes cluster and `p-rmq-operator-config` does not contain a valid `STORAGE_CLASS_NAME` value.
 
 ### <a id='failed-instance-solution'></a> Solution
 
-See more details about the failure by following the step in [Check the Status of an Instance](#check-instance-status) below to check the status of the RabbitMQ cluster resources in your Kubernetes cluster.
+See more details about the failure by following the step in
+[Check the Status of an Instance](#check-instance-status) below to check the status of the RabbitMQ cluster
+resources in your Kubernetes cluster.
 
 After learning more about the failure, follow advice in this topic that best corresponds to it or, if that is
 not possible, please email pivotal-cf-feedback@pivotal.io for help.
@@ -123,7 +127,8 @@ Follow the step below to check that the service broker works by manually trigger
 
 ### <a id='find-namespace'></a> Find the Namespace If Using the Service Broker
 
-When the service broker provisions an instance it creates a namespace. The pattern for that namespace is `p-rmq-GUID`. Follow the step below to check that there is an instance ID.
+When the service broker provisions an instance it creates a namespace. The pattern for that namespace is
+`p-rmq-GUID`. Follow the step below to check that there is an instance ID.
 
 1. Retrieve the instance ID by running `cf service INSTANCE-NAME --guid `.<br><br>
 
@@ -141,7 +146,8 @@ Follow the step below to check if an instance is running and see information abo
 
     Where `NAMESPACE` is the Kubernetes namespace of the instance.<br><br>
 
-    If you do not know the namespace, follow the steps in [Find the Namespace If Using the Service Broker](#find-namespace) above.<br><br>
+    If you do not know the namespace, follow the steps in
+    [Find the Namespace If Using the Service Broker](#find-namespace) above.<br><br>
 
     For example:
 
