@@ -233,7 +233,7 @@ The <%= vars.product_short %> service broker looks for its username and password
     ```
     echo -n BROKER-USERNAME > ./username
     echo -n BROKER-PASSWORD > ./password
-    kubectl create secret generic broker-credentials -n pivotal-rabbitmq-system --from-file=./username --from-file=./password
+    kubectl create secret generic p-rmq-servicebroker-admin -n pivotal-rabbitmq-system --from-file=./username --from-file=./password
     ```
 
 <p class="note">
