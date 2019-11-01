@@ -48,7 +48,7 @@ metadata:
     port: https
   selector:
     matchLabels:
-    app: rabbitmq-1
+      app: rabbitmq-1
 ```
 
 ## Deploying Prometheus with scraping annotations
@@ -117,5 +117,5 @@ metadata:
 ## Monitoring dashboards with Grafana
 If you are not deploying with kube-prometheus, you will need to deploy your own Grafana resources separately.
 RabbitMQ provides Grafana dashboards integrating the scraped Prometheus metrics.
-List of official RabbitMQ Grafana dashboards can be found [here](https://github.com/rabbitmq/rabbitmq-prometheus/tree/master/docker/grafana/dashboards).
-To import the above Grafana dashboards, copy the raw JSON form of the dashboard and [import](https://grafana.com/docs/reference/export_import/) them into your Grafana.
+List of official RabbitMQ Grafana dashboards can be found [here](https://grafana.com/orgs/rabbitmq).
+To import the above Grafana dashboards, copy the dashboard ID or raw JSON of the dashboard and [import](https://grafana.com/docs/reference/export_import/#importing-a-dashboard) them into your Grafana.
