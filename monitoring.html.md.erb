@@ -1,12 +1,121 @@
 ---
-title: Monitoring and Logging Pivotal RabbitMQ for Kubernetes
+title: Monitoring Pivotal RabbitMQ for Kubernetes
 owner: RMQ for k8s
 ---
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to monitor and log <%= vars.product_full %>.
+This topic describes how to monitor <%= vars.product_full %>.
 
 ## <a id='overview'></a> Overview
 
-<%# Add intro text %>
+RabbitMQ deploys with the `rabbitmq_prometheus` plugin (from version 3.8.0 onwards). This allows a
+Prometheus deployment to scrape metrics
+from the RabbitMQ cluster with minimal configuration.
+
+The following steps outline how to set up a Prometheus deployment to monitor RabbitMQ metrics. We
+will also describe how to display those metrics in Grafana.
+
+## Deploying Prometheus with `kube-prometheus`
+
+[Prometheus](https://prometheus.io/) is the de-facto metrics database used in Kubernetes
+deployments. While Kubernetes can be configured with other monitoring solutions, the Prometheus
+data model, service discovery capability, and modular architecture make it well suited to
+monitoring cloud native applications and infrastructure. There are several ways to deploy
+Prometheus. We will cover the requirements for deploying the `kube-prometheus` monitoring suite,
+as well as the necessary resources if you choose a different deployment strategy.
+
+The [kube-prometheus project](https://github.com/coreos/kube-prometheus) provides manifests for a
+metrics stack within your Kubernetes cluster (including an operator for Prometheus, Alert Manager,
+and Grafana). See the [`kube-prometheus` installation guide](https://github.com/coreos/kube-prometheus#quickstart)
+for installation and configuration steps.
+
+Each RabbitMQCluster require a `ServiceMonitor` Custom Resource to be deployed in its namespace.
+This resource targets the RabbitMQCluster via a [selector](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors).
+To check your RabbitMQCluster's labels, `kubectl get` the ingress service with the `--show-labels`
+flag. For example, if your cluster name is `rabbitmq-1` run `kubectl get service rabbitmq-1-ingress --show-labels`.
+See below for the corresponding ServiceMonitor resource to deploy for `rabbitmq-1`:
+
+```
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: rabbitmq-1
+  namespace: rabbitmq-1
+  spec:
+  endpoints:
+  - interval: 15s
+    port: https
+  selector:
+    matchLabels:
+    app: rabbitmq-1
+```
+
+## Deploying Prometheus with scraping annotations
+
+To deploy prometheus manually, there are several resources that will be required for
+Prometheus to begin scraping metrics from your RabbitMQ cluster:
+
+1. A ClusterRole permitting ‘get’ access to the ‘/metrics’ endpoint.
+
+```
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prometheus
+rules:
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+```
+
+2. A ClusterRoleBinding linking the ClusterRole to your Prometheus deployment’s ServiceAccount (note
+that this could also point to the default ServiceAccount in the Prometheus deployment’s namespace,
+however, we would strongly advise you create a dedicated ServiceAccount for your deployment)
+
+```
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prometheus
+subjects:
+- kind: ServiceAccount
+  name: prometheus
+  namespace: monitoring
+```
+
+3. To monitor a new RabbitMQCluster, add the following to the `annotations` section of your
+RabbitMQCluster Cluster CustomResource spec:
+
+```
+apiVersion: rabbitmq.pivotal.io/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmq-1
+spec:
+  service:
+    annotations:
+      "prometheus.io/scrape": "true"
+      "prometheus.io/port": "15692"
+```
+
+To monitor an existing RabbitMQCluster, edit the cluster’s ingress service yaml, add the following
+annotations in the `metadata` section of the manifest:
+
+```
+metadata:
+   annotations:
+      "prometheus.io/scrape": "true"
+      "prometheus.io/port": "15692"
+```
+
+## Monitoring dashboards with Grafana
+If you are not deploying with kube-prometheus, you will need to deploy your own Grafana resources separately.
+RabbitMQ provides Grafana dashboards integrating the scraped Prometheus metrics.
+List of official RabbitMQ Grafana dashboards can be found [here](https://github.com/rabbitmq/rabbitmq-prometheus/tree/master/docker/grafana/dashboards).
+To import the above Grafana dashboards, copy the raw JSON form of the dashboard and [import](https://grafana.com/docs/reference/export_import/) them into your Grafana.
