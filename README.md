@@ -38,10 +38,6 @@ When a commit is made into any of the above branches, the documentation is deplo
 
 [docs-staging]:        http://docs-pcf-staging.cfapps.io/rabbitmq-kubernetes/
 
-### Style Sheet
-
-Use this section to specify spelling of special words for RabbitMQ for Kubernetes:
-
 
 ### Making Your Documentation Changes Live
 
@@ -81,4 +77,6 @@ This is a word list for terminology and word usage specific to the RabbitMQ for 
 |------|-------------|
 | Kubernetes Operator |This operator refers to an Operator pattern, which is a Kubernetes concept. You can have a container image for the Operator code but it is not an image itself. Always capitalize it to help differentiate the term from the Alana persona operator.|
 | service broker |Unless you are specifically refering to the Open Source Service Broker API, do not capitalize service broker.|
+| `RabbitmqCluster` vs RabbitMQ cluster | _Both are used and I think both are needed but should define and disambiguate._ [JD] |
+| ServiceType vs service type |  _Both are used but I'm not clear about the distinction._ [JD] | 
 
