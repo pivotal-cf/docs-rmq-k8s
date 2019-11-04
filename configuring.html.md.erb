@@ -48,13 +48,13 @@ The following parameters are supported:
       </tr>
       <tr>
         <td>(Optional) <code>imagePullSecret</code></td>
-        <td>If your registry requires authentication, this is the name of the secret used to pull images. You can create it using <code>kubectl -n pivotal-rabbitmq-system create secret docker-registry</code>.</td>
+        <td>If your registry requires authentication, this is the name of the secret used to pull images. You can create by running <code>kubectl -n pivotal-rabbitmq-system create secret docker-registry</code>.</td>
       </tr>
       <tr>
         <td>(Optional) <code>service</code></td>
         <td>
-          The Kubernetes service for the <code>RabbitmqCluster</code> service.
-          Available settings are <code>type</code> and <code>annotations</code>.
+          This is the Kubernetes service for the <code>RabbitmqCluster</code> service.
+          The available settings are <code>type</code> and <code>annotations</code>.
           <tr>
             <td>(Optional) <code>type</code></td>
               <td>
@@ -76,7 +76,7 @@ The following parameters are supported:
         <td>(Optional) <code>persistence</code></td>
         <td>
           These are persistence settings for <code>RabbitmqClusters</code>.
-          Available settings are <code>storageClassName</code> and <code>storage</code>.
+          The available settings are <code>storageClassName</code> and <code>storage</code>.
           <tr>
             <td>(Optional) <code>storageClassName</code></td>
             <td>This is the name of the Kubernetes storage class to use. If not configured, the default <code>storageclass</code> is used.</td>
@@ -90,32 +90,32 @@ The following parameters are supported:
       <tr>
         <td>(Optional) <code>resources</code></td>
         <td>
-          This setting can be used to set the CPU and Memory Limits and Requests for <code>RabbitmqCluster</code> containers.
-          Available settings are <code>limits</code> and <code>requests</code>.
+          This setting can be used to set the CPU and memory limits and requests for <code>RabbitmqCluster</code> containers.
+          The available settings are <code>limits</code> and <code>requests</code>.
         </td>
       </tr>
       <tr>
         <td>(Optional) <code>limits</code></td>
-        <td> This setting is used to set the resource limits for the RabbitMQ containers in Kubernetes.
-             Available settings are <code>cpu</code> and <code>memory</code>.
+        <td> This sets the resource limits for the RabbitMQ containers in Kubernetes.
+             The available settings are <code>cpu</code> and <code>memory</code>.
         </td>
       </tr>
       <tr>
         <td>(Optional) <code>requests</code></td>
-        <td> This setting is used to set the resource requests for the RabbitMQ containers in Kubernetes.
-             Available settings are <code>cpu</code> and <code>memory</code>.
+        <td> This sets the resource requests for the RabbitMQ containers in Kubernetes.
+             The available settings are <code>cpu</code> and <code>memory</code>.
         </td>
       </tr>
       <tr>
         <td>(Optional) <code>cpu</code></td>
         <td>
-          This setting is used to set the CPU requests/limits for the RabbitMQ containers. Default values for requests: 100m , limits: 500m
+          This sets the CPU requests and limits for the RabbitMQ containers. The default request value is 100m. The default limit value is 500m.
         </td>
       </tr>
       <tr>
         <td>(Optional) <code>memory</code></td>
         <td>
-          This setting is used to set the memory requests and limits for the RabbitMQ containers. The default values for both requests and limits are 2Gi.
+          This sets the memory requests and limits for the RabbitMQ containers. The default values for both requests and limits are 2Gi.
           The RabbitMQ high watermark is set to 0.4 times the available memory by default, and in this case it considers the <code>limits</code> value. Pivotal recommends keeping the requests and limits as the same value.
         </td>
       </tr>
