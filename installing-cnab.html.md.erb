@@ -358,6 +358,24 @@ The table below lists the RabbitMQ for Kubernetes CNAB parameters that are avail
     <td>(Optional) <code>storage_capacity</code></td>
     <td>Capacity set in the RabbitmqCluster <code>PersistentVolumeClaims</code></td>
   </tr>
+  <tr>
+    <td>(Optional) <code>default_rabbitmq_cpu_request</code></td>
+    <td>CPU requested by each RabbitMQ Pod. Unit is millicores. This value is the minimum that must be available in a Kubernetes
+    node to schedule the Pod. Defaults to <code>100m</code> if omitted</td>
+  </tr>
+  <tr>
+    <td>(Optional) <code>default_rabbitmq_cpu_limit</code></td>
+    <td>CPU limit for each RabbitMQ Pod. Unit is millicores. Defaults to <code>500m</code> if omitted</td>
+  </tr>
+  <tr>
+    <td>(Optional) <code>default_rabbitmq_memory_request</code></td>
+    <td>Memory requested by each RabbitMQ Pod. Units can be mebibytes (Mi) or gibibytes (Gi). This value is the minimum that
+    must be available in a Kubernetes node to schedule the Pod. Defaults to <code>2Gi</code> if omitted</td>
+  </tr>
+  <tr>
+    <td>(Optional) <code>default_rabbitmq_memory_limit</code></td>
+    <td>Memory limit for each RabbitMQ Pod. Units can be mebibytes (Mi) or gibibytes (Gi). Defaults to <code>2Gi</code> if omitted</td>
+  </tr>
 </table>
 
 ## <a id='register'></a>(Optional) Register the Service Broker with Cloud Foundry
