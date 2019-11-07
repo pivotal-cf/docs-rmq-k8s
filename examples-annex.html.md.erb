@@ -30,7 +30,7 @@ spec:
   requiredDropCapabilities:
   - ALL
   runAsUser:
-    rule: RunAsAny
+    rule: MustRunAsNonRoot
   seLinux:
     rule: RunAsAny
   supplementalGroups:
@@ -93,7 +93,7 @@ spec:
   requiredDropCapabilities:
   - ALL
   runAsUser:
-    rule: RunAsAny
+    rule: MustRunAsNonRoot
   seLinux:
     rule: RunAsAny
   supplementalGroups:
