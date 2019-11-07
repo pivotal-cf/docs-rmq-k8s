@@ -57,46 +57,62 @@ The following parameters are supported:
         <td>
           This is the Kubernetes service for the <code>RabbitmqCluster</code> service.
           The available settings are <code>type</code> and <code>annotations</code>.
-          <tr>
-            <td>(Optional) <code>type</code></td>
-              <td>
-              <ul>
-                <li><code>ClusterIP</code> (default)</li>
-                <li><code>NodePort</code></li>
-                <li><code>LoadBalancer</code></li>
-              </ul>
-              <p class="note">
-                <strong>Note:</strong> <%= vars.product_full %> currently does not support the <code>ExternalName</code> ServiceType.
-              </p>
-              </td>
-          </tr>
-          <tr>
-            <td>(Optional) <code>annotations</code></td>
-            <td>Service annotations can be used to configure cloud-specific properties of a LoadBalancer service.</td>
-          </tr>
+      </tr>
+      <tr>
+        <th width="35%">Service Settings</th>
+        <th width="65%">Description</th>
+      </tr>
+      <tr>
+        <td>(Optional) <code>type</code></td>
+        <td>
+        <ul>
+          <li><code>ClusterIP</code> (default)</li>
+          <li><code>NodePort</code></li>
+          <li><code>LoadBalancer</code></li>
+        </ul>
+        <p class="note">
+          <strong>Note:</strong> <%= vars.product_full %> currently does not support the <code>ExternalName</code> ServiceType.
+        </p>
+        </td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>annotations</code></td>
+        <td>Service annotations can be used to configure cloud-specific properties of a LoadBalancer service.</td>
+      </tr>
+      <tr>
+        <th width="35%">Parameter</th>
+        <th width="65%">Description</th>
+      </tr>
       <tr>
         <td>(Optional) <code>persistence</code></td>
         <td>
           These are persistence settings for the <code>RabbitmqCluster</code> service.<br>
           The available settings are <code>storageClassName</code> and <code>storage</code>.
-          <tr>
-            <td>(Optional) <code>storageClassName</code></td>
-            <td>This is the name of the Kubernetes storage class to use. If not configured, the default
-              <code>storageclass</code> is used.</td>
-          </tr>
-          <tr>
-            <td>(Optional) <code>storage</code></td>
-            <td>This is the default capacity of the persistent volume.</td>
-          </tr>
-        </td>
       </tr>
       <tr>
-        <td>(Optional) <code>resources</code></td>
-        <td>
-          This setting can be used to set the CPU and memory for limits and requests for
-          <code>RabbitmqCluster</code> containers.<br>
-          The available settings are <code>limits</code> and <code>requests</code>.
-        </td>
+        <td>(Optional) <code>storageClassName</code></td>
+        <td>This is the name of the Kubernetes storage class to use. If not configured, the default
+          <code>storageclass</code> is used.</td>
+      </tr>
+      <tr>
+        <td>(Optional) <code>storage</code></td>
+        <td>This is the default capacity of the persistent volume.</td>
+      </tr>
+      <tr>
+        <th width="35%">Parameter</th>
+        <th width="65%">Description</th>
+      </tr>
+      <tr>
+      <td>(Optional) <code>resources</code></td>
+      <td>
+        This setting can be used to set the CPU and memory for limits and requests for
+        <code>RabbitmqCluster</code> containers.<br>
+        The available settings are <code>limits</code> and <code>requests</code>.
+      </td>
+      </tr>
+      <tr>
+        <th width="35%">Resource Settings</th>
+        <th width="65%">Description</th>
       </tr>
       <tr>
         <td>(Optional) <code>limits</code></td>
@@ -111,6 +127,10 @@ The following parameters are supported:
         </td>
       </tr>
       <tr>
+        <th width="35%">Limit and Request Settings</th>
+        <th width="65%">Description</th>
+      </tr>
+      <tr>
         <td>(Optional) <code>cpu</code></td>
         <td>
           This sets the CPU requests and limits for the RabbitMQ containers. The default request value is 100m. The
@@ -122,14 +142,14 @@ The following parameters are supported:
         <td>
           This sets the memory requests and limits for the RabbitMQ containers. The default values for both
           requests and limits are 2Gi.<br><br>
-          The RabbitMQ high-water mark is set to 0.4 times the memory limit. Pivotal recommends keeping the
+          The RabbitMQ high-water mark is set to 0.4 times of the memory limit. Pivotal recommends keeping the
           requests and limits as the same value.
         </td>
       </tr>
     </table>
 
-Configuration changes take effect when the operator is restarted. If you edit the configmap, you have to restart
-the operator by running:
+Configuration changes take effect when the Operator is restarted. If you edit the configmap, you have to restart
+the Operator by running:
 
 ```
 kubectl -n pivotal-rabbitmq-system rollout restart deployment.apps/p-rmq-operator
