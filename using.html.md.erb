@@ -36,13 +36,11 @@ For more information about Pod security policies, see the [Kubernetes documentat
 
 ### <a id='psp-for-operator'></a> Minimum Pod Security Policy for the Operator
 
-The Operator needs to run as a `root` user and it needs to mount volumes of the types `secret` and `configmap`.
 For the minimum resources required to deploy the Operator successfully, see
 [Pod Security Policy Example for the Operator](examples-annex.html#operator-psp-example).
 
 ### <a id='psp-for-sb'></a> Minimum Pod Security Policy for the Service Broker
 
-The Service Broker needs to run as a `root` user and it needs to mount volumes of the `secret` type.
 For the minimum resources required to deploy the Service Broker successfully, see
 [Pod Security Policy Example for the Service Broker](examples-annex.html#servicebroker-psp-example).
 
