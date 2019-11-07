@@ -15,26 +15,26 @@ kubectl -n pivotal-rabbitmq-system edit configmap p-rmq-operator-config
 
 The configmap looks like this:
 
-  ```
-  data:
-    config: |
-      image: eu.gcr.io/my-account/p-rabbitmq-for-kubernetes-staging-rabbitmq-228ecdc119f602d199fa39cc0326057e@sha256:6709cafde00784361b231f6c94b6dbecb8fefd3d3195676ed81823e007e37449
-      imagePullSecret: p-rmq-registry-access
-      service:
-        type: NodePort
-        annotations:
-          service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
-      persistence:
-        storageClassName: azurefile
-        storage: 20Gi
-      resources:
-        limits:
-          memory: 2Gi
-          cpu: 500m
-        requests:
-          memory: 2Gi
-          cpu: 100m
-  ```
+```
+data:
+  config: |
+    image: eu.gcr.io/my-account/p-rabbitmq-for-kubernetes-staging-rabbitmq-228ecdc119f602d199fa39cc0326057e@sha256:6709cafde00784361b231f6c94b6dbecb8fefd3d3195676ed81823e007e37449
+    imagePullSecret: p-rmq-registry-access
+    service:
+      type: NodePort
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+    persistence:
+      storageClassName: azurefile
+      storage: 20Gi
+    resources:
+      limits:
+        memory: 2Gi
+        cpu: 500m
+      requests:
+        memory: 2Gi
+        cpu: 100m
+```
 
 The following parameters are supported:
     <table>
@@ -50,7 +50,7 @@ The following parameters are supported:
       <tr>
         <td>(Optional) <code>imagePullSecret</code></td>
         <td>If your registry requires authentication, this is the name of the secret used to pull images. You can
-          create by running <code>kubectl -n pivotal-rabbitmq-system create secret docker-registry</code>.</td>
+          create the secret by running <code>kubectl -n pivotal-rabbitmq-system create secret docker-registry</code>.</td>
       </tr>
       <tr>
         <td>(Optional) <code>service</code></td>
@@ -77,7 +77,7 @@ The following parameters are supported:
       <tr>
         <td>(Optional) <code>persistence</code></td>
         <td>
-          These are persistence settings for the <code>RabbitmqCluster</code> service.
+          These are persistence settings for the <code>RabbitmqCluster</code> service.<br>
           The available settings are <code>storageClassName</code> and <code>storage</code>.
           <tr>
             <td>(Optional) <code>storageClassName</code></td>
@@ -93,20 +93,20 @@ The following parameters are supported:
       <tr>
         <td>(Optional) <code>resources</code></td>
         <td>
-          This setting can be used to set the CPU and memory limits and requests for <code>RabbitmqCluster</code>
-          containers.
+          This setting can be used to set the CPU and memory for limits and requests for
+          <code>RabbitmqCluster</code> containers.<br>
           The available settings are <code>limits</code> and <code>requests</code>.
         </td>
       </tr>
       <tr>
         <td>(Optional) <code>limits</code></td>
-        <td> This sets the resource limits for the RabbitMQ containers in Kubernetes.
+        <td> This sets the resource limits for the RabbitMQ containers in Kubernetes.<br>
              The available settings are <code>cpu</code> and <code>memory</code>.
         </td>
       </tr>
       <tr>
         <td>(Optional) <code>requests</code></td>
-        <td> This sets the resource requests for the RabbitMQ containers in Kubernetes.
+        <td> This sets the resource requests for the RabbitMQ containers in Kubernetes.<br>
              The available settings are <code>cpu</code> and <code>memory</code>.
         </td>
       </tr>
@@ -122,9 +122,8 @@ The following parameters are supported:
         <td>
           This sets the memory requests and limits for the RabbitMQ containers. The default values for both
           requests and limits are 2Gi.<br><br>
-          The RabbitMQ high watermark is set to 0.4 times the available memory by default, and in this case it
-          considers the <code>limits</code> value. Pivotal recommends keeping the requests and limits as the same
-          value.
+          The RabbitMQ high-water mark is set to 40% of the memory limit. Pivotal recommends keeping the
+          requests and limits as the same value.
         </td>
       </tr>
     </table>
@@ -132,6 +131,6 @@ The following parameters are supported:
 Configuration changes take effect when the operator is restarted. If you edit the configmap, you have to restart
 the operator by running:
 
-  ```
-  kubectl -n pivotal-rabbitmq-system rollout restart deployment.apps/p-rmq-operator
-  ```
+```
+kubectl -n pivotal-rabbitmq-system rollout restart deployment.apps/p-rmq-operator
+```
