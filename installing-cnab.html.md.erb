@@ -172,7 +172,7 @@ token has not expired.
         --relocation-mapping=relmap.json \
         --credentials rabbitmq-creds \
         --set broker_username=user1 \
-        --set broker_password=password123 \
+        --set broker_password=example-password \
       Executing install action...
       + action=install
       + name=rabbitmq
@@ -396,7 +396,7 @@ To register the service broker:
     For example:
 
     <pre class="terminal">
-      ~$ cf create-service-broker rabbitmq-for-k8s BROKER-USERNAME BROKER-PASSWORD http://12.13.14.15:8080
+      ~$ cf create-service-broker rabbitmq-for-k8s user1 example-password http://12.13.14.15:8080
       OK
     </pre>
 
