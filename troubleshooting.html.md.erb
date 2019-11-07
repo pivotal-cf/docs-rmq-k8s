@@ -92,7 +92,7 @@ Follow the step below to check connectivity to the service broker.
     For example:
 
     <pre class="terminal">
-    $ curl -H "X-Broker-API-Version: 2.14"   -H "Content-Type: application/json"   BROKER-USERNAME:BROKER-PASSWORD@p-rmq-servicebroker-ingress:8080/v2/catalog
+    $ curl -H "X-Broker-API-Version: 2.14"   -H "Content-Type: application/json"   user1:example-password@p-rmq-servicebroker-ingress:8080/v2/catalog
     {"services":[{"id":"00000000-0000-0000-0000-000000000000","name":"p-rabbitmq-k8s","description":"RabbitMQ on K8s","bindable":true,"tags":["rabbitmq","amqp"],"plan_updateable":false,"plans":[{"id":"22222222-2222-2222-2222-222222222222","name":"single","description":"Single-node RabbitMQ on K8s"},{"id":"33333333-3333-3333-3333-333333333333","name":"ha","description":"3-node RabbitMQ on K8s"}]}]}
     </pre>
 
@@ -118,7 +118,7 @@ Follow the step below to check that the service broker works by manually trigger
     <pre class="terminal">
     $ curl -X PUT -H "X-Broker-API-Version: 2.14" \
     -H "Content-Type: application/json" \
-    user1:password123@10.25.18.2:8080/v2/service_instances/instance-1?accepts_incomplete=true -d '{
+    user1:example-password@10.25.18.2:8080/v2/service_instances/instance-1?accepts_incomplete=true -d '{
     "service_id": "00000000-0000-0000-0000-000000000000",
     "plan_id": "22222222-2222-2222-2222-222222222222"
     }'
