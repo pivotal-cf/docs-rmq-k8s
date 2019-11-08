@@ -36,7 +36,7 @@ data:
         cpu: 100m
 ```
 
-The following parameters are supported:
+The following parameters and settings are supported:
     <table>
       <tr>
         <th width="35%">Parameter</th>
@@ -59,25 +59,24 @@ The following parameters are supported:
           The available settings are <code>type</code> and <code>annotations</code>.
       </tr>
       <tr>
-        <th width="35%">Service Settings</th>
+        <th width="35%">Service Setting</th>
         <th width="65%">Description</th>
       </tr>
       <tr>
         <td>(Optional) <code>type</code></td>
         <td>
+          The available types are:
         <ul>
           <li><code>ClusterIP</code> (default)</li>
           <li><code>NodePort</code></li>
           <li><code>LoadBalancer</code></li>
         </ul>
-        <p class="note">
-          <strong>Note:</strong> <%= vars.product_full %> currently does not support the <code>ExternalName</code> ServiceType.
-        </p>
+        <%= vars.product_full %> currently does not support the <code>ExternalName</code> ServiceType.
         </td>
       </tr>
       <tr>
         <td>(Optional) <code>annotations</code></td>
-        <td>Service annotations can be used to configure cloud-specific properties of a LoadBalancer service.</td>
+        <td>Service annotations can be used to configure cloud-specific properties of a <code>LoadBalancer</code> service.</td>
       </tr>
       <tr>
         <th width="35%">Parameter</th>
@@ -111,7 +110,7 @@ The following parameters are supported:
       </td>
       </tr>
       <tr>
-        <th width="35%">Resource Settings</th>
+        <th width="35%">Resource Setting</th>
         <th width="65%">Description</th>
       </tr>
       <tr>
@@ -127,7 +126,7 @@ The following parameters are supported:
         </td>
       </tr>
       <tr>
-        <th width="35%">Limit and Request Settings</th>
+        <th width="35%">Limit and Request Setting</th>
         <th width="65%">Description</th>
       </tr>
       <tr>
