@@ -98,7 +98,7 @@ To generate credentials to grant the Kubernetes cluster access to images in your
       <strong>Note:</strong> For more options on how to generate duffle credentials, run <code>duffle credentials --help</code>.
     </p>
 
-1. When prompted, enter the following:
+1. When prompted, enter the following<%# "To X, run:" and "X by running:" are preferred. %>:
     * The absolute path to the kubeconfig that points to your target Kubernetes cluster
     * The URL for the docker registry server
     * The docker registry username and password
@@ -298,7 +298,7 @@ token has not expired.
     </pre>
 
 The <code>set</code> flag refers to CNAB parameters that configure your CNAB installation.
-The table below lists the RabbitMQ for Kubernetes CNAB parameters that are available to use with the `--set` flag.
+The table below lists the <%= vars.product_full %> CNAB parameters that are available to use with the `--set` flag.
 
 <p class="note">
   <strong>Note:</strong> You can also pass CNAB parameters using a JSON file with the <code>--parameters FILENAME</code> flag.
@@ -360,21 +360,23 @@ The table below lists the RabbitMQ for Kubernetes CNAB parameters that are avail
   </tr>
   <tr>
     <td>(Optional) <code>default_rabbitmq_cpu_request</code></td>
-    <td>CPU requested by each RabbitMQ Pod. Unit is millicores. This value is the minimum that must be available in a Kubernetes
-    node to schedule the Pod. Defaults to <code>100m</code> if omitted</td>
+    <td>This is the CPU requested by each RabbitMQ Pod, measured in millicores. This value is the minimum that
+      must be available in a Kubernetes node to schedule the Pod. The default is <code>100m</code>.</td>
   </tr>
   <tr>
     <td>(Optional) <code>default_rabbitmq_cpu_limit</code></td>
-    <td>CPU limit for each RabbitMQ Pod. Unit is millicores. Defaults to <code>500m</code> if omitted</td>
+    <td>This is the CPU limit for each RabbitMQ Pod, measured in millicores. The default is <code>500m</code>.</td>
   </tr>
   <tr>
     <td>(Optional) <code>default_rabbitmq_memory_request</code></td>
-    <td>Memory requested by each RabbitMQ Pod. Units can be mebibytes (Mi) or gibibytes (Gi). This value is the minimum that
-    must be available in a Kubernetes node to schedule the Pod. Defaults to <code>2Gi</code> if omitted</td>
+    <td>This is the memory requested by each RabbitMQ Pod. It is measured in mebibytes (MiB) or gibibytes (GiB).
+      This value is the minimum that must be available in a Kubernetes node to schedule the Pod. The default is
+      <code>2 GiB</code>.</td>
   </tr>
   <tr>
     <td>(Optional) <code>default_rabbitmq_memory_limit</code></td>
-    <td>Memory limit for each RabbitMQ Pod. Units can be mebibytes (Mi) or gibibytes (Gi). Defaults to <code>2Gi</code> if omitted</td>
+    <td>This is the memory limit for each RabbitMQ Pod. It is measured in mebibytes (MiB) or gibibytes (GiB).
+      The default is <code>2 GiB</code>.</td>
   </tr>
 </table>
 
@@ -387,7 +389,7 @@ To register the service broker:
 
 1. Log in to the cf CLI.
 
-1. Run the following command:
+1. Run:
 
     ```
     cf create-service-broker SERVICE-BROKER-NAME BROKER-USERNAME BROKER-PASSWORD https://IP-ADDRESS:8080
