@@ -22,12 +22,10 @@ Follow the steps in one of the two procedures below to deploy Prometheus:
 * <a id='kube-prom'></a> Deploy Prometheus with `kube-prometheus`
 * <a id='scrape'></a> Deploy Prometheus with Scraping Annotations
 
-<%# How does the operator choose one over the other? Should we recommend one procedure over the other? %>
-
 Alternatively, you can deploy your own Grafana resources separately for monitoring.
 To do so, follow the steps in [Monitor Dashboards with Grafana](#grafana) below.
 
-## <a id='kube-prom'></a> Deploy Prometheus with kube-prometheus
+## <a id='kube-prom'></a> Monitor RabbitMQ Using Prometheus Deployed with kube-prometheus
 
 The `kube-prometheus` project provides manifests for a metrics stack within your Kubernetes cluster, including
 operators for Prometheus, Alert Manager, and Grafana.
@@ -78,12 +76,7 @@ See an example below.
           app: rabbitmq-1
     ```
 
-<%# Insert a label or two in the example above -- I think it's cut off too early %>
-
-<%# Any missing steps here? Or is the above step really the final one for deploying Prometheus?
-What does the operator see when the deployment has succeeded (can we mention some success state)? %>
-
-## <a id='scrape'></a> Deploy Prometheus with Scraping Annotations
+## <a id='scrape'></a> Monitor RabbitMQ using Prometheus with Scraping Annotations
 
 Before you can deploy Prometheus manually, several resources are required for Prometheus to begin scraping
 metrics from your RabbitMQ cluster:
@@ -129,7 +122,7 @@ in the `ClusterRoleBinding` manifest snippet below.
 
 To monitor a new `RabbitmqCluster`:
 
-1. Add Prometheus annotations to your `RabbitmqCluster` manifest. <%# How does Alana know what these are? Where does Alana find them? %>
+1. Add Prometheus annotations to your `RabbitmqCluster` manifest.
 
 An example of a `RabbitmqCluster` with annotations is below:
 
