@@ -2,16 +2,39 @@
 title: Configuring Pivotal RabbitMQ for Kubernetes
 owner: RMQ for k8s
 ---
+<strong><%= modified_date %></strong>
 
-The Kubernetes Operator is configured using a configmap in the `pivotal-rabbitmq-system` namespace.
-Initial values are populated automatically based on the parameters provided to the `--set` argument in the
-`duffle install` command if you installed through the Cloud Native Application Bundle (CNAB).
+This topic describes how to configure the Kubernetes Operator using a configmap.
 
-To see or change these settings after the installation, run:
+The configmap for the Kubernetes Operator is in the `pivotal-rabbitmq-system` namespace.
+You must install <%= vars.product_full %> before you configure <%= vars.product_short %>.
 
-```
-kubectl -n pivotal-rabbitmq-system edit configmap p-rmq-operator-config
-```
+If you installed using Cloud Native Application Bundle (CNAB),
+the initial values for the configmap are populated automatically based on the parameters
+provided to the `--set` argument in the `duffle install` command.
+
+## <a id='configure'></a> Configure the Kubernetes Operator
+
+To configure the Kubernetes Operator:
+
+1. View or change your settings by running:
+
+    ```
+    kubectl -n pivotal-rabbitmq-system edit configmap p-rmq-operator-config
+    ```
+
+    For information about supported paramers and settings, see [ConfigMap Parameters and Settings](#settings) below.
+
+2.  If you edit the configmap, you must restart the Operator by running:
+
+    ```
+    kubectl -n pivotal-rabbitmq-system rollout restart deployment.apps/p-rmq-operator
+    ```
+
+    Configuration changes take effect when the Operator is restarted.
+
+
+## <a id='settings'></a> ConfigMap Parameters and Settings
 
 The configmap looks like this:
 
@@ -146,10 +169,3 @@ The following parameters and settings are supported:
         </td>
       </tr>
     </table>
-
-Configuration changes take effect when the Operator is restarted. If you edit the configmap, you have to restart
-the Operator by running:
-
-```
-kubectl -n pivotal-rabbitmq-system rollout restart deployment.apps/p-rmq-operator
-```
