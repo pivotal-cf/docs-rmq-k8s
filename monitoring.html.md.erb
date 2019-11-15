@@ -9,19 +9,30 @@ This topic describes how to monitor <%= vars.product_full %>.
 
 ## <a id='overview'></a> Overview
 
-RabbitMQ for Kubernetes deploys RabbitMQ clusters with `rabbitmq_prometheus` plugin enabled by default.
-This plugin exposes a Prometheus-compatible metrics endpoint. Some other monitoring tools
-also support Prometheus endpoints but in this document we focus on configuring [Prometheus](https://prometheus.io/) to scrape these endpoints
-and [Grafana](https://grafana.com/) to visualize data stored in Prometheus.
+<%= vars.product_full %> deploys RabbitMQ clusters with the `rabbitmq_prometheus` plugin, which is enabled by
+default.
+`rabbitmq_prometheus` exposes a Prometheus-compatible metrics endpoint.
 
-Prometheus is often configured to automatically scrape any pod with `prometheus.io/scrape: true` annotation. If you have configured Prometheus like that
-then follow the process explained in [Monitor RabbitMQ Using Prometheus and Scraping Annotations](#prom-annotations).
+Some other monitoring tools also support Prometheus endpoints but this topic focuses on configuring
+[Prometheus](https://prometheus.io/) to scrape these endpoints and configuring [Grafana](https://grafana.com/)
+to visualize data stored in Prometheus.
 
-Another popular approach is to use [Prometheus Operator](https://github.com/coreos/prometheus-operator). Prometheus Operator ignores the annotations
-in favour of a more flexible custom resource called `ServiceMonitor` to define scraping configuration. If you are using Prometheus Operator
-(eg. deployed using [kube-prometheus](https://github.com/coreos/kube-prometheus/)), go to [Monitor RabbitMQ Using Prometheus Operator](#prom-operator).
+Prometheus is often configured to automatically scrape any Pod with the `prometheus.io/scrape: true` annotation.
+If you have configured Prometheus to do that, follow the steps in [Monitor RabbitMQ Using Prometheus and Scraping Annotations](#prom-annotations) below.
 
-If you are not sure, you can run:
+Another common approach is to use the Prometheus Operator.
+The Prometheus Operator ignores the annotations in favor of a more flexible custom resource called `ServiceMonitor`
+to define scraping configuration.
+
+For more information, see the Prometheus Operator
+[GitHub repository](https://github.com/coreos/prometheus-operator).
+
+
+## <a id='check-for-prom'></a> Check for a Prometheus Operator Deployment
+
+To check if you are using the Prometheus Operator:
+
+1. Run:
 
   ```
   kubectl get customresourcedefinitions.apiextensions.k8s.io servicemonitors.monitoring.coreos.com
@@ -29,10 +40,14 @@ If you are not sure, you can run:
 
 If this command returns an error, that means you do not have Prometheus Operator deployed.
 
+If you are using the Prometheus Operator, follow the steps in
+[Monitor RabbitMQ Using Prometheus Operator](#prom-operator) below.
+
 ## <a id='prom-annotations'></a> Monitor RabbitMQ Using Prometheus and Scraping Annotations
 
-If you have configured Prometheus to automatically scrape all pods with `prometheus.io/scrape: true` annotation then most likely you don't have to do anything special to start monitoring your RabbitMQ clusters.
-RabbitMQ for Kubernetes configures these annotation by default. You can verify that by running:
+If you have configured Prometheus to automatically scrape all Pods with the `prometheus.io/scrape: true` annotation
+then most likely you do not have to do anything special to start monitoring your RabbitMQ clusters.
+<%= vars.product_full %> configures these annotation by default. You can verify that by running:
 
     ```
     kubectl get -o yaml service INSTANCE-rabbitmq-ingress
@@ -52,7 +67,7 @@ You should see the annotations in the `spec.service` part of the output:
           "prometheus.io/port": "15692"
     ```
 
-Once Prometheus successfully scrapes RabbitMQ clusters, you can go to Grafana to [import the dashboards](#grafana).
+Once Prometheus successfully scrapes RabbitMQ clusters, you can go to Grafana to [import the dashboards](#grafana). <%# After giving the anchor, state whether it is "above" or "below". %>
 
 ## <a id='prom-operator'></a> Monitor RabbitMQ Using Prometheus Operator
 
@@ -77,17 +92,17 @@ To monitor RabbitMQ using Prometheus Operator:
       namespaceSelector:
         any: true
     ```
-  
+
 1. Create the ServiceMonitor resource by running:
 
   ```
   kubectl apply -f rabbitmq-servicemonitor.yaml
   ```
 
-This resource can be created in any namespace, as long as Prometheus Operator has permissions to find it. If your RabbitMQ clusters don't appear in Prometheus,
-you may need to [configure permissions for Prometheus Operator](https://github.com/coreos/prometheus-operator/blob/master/Documentation/rbac.md). For example, the following
-steps should work if you deployed Prometheus Operator using [kube-prometheus](https://github.com/coreos/kube-prometheus).
-  
+This resource can be created in any namespace, as long as Prometheus Operator has permissions to find it.
+If your RabbitMQ clusters do not appear in Prometheus, you might need to [configure permissions for Prometheus Operator](https://github.com/coreos/prometheus-operator/blob/master/Documentation/rbac.md). For example, the following <%# Type "in GitHub" somewhere in the cross-reference sentence. %>
+steps should work if you deployed Prometheus Operator using [kube-prometheus](https://github.com/coreos/kube-prometheus). <%# Type "in GitHub" somewhere in the cross-reference sentence. %>
+
 1. Create `prometheus-roles.yaml` with the following contents:
 
   ```
@@ -129,7 +144,7 @@ steps should work if you deployed Prometheus Operator using [kube-prometheus](ht
   kubectl apply -f prometheus-roles.yaml
   ```
 
-Once Prometheus successfully scrapes RabbitMQ clusters, you can go to Grafana to [import the dashboards](#grafana).
+After Prometheus successfully scrapes RabbitMQ clusters, you can go to Grafana to [import the dashboards](#grafana). <%# After giving the anchor, state whether it is "above" or "below". %>
 
 ## <a id='grafana'></a> Import Dashboards to Grafana
 
