@@ -17,25 +17,19 @@ Some other monitoring tools also support Prometheus endpoints but this topic foc
 [Prometheus](https://prometheus.io/) to scrape these endpoints and configuring [Grafana](https://grafana.com/)
 to visualize data stored in Prometheus.
 
-## <a id='choose'></a> Choose a Monitoring Approach
+## <a id='choose'></a> Choose a Monitoring Method
 
 Follow one of the procedures below to monitor RabbitMQ clusters:
 
 1. [Monitor RabbitMQ Using Prometheus and Scraping Annotations](#prom-annotations)
-Prometheus is likely already configured to monitor RabbitMQ clusters through scraping annotations.
 
 1. [Monitor RabbitMQ Using the Prometheus Operator](#prom-operator)
-The Prometheus Operator ignores the annotations in favor of a more flexible custom resource called
-`ServiceMonitor` to define scraping configuration.
-
-For more information, see the
-[Prometheus Operator](https://github.com/coreos/prometheus-operator) in GitHub.
 
 ## <a id='prom-annotations'></a> Monitor RabbitMQ Using Prometheus and Scraping Annotations
 
 Prometheus can automatically scrape all Pods with the `prometheus.io/scrape: true` annotation.
 <%= vars.product_full %> has this annotation by default.
-If you have Prometheus configured with this annotation then it is likely Prometheus is already monitoring your
+If you have Prometheus configured with this annotation then Prometheus is likely already monitoring your
 RabbitMQ clusters.
 
 To verify that you have the `prometheus.io/scrape: true` annotation:
@@ -63,7 +57,7 @@ output, as in the example below:
           "prometheus.io/port": "15692"
     ```
 
-<%# Add steps for configuring adding the `prometheus.io/scrape: true` annotation. %>
+<%# Add steps for configuring for the `prometheus.io/scrape: true` annotation or link to elsewhere for them -- maybe in configuring.html? %>
 
 After Prometheus successfully scrapes the RabbitMQ clusters, follow the steps in
 [Import Dashboards to Grafana](#grafana) below.
@@ -71,6 +65,11 @@ After Prometheus successfully scrapes the RabbitMQ clusters, follow the steps in
 
 
 ## <a id='prom-operator'></a> Monitor RabbitMQ Using the Prometheus Operator
+
+The Prometheus Operator ignores the annotations in favor of a more flexible custom resource called
+`ServiceMonitor` to define scraping configuration.
+For more information, see the
+[Prometheus Operator](https://github.com/coreos/prometheus-operator) in GitHub.
 
 To use the Prometheus Operator to monitor RabbitMQ clusters:
 
@@ -83,10 +82,7 @@ To use the Prometheus Operator to monitor RabbitMQ clusters:
     If this command returns an error, you do not have the Prometheus Operator deployed.
     <%# Link to procedure for deploying it. %>
 
-When using the Prometheus Operator, you must create a `ServiceMonitor` resource to configure automatic discovery
-of RabbitMQ clusters. To do so:
-
-1. Create a YAML file named `rabbitmq-servicemonitor.yaml` with the following contents:
+1. Create a YAML file <%# where? %> named `rabbitmq-servicemonitor.yaml` with the following contents:
 
     ```
     apiVersion: monitoring.coreos.com/v1
@@ -104,16 +100,18 @@ of RabbitMQ clusters. To do so:
         any: true
     ```
 
-1. Create the `ServiceMonitor` resource by running:
+    You now have the `ServiceMonitor` resource, which is needed to configure the automatic discovery of RabbitMQ
+    clusters.
+
+1. Apply the `ServiceMonitor` resource by running:
 
     ```
     kubectl apply -f rabbitmq-servicemonitor.yaml
     ```
 
-  This resource can be created in any namespace, as long as the Prometheus Operator has permissions to find it.
+  `ServiceMonitor` can be created in any namespace, as long as the Prometheus Operator has permissions to find it.
 
-  <%# Is the command above missing a namespace? How does the operator know which namespaces the Prometheus Operator can find?
-  I probably need to add: Where `NAMESPACE` is any namespace that the Prometheus Operator is permitted to locate. %>
+  <%# Is the command above missing a namespace? How does the operator know which namespaces the Prometheus Operator can find? %>
 
 ### <a id='config-perm'></a> (Optional) Configure Permissions for the Prometheus Operator
 
@@ -124,49 +122,50 @@ For more information about permissions, see
 [RBAC](https://github.com/coreos/prometheus-operator/blob/master/Documentation/rbac.md) in GitHub.
 
 For example, the following steps should work if you deployed the Prometheus Operator using `kube-prometheus`.
-For more information, see [`kube-prometheus`](https://github.com/coreos/kube-prometheus) in GitHub.
+For more information, see [kube-prometheus](https://github.com/coreos/kube-prometheus) in GitHub.
+<%# Is this essentially a warning that the below steps might not work if the reader did not deploy using `kube-prometheus`? Ideally it would be best not to bring up `kube-prometheus` at all given it feels out of place now. %>
 
-1. Create a YAML file named `prometheus-roles.yaml` with the following contents:
+1. Create a YAML file <%# where? %> named `prometheus-roles.yaml` with the following contents:
 
-  ```
-    apiVersion: rbac.authorization.k8s.io/v1beta1
-    kind: ClusterRole
-    metadata:
-      name: prometheus
-    rules:
-    - apiGroups: [""]
-      resources:
-      - nodes
-      - services
-      - endpoints
-      - pods
-      verbs: ["get", "list", "watch"]
-    - apiGroups: [""]
-      resources:
-      - configmaps
-      verbs: ["get"]
-    - nonResourceURLs: ["/metrics"]
-      verbs: ["get"]
-    ---
-    apiVersion: rbac.authorization.k8s.io/v1beta1
-    kind: ClusterRoleBinding
-    metadata:
-      name: prometheus
-    roleRef:
-      apiGroup: rbac.authorization.k8s.io
+    ```
+      apiVersion: rbac.authorization.k8s.io/v1beta1
       kind: ClusterRole
-      name: prometheus
-    subjects:
-    - kind: ServiceAccount
-      name: prometheus-k8s
-      namespace: monitoring
-  ```
+      metadata:
+        name: prometheus
+      rules:
+      - apiGroups: [""]
+        resources:
+        - nodes
+        - services
+        - endpoints
+        - pods
+        verbs: ["get", "list", "watch"]
+      - apiGroups: [""]
+        resources:
+        - configmaps
+        verbs: ["get"]
+      - nonResourceURLs: ["/metrics"]
+        verbs: ["get"]
+      ---
+      apiVersion: rbac.authorization.k8s.io/v1beta1
+      kind: ClusterRoleBinding
+      metadata:
+        name: prometheus
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: prometheus
+      subjects:
+      - kind: ServiceAccount
+        name: prometheus-k8s
+        namespace: monitoring
+    ```
 
 1. Apply the permissions listed in `prometheus-roles.yaml` by running:
 
-  ```
-  kubectl apply -f prometheus-roles.yaml
-  ```
+    ```
+    kubectl apply -f prometheus-roles.yaml
+    ```
 
 After Prometheus successfully scrapes the RabbitMQ clusters, follow the steps in
 [Import Dashboards to Grafana](#grafana) below.
@@ -182,5 +181,6 @@ To import dashboard to Grafana:
 dashboards.
 1. Click on the dashboard you want to use.
 1. Click the **Download JSON** link or copy the dashboard ID.
-1. Follow the steps in the [Grafana documentation](https://grafana.com/docs/reference/export_import/#importing-a-dashboard)
-to import your chosen dashboard to Grafana.
+1. Follow the steps in the
+[Grafana documentation](https://grafana.com/docs/reference/export_import/#importing-a-dashboard) to import your
+chosen dashboard to Grafana.
