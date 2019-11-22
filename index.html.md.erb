@@ -5,9 +5,10 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-<%= partial vars.path_to_partials + "/services/beta-notice" %>
+<%= partial vars.path_to_partials + '/services/beta-notice',
+:locals => {:product_full => vars.product_full, :platform_name => vars.platform_name} %>
 
-<%= vars.product_full %> is a Kubernetes Operator that automates provisioning, managing, 
+<%= vars.product_full %> is a Kubernetes Operator that automates provisioning, managing,
 and operating RabbitMQ clusters running on Kubernetes.
 
 Kubernetes Operators are software extensions to Kubernetes that make use of custom resources to manage apps
@@ -26,9 +27,9 @@ manage their lifecycle. RabbitMQ clusters can be accessed by apps running on Kub
 * A Kubernetes Operator that automates the provision, management, and operations of RabbitMQ clusters
 * (Optional) An OSBAPI-compliant service broker for integration with <%= vars.platform_name %>
 
-When combined with <%= vars.app_runtime %>, <%= vars.product_short %> enables you to create and 
+When combined with <%= vars.app_runtime %>, <%= vars.product_short %> enables you to create and
 bind RabbitMQ clusters with single commands.
-Run `cf create-service` to create RabbitMQ clusters 
+Run `cf create-service` to create RabbitMQ clusters
 and run `cf bind-service` to bind them to a <%= vars.app_runtime %>-deployed app.
 
 ## <a id='features'></a> Key Features
@@ -86,7 +87,7 @@ The following section lists limitations of <%= vars.product_short %>.
 ### <a id='update-rmq-cluster'></a> RabbitMQ Cluster Updates
 
 After you create a RabbitMQ cluster, you cannot update the cluster or any of its child objects.
-Child objects include `StatefulSet`, `ConfigMap`, `Service`, and `Secret`. 
+Child objects include `StatefulSet`, `ConfigMap`, `Service`, and `Secret`.
 If you try to update any of the configurations, there is no effect.
 
 `StatefulSet`, `ConfigMap` and `Service` objects are re-created if you delete them.
