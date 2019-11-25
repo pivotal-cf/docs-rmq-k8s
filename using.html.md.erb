@@ -116,31 +116,41 @@ These properties are described in [Configuring Pivotal RabbitMQ for Kubernetes](
 
 ## <a id='update'></a>Update a RabbitMQ Instance
 
-You can add or change the annotations on a `RabbitmqCluster` instance's ingress service by editing `spec.service.annotations` in the Custom Resource.
+You can add or change the annotations on the ingress service of a `RabbitmqCluster` instance by editing
+`spec.service.annotations` in the Custom Resource.
 
-1. Modify the yaml used to deploy the instance with the desired edit:
-```
-apiVersion: rabbitmq.pivotal.io/v1beta1
-kind: RabbitmqCluster
-metadata:
-  name: simple
-spec:
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
-```
+1. Edit the YAML used to deploy the instance per the snippet below:
+
+    ```
+    apiVersion: rabbitmq.pivotal.io/v1beta1
+    kind: RabbitmqCluster
+    metadata:
+      name: simple
+    spec:
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+    ```
+
 2. Apply the definition by running:
-```
-kubectl apply -f simple.yaml
-```
-Note: you can also edit the the configuration in place with `kubectl edit rabbitmqcluster simple`.
+
+    ```
+    kubectl apply -f simple.yaml
+    ```
+
+    <p class="note">
+      <strong>Note:</strong> You can also edit the the configuration in place with
+      <code>kubectl edit rabbitmqcluster simple</code>.
+    </p>
 
 3. Check that the change has been applied by verifying that the new annotation is present on the ingress service:
 
-```
-kubectl describe service simple-rabbitmq-ingress
-```
+    ```
+    kubectl describe service simple-rabbitmq-ingress
+    ```
 
-Changes to default values in the [Operator configuration](configuring.html) do not update existing `RabbitmqCluster` instances. Operator configuration changes will only be applied to newly created `RabbitmqCluster` instances.
+Changes to default values in the [Operator configuration](configuring.html) do not update existing
+`RabbitmqCluster` instances.
+Operator configuration changes are only applied to newly created `RabbitmqCluster` instances.
 
 ## <a id='connect'></a> Connect an App to RabbitMQ
 
