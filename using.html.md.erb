@@ -118,14 +118,26 @@ Here is an example with all settings specified explicitly:
     persistence:
       storageClassName: fast
       storage: 20Gi
+    resource:
+      request:
+        cpu: 1000m
+        memory: 2Gi
+      limit:
+        cpu: 1000m
+        memory: 2Gi
   ```
 
 These properties are described in [Configuring Pivotal RabbitMQ for Kubernetes](./configuring.html).
 
 ## <a id='update'></a> Update a RabbitMQ Instance
 
-You can add or change the annotations on the ingress service of a `RabbitmqCluster` instance by editing
-`spec.service.annotations` in the Custom Resource.
+You can add or change the following configurations by editing the Custom Resource:
+
+| Custom Resource attribute  | Impact on the RabbitMQ cluster  |
+|---|---|
+| `spec.service.annotations`  | Annotations on the ingress service  |
+| `spec.resource.request.cpu`  | [CPU units](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu) required [by the Kubernetes scheduler](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-requests-are-scheduled) for the container running RabbitMQ |
+|  `spec.resource.limit.cpu` | [CPU units](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu) used to calculated the share of CPU time available to the RabbitMQ container [per 100ms](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-limits-are-run) |
 
 To update a RabbitMQ instance:
 
@@ -139,6 +151,11 @@ To update a RabbitMQ instance:
     spec:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+      resource:
+        request:
+          cpu: 2000m
+        limit:
+          cpu: 2000m
     ```
 
 1. Apply the definition by running:
@@ -152,13 +169,14 @@ To update a RabbitMQ instance:
       <code>kubectl edit rabbitmqcluster simple</code>.
     </p>
 
-1. Check that the change has been applied by running:
+1. Check that the changes have been applied by running the following commands:
 
     ```
     kubectl describe service simple-rabbitmq-ingress
+
+    kubectl describe statefulset simple-rabbitmq-server
     ```
 
-    This verifies that the new annotation is present on the ingress service.
 
 Changes to default values in the Operator configuration do not update existing
 `RabbitmqCluster` instances.
