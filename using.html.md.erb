@@ -6,7 +6,8 @@ owner: RMQ for k8s
 <strong><%= modified_date %></strong>
 
 This topic describes how to use <%= vars.product_full %> using kubectl and YAML.
-To use it with <%= vars.platform_name %> and Cloud Foundry instead, see [Using with Pivotal Platform](using-service-broker.html).
+To use it with <%= vars.platform_name %> and Cloud Foundry instead, see
+[Using with Pivotal Platform](using-service-broker.html).
 
 ## <a id='availability'></a> Confirm Service Availability
 
@@ -23,7 +24,9 @@ To confirm this availability:
     rabbitmqclusters.rabbitmq.pivotal.io   2019-10-23T10:11:06Z
     </pre>
 
-    If it is, <%= vars.product_short %> is available. If it is not, ask your operator to install it by following the steps in [Installing and Configuring Using CNAB](./installing-cnab.html) or [Installing and Configuring Using Kubernetes Manifests](./installing.html).
+    If it is, <%= vars.product_short %> is available. If it is not, ask your operator to install it by following
+    the steps in [Installing and Configuring Using CNAB](./installing-cnab.html) or
+    [Installing and Configuring Using Kubernetes Manifests](./installing.html).
 
 
 ## <a id='psp'></a> Pod Security Policies
@@ -32,7 +35,8 @@ If you have Pod security policies enabled in the Kubernetes cluster, you must cr
 `ClusterRoleBinding` to enable the Pods to be scheduled.
 If you do not have Pod security policies enabled, skip to <a href="#create">Create a RabbitMQ Instance</a> below.
 
-For more information about Pod security policies, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/policy/pod-security-policy/).
+For more information about Pod security policies, see the
+[Kubernetes documentation](https://kubernetes.io/docs/concepts/policy/pod-security-policy/).
 
 ### <a id='minimum-psp'></a> Minimum Pod Security Policies
 
@@ -44,7 +48,8 @@ For the minimum resources required to deploy the Service Broker successfully, se
 
 For the minimum resources required to deploy a RabbitMQ instance successfully, see
 [Pod Security Policy Example for a RabbitMQ Instance](examples-annex.html#rabbitmq-psp-example).<br>
-RabbitMQ instances need to run as a `root` user and mount volumes of the types `secret`, `configMap`, `persistentVolumeClaim`, and `emptyDir`.
+RabbitMQ instances need to run as a `root` user and mount volumes of the types `secret`, `configMap`,
+`persistentVolumeClaim`, and `emptyDir`.
 
 ## <a id='create'></a> Create a RabbitMQ Instance
 
@@ -52,7 +57,8 @@ To create a RabbitMQ instance, you need to create a `RabbitmqCluster` resource d
 RabbitMQ Operator creates the necessary resources (such as `services` and `statefulset`) in the same namespace
 in which the `RabbitmqCluster` was defined.
 
-1. Create a YAML file to describe a `RabbitmqCluster` resource, such as `simple.yaml`. The simplest definition looks like this:
+1. Create a YAML file to describe a `RabbitmqCluster` resource, such as `simple.yaml`. The simplest definition
+looks like this:
 
     ```
     apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -85,12 +91,14 @@ in which the `RabbitmqCluster` was defined.
     service/simple-rabbitmq-ingress    ClusterIP   10.103.214.196   <none>        5672/TCP,15672/TCP,15692/TCP   113s
     </pre>
 
-    If the pod is not running within a few minutes, see [Troubleshooting Pivotal RabbitMQ for Kubernetes](./troubleshooting.html#failed-instance).
+    If the pod is not running within a few minutes, see
+    [Troubleshooting Pivotal RabbitMQ for Kubernetes](./troubleshooting.html#failed-instance).
     If you cannot solve the problem, contact your operator or email pivotal-cf-feedback@pivotal.io.
 
-## <a id='configure'></a>Configure a RabbitMQ Instance
+## <a id='configure'></a> Configure a RabbitMQ Instance
 
-The `RabbitmqCluster` definition might include multiple additional settings. When these settings are not specified, [Operator configuration](configuring.html) provides default values.
+The `RabbitmqCluster` definition might include multiple additional settings. When these settings are not
+specified, the Operator configuration provides default values.
 
 Here is an example with all settings specified explicitly:
 
@@ -114,12 +122,14 @@ Here is an example with all settings specified explicitly:
 
 These properties are described in [Configuring Pivotal RabbitMQ for Kubernetes](./configuring.html).
 
-## <a id='update'></a>Update a RabbitMQ Instance
+## <a id='update'></a> Update a RabbitMQ Instance
 
 You can add or change the annotations on the ingress service of a `RabbitmqCluster` instance by editing
 `spec.service.annotations` in the Custom Resource.
 
-1. Edit the YAML used to deploy the instance per the snippet below:
+To update a RabbitMQ instance:
+
+1. Edit the YAML used to deploy the instance. See an example snippet below.
 
     ```
     apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -131,7 +141,7 @@ You can add or change the annotations on the ingress service of a `RabbitmqClust
         service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
     ```
 
-2. Apply the definition by running:
+1. Apply the definition by running:
 
     ```
     kubectl apply -f simple.yaml
@@ -142,22 +152,27 @@ You can add or change the annotations on the ingress service of a `RabbitmqClust
       <code>kubectl edit rabbitmqcluster simple</code>.
     </p>
 
-3. Check that the change has been applied by verifying that the new annotation is present on the ingress service:
+1. Check that the change has been applied by running:
 
     ```
     kubectl describe service simple-rabbitmq-ingress
     ```
 
-Changes to default values in the [Operator configuration](configuring.html) do not update existing
+    This verifies that the new annotation is present on the ingress service.
+
+Changes to default values in the Operator configuration do not update existing
 `RabbitmqCluster` instances.
 Operator configuration changes are only applied to newly created `RabbitmqCluster` instances.
+For more information, see [Configuring Pivotal RabbitMQ for Kubernetes](./configuring.html).
 
 ## <a id='connect'></a> Connect an App to RabbitMQ
 
 For an app to use RabbitMQ, you must configure it with the correct service name and credentials.
 
-The service name is `INSTANCE-rabbitmq-ingress` in the namespace where RabbitMQ is deployed, where `INSTANCE` is the name of your instance.
-For example, for the `RabbitmqCluster` created above in [Create a RabbitMQ instance](#create), the service name is `simple-rabbitmq-ingress`.
+The service name is `INSTANCE-rabbitmq-ingress` in the namespace where RabbitMQ is deployed, where `INSTANCE`
+is the name of your instance.
+For example, for the `RabbitmqCluster` created above in [Create a RabbitMQ instance](#create), the service name
+is `simple-rabbitmq-ingress`.
 
 Admin credentials for a RabbitMQ cluster are stored in a Kubernetes secret called `INSTANCE-rabbitmq-admin`.
 Kubernetes encodes secrets using base64.
@@ -188,7 +203,8 @@ Kubernetes encodes secrets using base64.
 
 ## <a id='use'></a> Use the RabbitMQ Service in Your App
 
-For information about how to start using your apps, see the [RabbitMQ documentation](https://www.rabbitmq.com/getstarted.html).
+For information about how to start using your apps, see the
+[RabbitMQ documentation](https://www.rabbitmq.com/getstarted.html).
 
 ## <a id="delete"></a> Delete a RabbitMQ Instance
 
