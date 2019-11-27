@@ -57,87 +57,125 @@ To create a RabbitMQ instance, you need to create a `RabbitmqCluster` resource d
 RabbitMQ Operator creates the necessary resources (such as `services` and `statefulset`) in the same namespace
 in which the `RabbitmqCluster` was defined.
 
-1. Create a YAML file to describe a `RabbitmqCluster` resource, such as `simple.yaml`. The simplest definition
-looks like this:
+1. Create a YAML file to define a `RabbitmqCluster` resource named `definition.yaml`.
+
+<p class="note">
+  <strong>Note:</strong> The YAML file can have any name, but the steps that follow assume it is called
+  <code>definition</code>.
+</p>
+
+1. Copy and paste the below snippet into the file and save it.
 
     ```
     apiVersion: rabbitmq.pivotal.io/v1beta1
     kind: RabbitmqCluster
     metadata:
-      name: simple
+      name: definition
     ```
 
 1. Apply the definition by running:
 
     ```
-    kubectl apply -f simple.yaml
+    kubectl apply -f definition.yaml
     ```
 
 1. Check that the process was successful by running:
 
     ```
-    kubectl get all -l app=simple
+    kubectl get all -l app=definition
     ```
 
-    If successful, you should see a running pod and a service that exposes the instance.<br><br>
+    If successful, you see a running pod and a service that exposes the instance.<br><br>
+
     For example:
     <pre class="terminal">
-    $ kubectl get all -l app=simple
+    $ kubectl get all -l app=definition
     NAME                           READY   STATUS    RESTARTS   AGE
-    pod/simple-rabbitmq-server-0   1/1     Running   0          112s
+    pod/definition-rabbitmq-server-0   1/1     Running   0          112s
 
     NAME                               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                        AGE
-    service/simple-rabbitmq-headless   ClusterIP   None             <none>        4369/TCP                       113s
-    service/simple-rabbitmq-ingress    ClusterIP   10.103.214.196   <none>        5672/TCP,15672/TCP,15692/TCP   113s
+    service/definition-rabbitmq-headless   ClusterIP   None             <none>        4369/TCP                       113s
+    service/definition-rabbitmq-ingress    ClusterIP   10.103.214.196   <none>        5672/TCP,15672/TCP,15692/TCP   113s
     </pre>
 
-    If the pod is not running within a few minutes, see
+    If the pod is not running within a few minutes, follow the steps in
     [Troubleshooting Pivotal RabbitMQ for Kubernetes](./troubleshooting.html#failed-instance).
     If you cannot solve the problem, contact your operator or email pivotal-cf-feedback@pivotal.io.
 
 ## <a id='configure'></a> Configure a RabbitMQ Instance
 
-The `RabbitmqCluster` definition might include multiple additional settings. When these settings are not
-specified, the Operator configuration provides default values.
+The `RabbitmqCluster` definition can include multiple additional settings.
+For more information about these settings, see [ConfigMap Parameters and Settings](./configuring.html#settings).
+When these settings are not specified, the Operator configuration provides default values.
 
-Here is an example with all settings specified explicitly:
+To change these settings:
 
-  ```
-  apiVersion: rabbitmq.pivotal.io/v1beta1
-  kind: RabbitmqCluster
-  metadata:
-    name: rabbitmqcluster-sample
-  spec:
-    replicas: 3
-    service:
-      type: LoadBalancer
-      annotations:
-        service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
-    image: rabbitmq:3.8
-    imagePullSecret: some-secret
-    persistence:
-      storageClassName: fast
-      storage: 20Gi
-    resource:
-      request:
-        cpu: 1000m
-        memory: 2Gi
-      limit:
-        cpu: 1000m
-        memory: 2Gi
-  ```
+1. Open `definition.yaml`.
 
-These properties are described in [Configuring Pivotal RabbitMQ for Kubernetes](./configuring.html).
+1. Copy properties that you want to configure from the below example and paste them into `definition.yaml`.
+Here is an example with all settings specified:
+
+    ```
+    apiVersion: rabbitmq.pivotal.io/v1beta1
+    kind: RabbitmqCluster
+    metadata:
+      name: rabbitmqcluster-sample
+    spec:
+      replicas: 3
+      service:
+        type: LoadBalancer
+        annotations:
+          service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+      image: rabbitmq:3.8
+      imagePullSecret: some-secret
+      persistence:
+        storageClassName: fast
+        storage: 20Gi
+      resource:
+        request:
+          cpu: 1000m
+          memory: 2Gi
+        limit:
+          cpu: 1000m
+          memory: 2Gi
+    ```
+
+1. Replace the values you want to change and save the file.
 
 ## <a id='update'></a> Update a RabbitMQ Instance
 
-You can add or change the following configurations by editing the Custom Resource:
+You can add or change the following configurations listed in the table below by editing the Custom Resource.
 
-| Custom Resource attribute  | Impact on the RabbitMQ cluster  |
-|---|---|
-| `spec.service.annotations`  | Annotations on the ingress service  |
-| `spec.resource.request.cpu`  | [CPU units](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu) required [by the Kubernetes scheduler](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-requests-are-scheduled) for the container running RabbitMQ |
-|  `spec.resource.limit.cpu` | [CPU units](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu) used to calculated the share of CPU time available to the RabbitMQ container [per 100ms](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-limits-are-run) |
+<table class="nice">
+      <th>Custom Resource attribute</th>
+      <th>Impact on the RabbitMQ cluster</th>
+    <tr>
+      <td>
+        <code>spec.service.annotations</code>
+      </td>
+      <td>Annotations on the ingress service</td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.resource.request.cpu</code>
+      </td>
+      <td>
+        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu">CPU units</a>
+        required
+        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-requests-are-scheduled">by the Kubernetes scheduler</a>
+        for the container running RabbitMQ</td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.resource.limit.cpu</code>
+      </td>
+      <td>
+        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu">CPU units</a>
+        used to calculated the share of CPU time available to the RabbitMQ container
+        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-limits-are-run">per 100ms</a>
+      </td>
+    </tr>
+</table>
 
 To update a RabbitMQ instance:
 
@@ -147,7 +185,7 @@ To update a RabbitMQ instance:
     apiVersion: rabbitmq.pivotal.io/v1beta1
     kind: RabbitmqCluster
     metadata:
-      name: simple
+      name: definition
     spec:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
@@ -161,25 +199,27 @@ To update a RabbitMQ instance:
 1. Apply the definition by running:
 
     ```
-    kubectl apply -f simple.yaml
+    kubectl apply -f definition.yaml
     ```
 
     <p class="note">
       <strong>Note:</strong> You can also edit the the configuration in place with
-      <code>kubectl edit rabbitmqcluster simple</code>.
+      <code>kubectl edit rabbitmqcluster definition</code>.
     </p>
 
-1. Check that the changes have been applied by running the following commands:
+1. Check that the changes have been applied by running:
 
     ```
-    kubectl describe service simple-rabbitmq-ingress
+    kubectl describe service definition-rabbitmq-ingress
+    ```
 
-    kubectl describe statefulset simple-rabbitmq-server
+    and then running:
+
+    kubectl describe statefulset definition-rabbitmq-server
     ```
 
 
-Changes to default values in the Operator configuration do not update existing
-`RabbitmqCluster` instances.
+Changes to default values in the Operator configuration do not update existing `RabbitmqCluster` instances.
 Operator configuration changes are only applied to newly created `RabbitmqCluster` instances.
 For more information, see [Configuring Pivotal RabbitMQ for Kubernetes](./configuring.html).
 
@@ -190,7 +230,7 @@ For an app to use RabbitMQ, you must configure it with the correct service name 
 The service name is `INSTANCE-rabbitmq-ingress` in the namespace where RabbitMQ is deployed, where `INSTANCE`
 is the name of your instance.
 For example, for the `RabbitmqCluster` created above in [Create a RabbitMQ instance](#create), the service name
-is `simple-rabbitmq-ingress`.
+is `definition-rabbitmq-ingress`.
 
 Admin credentials for a RabbitMQ cluster are stored in a Kubernetes secret called `INSTANCE-rabbitmq-admin`.
 Kubernetes encodes secrets using base64.
@@ -213,9 +253,9 @@ Kubernetes encodes secrets using base64.
   See an example below.
 
   <pre class="terminal">
-  $ kubectl -n p-rmq-9ec22161-c935-4fab-a3fa-66f5446dc434 get secret simple-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
+  $ kubectl -n p-rmq-9ec22161-c935-4fab-a3fa-66f5446dc434 get secret definition-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
   DbjXnPjLt82DbZC-xr5i_UiBx7nDRRqI
-  $ kubectl -n p-rmq-9ec22161-c935-4fab-a3fa-66f5446dc434 get secret simple-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
+  $ kubectl -n p-rmq-9ec22161-c935-4fab-a3fa-66f5446dc434 get secret definition-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
   SB6sezvZfSR4Yu36KC2n8dokmFcCXLWv
   </pre>
 
@@ -226,29 +266,31 @@ For information about how to start using your apps, see the
 
 ## <a id="delete"></a> Delete a RabbitMQ Instance
 
-To delete a service instance, run:
+To delete a service instance:
 
-  ```
-  kubectl delete rabbitmqcluster INSTANCE
-  ```
-  or
+1. Run:
 
-  ```
-  kubectl delete -f INSTANCE.yaml
-  ```
+    ```
+    kubectl delete rabbitmqcluster INSTANCE
+    ```
+    or
 
-Where `INSTANCE` is the name of your `RabbitmqCluster`.
+    ```
+    kubectl delete -f INSTANCE.yaml
+    ```
+
+    Where `INSTANCE` is the name of your `RabbitmqCluster`.
 
 For example:
 
   <pre class="terminal">
-  $ kubectl delete rabbitmqclusters.rabbitmq.pivotal.io simple
-  rabbitmqcluster.rabbitmq.pivotal.io "simple" deleted
+  $ kubectl delete rabbitmqclusters.rabbitmq.pivotal.io definition
+  rabbitmqcluster.rabbitmq.pivotal.io "definition" deleted
   </pre>
 
 or
 
   <pre class="terminal">
-  $ kubectl delete -f simple.yaml
-  rabbitmqcluster.rabbitmq.pivotal.io "simple" deleted
+  $ kubectl delete -f definition.yaml
+  rabbitmqcluster.rabbitmq.pivotal.io "definition" deleted
   </pre>
