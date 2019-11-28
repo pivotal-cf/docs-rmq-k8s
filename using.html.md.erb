@@ -103,46 +103,8 @@ in which the `RabbitmqCluster` was defined.
 
 ## <a id='configure'></a> Configure a RabbitMQ Instance
 
-The `RabbitmqCluster` definition can include various settings.
-For more information about these settings, see [ConfigMap Parameters and Settings](./configuring.html#settings).
+The `RabbitmqCluster` definition can include any of the settings listed in the table below.
 When these settings are not specified, the Operator configuration provides default values.
-
-To change these settings:
-
-1. Open `definition.yaml`.
-
-1. Copy properties that you want to configure from the below example and paste them into `definition.yaml`.
-
-    ```
-    apiVersion: rabbitmq.pivotal.io/v1beta1
-    kind: RabbitmqCluster
-    metadata:
-      name: rabbitmqcluster-sample
-    spec:
-      replicas: 3
-      service:
-        type: LoadBalancer
-        annotations:
-          service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
-      image: rabbitmq:3.8
-      imagePullSecret: some-secret
-      persistence:
-        storageClassName: fast
-        storage: 20Gi
-      resource:
-        request:
-          cpu: 1000m
-          memory: 2Gi
-        limit:
-          cpu: 1000m
-          memory: 2Gi
-    ```
-
-1. Change the property values as desired and save the file.
-
-## <a id='update'></a> Update a RabbitMQ Instance
-
-You can add or change the configurations listed in the table below by editing the Custom Resource.
 
 <table class="nice">
       <th>Custom Resource attribute</th>
@@ -175,29 +137,36 @@ You can add or change the configurations listed in the table below by editing th
     </tr>
 </table>
 
-To update a RabbitMQ instance:
+To configure a RabbitMQ instance:
 
-1. Edit the YAML used to deploy the instance. See an example snippet below.
+1. Open `definition.yaml`.
+
+1. Add any of the properties listed in the table above along with their values.
+An example is shown below.
 
     ```
     apiVersion: rabbitmq.pivotal.io/v1beta1
     kind: RabbitmqCluster
     metadata:
-      name: definition
+      name: rabbitmqcluster-sample
     spec:
-      annotations:
-        service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+      replicas: 3
+      service:
+        type: LoadBalancer
+        annotations:
+          service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+      image: rabbitmq:3.8
+      imagePullSecret: some-secret
+      persistence:
+        storageClassName: fast
+        storage: 20Gi
       resource:
         request:
-          cpu: 2000m
+          cpu: 1000m
+          memory: 2Gi
         limit:
-          cpu: 2000m
-    ```
-
-1. Apply the definition by running:
-
-    ```
-    kubectl apply -f definition.yaml
+          cpu: 1000m
+          memory: 2Gi
     ```
 
     <p class="note">
@@ -205,14 +174,22 @@ To update a RabbitMQ instance:
       <code>kubectl edit rabbitmqcluster definition</code>.
     </p>
 
+1. Save your changes to `definition.yaml`.
+
+1. Re-apply the definition by running:
+
+    ```
+    kubectl apply -f definition.yaml
+    ```
+
 1. Check that the changes have been applied by running:
 
     ```
     kubectl describe service definition-rabbitmq-ingress
     ```
+    and
 
-    and then running:
-
+    ```
     kubectl describe statefulset definition-rabbitmq-server
     ```
 
@@ -229,32 +206,38 @@ is the name of your instance.
 For example, for the `RabbitmqCluster` created in [Create a RabbitMQ instance](#create) above, the service name
 is `definition-rabbitmq-ingress`.
 
-Admin credentials for a RabbitMQ cluster are stored in a Kubernetes secret called `INSTANCE-rabbitmq-admin`.
+Admin credentials for a RabbitMQ cluster are stored in a Kubernetes secret called `INSTANCE-rabbitmq-admin`,
+where `INSTANCE` is the name of your instance.
 Kubernetes encodes secrets using base64.
 
-1. To retrieve credentials, and display them in plaintext, run the following commands:
+To retrieve credentials and display them in plaintext:
 
-  <pre class="terminal">
-  # display the username
-  kubectl -n NAMESPACE get secret INSTANCE-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
-  # display the password
-  kubectl -n NAMESPACE get secret INSTANCE-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
-  </pre>
+1. Display the username by running:
 
-  Where:
-  <ul>
-    <li><code>INSTANCE</code> is the name of your <code>RabbitmqCluster</code>
-    <li><code>NAMESPACE</code> is the Kubernetes namespace that contains <code>RabbitmqCluster</code>
-  </ul>
+    ```
+    kubectl -n NAMESPACE get secret INSTANCE-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
+    ```
 
-  See an example below.
+    Where:
+    <ul>
+      <li><code>INSTANCE</code> is the name of your <code>RabbitmqCluster</code>
+      <li><code>NAMESPACE</code> is the Kubernetes namespace that contains <code>RabbitmqCluster</code>
+    </ul>
 
-  <pre class="terminal">
+1. Display the password by running:
+
+    ```
+    kubectl -n NAMESPACE get secret INSTANCE-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
+    ```
+
+See an example below.
+
+<pre class="terminal">
   $ kubectl -n p-rmq-9ec22161-c935-4fab-a3fa-66f5446dc434 get secret definition-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
   DbjXnPjLt82DbZC-xr5i_UiBx7nDRRqI
   $ kubectl -n p-rmq-9ec22161-c935-4fab-a3fa-66f5446dc434 get secret definition-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
   SB6sezvZfSR4Yu36KC2n8dokmFcCXLWv
-  </pre>
+</pre>
 
 ## <a id='use'></a> Use the RabbitMQ Service in Your App
 
