@@ -7,7 +7,7 @@ owner: RMQ for k8s
 
 This topic describes how to use <%= vars.product_full %> using kubectl and YAML.
 To use it with <%= vars.platform_name %> and Cloud Foundry instead, see
-[Using with Pivotal Platform](using-service-broker.html).
+[Using with <%= vars.platform_name %>](using-service-broker.html).
 
 ## <a id='availability'></a> Confirm Service Availability
 
@@ -27,7 +27,6 @@ To confirm this availability:
     If it is, <%= vars.product_short %> is available. If it is not, ask your operator to install it by following
     the steps in [Installing and Configuring Using CNAB](./installing-cnab.html) or
     [Installing and Configuring Using Kubernetes Manifests](./installing.html).
-
 
 ## <a id='psp'></a> Pod Security Policies
 
@@ -53,14 +52,14 @@ RabbitMQ instances need to run as a `root` user and mount volumes of the types `
 
 ## <a id='create'></a> Create a RabbitMQ Instance
 
-To create a RabbitMQ instance, you need to create a `RabbitmqCluster` resource definition and apply it.
-RabbitMQ Operator creates the necessary resources (such as `services` and `statefulset`) in the same namespace
+To create a RabbitMQ instance, you must create a `RabbitmqCluster` resource definition and apply it.
+RabbitMQ Operator creates the necessary resources, such as `services` and `statefulset`, in the same namespace
 in which the `RabbitmqCluster` was defined.
 
 1. Create a YAML file to define a `RabbitmqCluster` resource named `definition.yaml`.
 
 <p class="note">
-  <strong>Note:</strong> The YAML file can have any name, but the steps that follow assume it is called
+  <strong>Note:</strong> The YAML file can have any name, but the steps that follow assume it is named
   <code>definition</code>.
 </p>
 
@@ -99,12 +98,12 @@ in which the `RabbitmqCluster` was defined.
     </pre>
 
     If the pod is not running within a few minutes, follow the steps in
-    [Troubleshooting Pivotal RabbitMQ for Kubernetes](./troubleshooting.html#failed-instance).
+    [Troubleshooting <%= vars.product_full %>](./troubleshooting.html#failed-instance).
     If you cannot solve the problem, contact your operator or email pivotal-cf-feedback@pivotal.io.
 
 ## <a id='configure'></a> Configure a RabbitMQ Instance
 
-The `RabbitmqCluster` definition can include multiple additional settings.
+The `RabbitmqCluster` definition can include various settings.
 For more information about these settings, see [ConfigMap Parameters and Settings](./configuring.html#settings).
 When these settings are not specified, the Operator configuration provides default values.
 
@@ -113,7 +112,6 @@ To change these settings:
 1. Open `definition.yaml`.
 
 1. Copy properties that you want to configure from the below example and paste them into `definition.yaml`.
-Here is an example with all settings specified:
 
     ```
     apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -140,11 +138,11 @@ Here is an example with all settings specified:
           memory: 2Gi
     ```
 
-1. Replace the values you want to change and save the file.
+1. Change the property values as desired and save the file.
 
 ## <a id='update'></a> Update a RabbitMQ Instance
 
-You can add or change the following configurations listed in the table below by editing the Custom Resource.
+You can add or change the configurations listed in the table below by editing the Custom Resource.
 
 <table class="nice">
       <th>Custom Resource attribute</th>
@@ -218,10 +216,9 @@ To update a RabbitMQ instance:
     kubectl describe statefulset definition-rabbitmq-server
     ```
 
-
 Changes to default values in the Operator configuration do not update existing `RabbitmqCluster` instances.
 Operator configuration changes are only applied to newly created `RabbitmqCluster` instances.
-For more information, see [Configuring Pivotal RabbitMQ for Kubernetes](./configuring.html).
+For more information, see [Configuring <%= vars.product_full %>](./configuring.html).
 
 ## <a id='connect'></a> Connect an App to RabbitMQ
 
@@ -229,7 +226,7 @@ For an app to use RabbitMQ, you must configure it with the correct service name 
 
 The service name is `INSTANCE-rabbitmq-ingress` in the namespace where RabbitMQ is deployed, where `INSTANCE`
 is the name of your instance.
-For example, for the `RabbitmqCluster` created above in [Create a RabbitMQ instance](#create), the service name
+For example, for the `RabbitmqCluster` created in [Create a RabbitMQ instance](#create) above, the service name
 is `definition-rabbitmq-ingress`.
 
 Admin credentials for a RabbitMQ cluster are stored in a Kubernetes secret called `INSTANCE-rabbitmq-admin`.
