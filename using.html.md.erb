@@ -24,9 +24,9 @@ To confirm this availability:
     rabbitmqclusters.rabbitmq.pivotal.io   2019-10-23T10:11:06Z
     </pre>
 
-    If it is, <%= vars.product_short %> is available. If it is not, ask your operator to install it by following
-    the steps in [Installing and Configuring Using CNAB](./installing-cnab.html) or
-    [Installing and Configuring Using Kubernetes Manifests](./installing.html).
+If it is on the list, <%= vars.product_short %> is available. If it is not, ask your operator to install it by
+following the steps in [Installing and Configuring Using CNAB](./installing-cnab.html) or
+[Installing and Configuring Using Kubernetes Manifests](./installing.html).
 
 ## <a id='psp'></a> Pod Security Policies
 
@@ -58,10 +58,10 @@ in which the `RabbitmqCluster` was defined.
 
 1. Create a YAML file to define a `RabbitmqCluster` resource named `definition.yaml`.
 
-<p class="note">
-  <strong>Note:</strong> The YAML file can have any name, but the steps that follow assume it is named
-  <code>definition</code>.
-</p>
+    <p class="note">
+      <strong>Note:</strong> The YAML file can have any name, but the steps that follow assume it is named
+      <code>definition</code>.
+    </p>
 
 1. Copy and paste the below snippet into the file and save it.
 
@@ -261,16 +261,16 @@ To delete a service instance:
 
     Where `INSTANCE` is the name of your `RabbitmqCluster`.
 
-For example:
+    For example:
 
-<pre class="terminal">
-$ kubectl delete rabbitmqclusters.rabbitmq.pivotal.io definition
-rabbitmqcluster.rabbitmq.pivotal.io "definition" deleted
-</pre>
+    <pre class="terminal">
+    $ kubectl delete rabbitmqclusters.rabbitmq.pivotal.io definition
+    rabbitmqcluster.rabbitmq.pivotal.io "definition" deleted
+    </pre>
 
-or
+    or
 
-<pre class="terminal">
-$ kubectl delete -f definition.yaml
-rabbitmqcluster.rabbitmq.pivotal.io "definition" deleted
-</pre>
+    <pre class="terminal">
+    $ kubectl delete -f definition.yaml
+    rabbitmqcluster.rabbitmq.pivotal.io "definition" deleted
+    </pre>
