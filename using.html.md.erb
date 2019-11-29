@@ -30,11 +30,11 @@ To confirm this availability:
 
 ## <a id='psp'></a> Pod Security Policies
 
-If you have Pod security policies enabled in the Kubernetes cluster, you must create a `ClusterRole` and
-`ClusterRoleBinding` to enable the Pods to be scheduled.
+If you have pod security policies enabled in the Kubernetes cluster, you must create a `ClusterRole` and
+`ClusterRoleBinding` to enable the pods to be scheduled.
 If you do not have Pod security policies enabled, skip to <a href="#create">Create a RabbitMQ Instance</a> below.
 
-For more information about Pod security policies, see the
+For more information about pod security policies, see the
 [Kubernetes documentation](https://kubernetes.io/docs/concepts/policy/pod-security-policy/).
 
 ### <a id='minimum-psp'></a> Minimum Pod Security Policies
@@ -263,14 +263,14 @@ To delete a service instance:
 
 For example:
 
-  <pre class="terminal">
-  $ kubectl delete rabbitmqclusters.rabbitmq.pivotal.io definition
-  rabbitmqcluster.rabbitmq.pivotal.io "definition" deleted
-  </pre>
+<pre class="terminal">
+$ kubectl delete rabbitmqclusters.rabbitmq.pivotal.io definition
+rabbitmqcluster.rabbitmq.pivotal.io "definition" deleted
+</pre>
 
 or
 
-  <pre class="terminal">
-  $ kubectl delete -f definition.yaml
-  rabbitmqcluster.rabbitmq.pivotal.io "definition" deleted
-  </pre>
+<pre class="terminal">
+$ kubectl delete -f definition.yaml
+rabbitmqcluster.rabbitmq.pivotal.io "definition" deleted
+</pre>
