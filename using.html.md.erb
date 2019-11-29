@@ -103,45 +103,16 @@ in which the `RabbitmqCluster` was defined.
 
 ## <a id='configure'></a> Configure a RabbitMQ Instance
 
-The `RabbitmqCluster` definition can include any of the settings listed in the table below.
+The `RabbitmqCluster` definition can include multiple settings.
 When these settings are not specified, the Operator configuration provides default values.
-
-<table class="nice">
-      <th>Custom Resource attribute</th>
-      <th>Impact on the RabbitMQ cluster</th>
-    <tr>
-      <td>
-        <code>spec.service.annotations</code>
-      </td>
-      <td>Annotations on the ingress service</td>
-    </tr>
-    <tr>
-      <td>
-        <code>spec.resource.request.cpu</code>
-      </td>
-      <td>
-        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu">CPU units</a>
-        required
-        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-requests-are-scheduled">by the Kubernetes scheduler</a>
-        for the container running RabbitMQ</td>
-    </tr>
-    <tr>
-      <td>
-        <code>spec.resource.limit.cpu</code>
-      </td>
-      <td>
-        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu">CPU units</a>
-        used to calculated the share of CPU time available to the RabbitMQ container
-        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-limits-are-run">per 100ms</a>
-      </td>
-    </tr>
-</table>
 
 To configure a RabbitMQ instance:
 
 1. Open `definition.yaml`.
 
-1. Add any of the properties listed in the table above along with their values.
+1. Add any of the properties described in [ConfigMap Parameters and Settings](./configuring.html#settings)
+along with their values.
+
 An example is shown below.
 
     ```
@@ -170,13 +141,83 @@ An example is shown below.
     ```
 
     <p class="note">
-      <strong>Note:</strong> You can also edit the the configuration in place with
+      <strong>Note:</strong> You can also edit the the configuration in place by running
       <code>kubectl edit rabbitmqcluster definition</code>.
     </p>
 
 1. Save your changes to `definition.yaml`.
 
-1. Re-apply the definition by running:
+1. Apply the definition by running:
+
+    ```
+    kubectl apply -f definition.yaml
+    ```
+
+Changes to default values in the Operator configuration do not update existing `RabbitmqCluster` instances.
+Operator configuration changes are only applied to newly created `RabbitmqCluster` instances.
+For more information, see [Configuring <%= vars.product_full %>](./configuring.html).
+
+## <a id='update'></a> Update a RabbitMQ Instance
+
+You can add or change certain configurations for an existing RabbitMQ instance.
+These configurations are listed in the table below.
+
+<table class="nice">
+      <th>Custom Resource attribute</th>
+      <th>Impact on the RabbitMQ cluster</th>
+    <tr>
+      <td>
+        <code>spec.service.annotations</code>
+      </td>
+      <td>Annotations on the ingress service</td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.resource.request.cpu</code>
+      </td>
+      <td>
+        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu">CPU units</a>
+        required
+        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-requests-are-scheduled">by the Kubernetes scheduler</a>
+        for the container running RabbitMQ</td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.resource.limit.cpu</code>
+      </td>
+      <td>
+        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu">CPU units</a>
+        used to calculated the share of CPU time available to the RabbitMQ container
+        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-limits-are-run">per 100 ms</a>
+      </td>
+    </tr>
+</table>
+
+To update a RabbitMQ instance:
+
+1. Open `definition.yaml`.
+
+1. Add any of the properties listed in the table above along with their values.
+An example is shown below.
+
+    ```
+    apiVersion: rabbitmq.pivotal.io/v1beta1
+    kind: RabbitmqCluster
+    metadata:
+      name: simple
+    spec:
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+      resource:
+        request:
+          cpu: 2000m
+        limit:
+          cpu: 2000m
+    ```
+
+1. Save your changes to `definition.yaml`.
+
+1. Apply the definition by running:
 
     ```
     kubectl apply -f definition.yaml
@@ -191,11 +232,6 @@ An example is shown below.
 
     ```
     kubectl describe statefulset definition-rabbitmq-server
-    ```
-
-Changes to default values in the Operator configuration do not update existing `RabbitmqCluster` instances.
-Operator configuration changes are only applied to newly created `RabbitmqCluster` instances.
-For more information, see [Configuring <%= vars.product_full %>](./configuring.html).
 
 ## <a id='connect'></a> Connect an App to RabbitMQ
 
@@ -259,7 +295,7 @@ To delete a service instance:
     kubectl delete -f INSTANCE.yaml
     ```
 
-    Where `INSTANCE` is the name of your `RabbitmqCluster`.
+    Where `INSTANCE` is the name of your `RabbitmqCluster`.<br><br>
 
     For example:
 
