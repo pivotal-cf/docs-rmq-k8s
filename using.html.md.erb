@@ -89,12 +89,12 @@ in which the `RabbitmqCluster` was defined.
     For example:
     <pre class="terminal">
     $ kubectl get all -l app=definition
-    NAME                           READY   STATUS    RESTARTS   AGE
+    NAME                               READY   STATUS    RESTARTS   AGE
     pod/definition-rabbitmq-server-0   1/1     Running   0          112s
 
-    NAME                               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                        AGE
-    service/definition-rabbitmq-headless   ClusterIP   None             <none>        4369/TCP                       113s
-    service/definition-rabbitmq-ingress    ClusterIP   10.103.214.196   <none>        5672/TCP,15672/TCP,15692/TCP   113s
+    NAME                                   TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                        AGE
+    service/definition-rabbitmq-headless   ClusterIP   None             \<none\>        4369/TCP                       113s
+    service/definition-rabbitmq-ingress    ClusterIP   10.103.214.196   \<none\>        5672/TCP,15672/TCP,15692/TCP   113s
     </pre>
 
     If the pod is not running within a few minutes, follow the steps in
@@ -113,7 +113,7 @@ To configure a RabbitMQ instance:
 1. Add any of the properties described in [ConfigMap Parameters and Settings](./configuring.html#settings)
 along with their values.
 
-An example is shown below.
+    An example is shown below.
 
     ```
     apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -266,14 +266,14 @@ To retrieve credentials and display them in plaintext:
     kubectl -n NAMESPACE get secret INSTANCE-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
     ```
 
-See an example below.
+    See an example below.
 
-<pre class="terminal">
-  $ kubectl -n p-rmq-9ec22161-c935-4fab-a3fa-66f5446dc434 get secret definition-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
-  DbjXnPjLt82DbZC-xr5i_UiBx7nDRRqI
-  $ kubectl -n p-rmq-9ec22161-c935-4fab-a3fa-66f5446dc434 get secret definition-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
-  SB6sezvZfSR4Yu36KC2n8dokmFcCXLWv
-</pre>
+    <pre class="terminal">
+      $ kubectl -n p-rmq-9ec22161-c935-4fab-a3fa-66f5446dc434 get secret definition-rabbitmq-admin -o jsonpath="{.data.rabbitmq-username}" | base64 --decode
+      DbjXnPjLt82DbZC-xr5i_UiBx7nDRRqI
+      $ kubectl -n p-rmq-9ec22161-c935-4fab-a3fa-66f5446dc434 get secret definition-rabbitmq-admin -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
+      SB6sezvZfSR4Yu36KC2n8dokmFcCXLWv
+    </pre>
 
 ## <a id='use'></a> Use the RabbitMQ Service in Your App
 
