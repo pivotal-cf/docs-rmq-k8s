@@ -22,15 +22,16 @@ There are two methods to install <%= vars.product_short %>. Use one of the follo
 Before you install and configure <%= vars.product_short %>, you must install and configure:
 
 1. **kubectl:** For installation instructions,
-see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes documentation.
+see [the Kubernetes documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
 
 1. **The Docker CLI:** For installation instructions,
 see the [Docker documentation](https://docs.docker.com/install/).
 
-1. **Duffle:** Install v0.3.3-beta.1 or later. For installation instructions,
-see [duffle](https://github.com/deislabs/duffle) on GitHub.
+1. **Duffle:** Install v0.3.3-beta.1 or later. For installation instructions, see
+[duffle](https://github.com/deislabs/duffle) on GitHub.
 
-1. **A Kubernetes cluster:** You must use Kubernetes v1.14 or later. A default storageClass has to be configured or you need to specify which storageClass to use.
+1. **A Kubernetes cluster:** You must use Kubernetes v1.14 or later. A default storageClass has to be configured
+or you need to specify which storageClass to use.
 
 1. **A private image registry:** Pivotal recommends that you keep the CNAB, Kubernetes Operator, and
 service broker images private even if your repository is publicly accessible.
@@ -41,27 +42,29 @@ rabbitmq-for-k8s@pivotal.io for help.
 
 To install and configure <%= vars.product_short %>:
 
-1. [Download and Import Pivotal RabbitMQ for Kubernetes](#import)
+1. [Download and Import <%= vars.product_full %>](#import)
 1. [Configure Kubernetes Cluster Access to your Private Image Registry](#generate-credentials)
 1. [Move the Images](#relocate-images)
 1. [Install the CNAB Bundle](#install)
 1. [(Optional) Register the Service Broker with Cloud Foundry](#register)
 1. [(Optional) Configure the Kubernetes Operator](#configure)
 
-## <a id='import'></a>Download and Import Pivotal RabbitMQ for Kubernetes
-
-<p class="note">
-  <strong>Note:</strong>
-  RabbitMQ for Kubernetes is currently visible to selected customers only.
-  Email the team at <a href="mailto:rabbitmq-for-k8s@pivotal.io">rabbitmq-for-k8s@pivotal.io</a> if you want access.
-  Otherwise, you see a 404 error.
-</p>
+## <a id='import'></a>Download and Import <%= vars.product_full %>
 
 To download and import <%= vars.product_short %>:
 
-1. Sign in to [Pivotal Network](https://login.run.pivotal.io/login).
+1. Log in to your Early Access user account on [Pivotal Network](https://login.run.pivotal.io/login).
+If you do not have an Early Access account, apply for one through the
+[application form](https://pivotal.io/pivotal-rabbitmq-on-kubernetes).
+<%= vars.product_short %> is currently only available to Early Access users.
 
-1. Download the <%= vars.product_short %> CNAB artifact from [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
+1. Download the **<%= vars.product_full %> CNAB** artifact from
+[Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
+
+    <p class="note">
+      <strong>Note:</strong> You do not need to download the <strong><%= vars.product_full %></strong> artifact.
+      It is used for <a href="./installing.html">Installing and Configuring Using Kubernetes Manifests</a>.
+    </p>
 
 1. Set a version variable by running:
 
@@ -69,7 +72,7 @@ To download and import <%= vars.product_short %>:
     export version=NUMBER-build.NUMBER
     ```
 
-    Where `NUMBER` is the CNAB artifact version listed in the name of the file downloaded in the previous step.
+    Where `NUMBER` is the CNAB artifact version listed in the name of the artifact file you downloaded.
 
     For example:
 
@@ -95,10 +98,11 @@ To generate credentials to grant the Kubernetes cluster access to images in your
     ```
 
     <p class="note">
-      <strong>Note:</strong> For more options on how to generate duffle credentials, run <code>duffle credentials --help</code>.
+      <strong>Note:</strong> For more options on how to generate duffle credentials, run
+      <code>duffle credentials --help</code>.
     </p>
 
-1. When prompted, enter the following:
+1. When prompted, enter:
     * The absolute path to the kubeconfig that points to your target Kubernetes cluster
     * The URL for the docker registry server
     * The docker registry username and password
@@ -141,7 +145,7 @@ To move the images to your private image registry:
 To install the CNAB bundle:
 
 1. Run any kubectl command that connects with the Kubernetes cluster to check that your Kubernetes authentication
-token has not expired.
+token has not expired.<br><br>
 
     For example:
 
@@ -298,10 +302,12 @@ token has not expired.
     </pre>
 
 The <code>set</code> flag refers to CNAB parameters that configure your CNAB installation.
-The table below lists the RabbitMQ for Kubernetes CNAB parameters that are available to use with the `--set` flag.
+The table below lists the <%= vars.product_short %> CNAB parameters that are available to use with the `--set`
+flag.
 
 <p class="note">
-  <strong>Note:</strong> You can also pass CNAB parameters using a JSON file with the <code>--parameters FILENAME</code> flag.
+  <strong>Note:</strong> You can also pass CNAB parameters using a JSON file with the
+  <code>--parameters FILENAME</code> flag.
 </p>
 
 <table>
@@ -352,7 +358,8 @@ The table below lists the RabbitMQ for Kubernetes CNAB parameters that are avail
   </tr>
   <tr>
     <td>(Optional) <code>storage_class_name</code></td>
-    <td>Name of the Kubernetes <code>StorageClass</code> to use for provisioning RabbitmqCluster <code>PersistentVolumes</code></td>
+    <td>Name of the Kubernetes <code>StorageClass</code> to use for provisioning RabbitmqCluster
+      <code>PersistentVolumes</code></td>
   </tr>
   <tr>
     <td>(Optional) <code>storage_capacity</code></td>
@@ -385,8 +392,8 @@ To register the service broker:
 <p class="note">
   <strong>Note:</strong>
   To register a service broker this way, you need to be logged in as Cloud Foundry admin.
-  If you want, you can register a space-scoped service broker as a normal user by adding <code>--space-scoped</code>
-  parameter to the command above.
+  If you want, you can register a space-scoped service broker as a normal user by adding
+  <code>--space-scoped</code> parameter to the command above.
 </p>
 
 For more information about registering service brokers,
@@ -395,4 +402,5 @@ in Cloud Foundry documentation.
 
 ## <a id='configure'></a> (Optional) Configure the Kubernetes Operator
 
-For more information about configuring the Kubernetes Operator, see [Configuring <%= vars.product_full %>](./configuring.html).
+For more information about configuring the Kubernetes Operator, see
+[Configuring <%= vars.product_full %>](./configuring.html).

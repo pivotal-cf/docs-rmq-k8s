@@ -21,23 +21,24 @@ There are two methods to install <%= vars.product_short %>. Use one of the follo
 Before you install and configure <%= vars.product_short %>, you must install and configure the following software:
 
 1. **kubectl:** For installation instructions,
-see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes documentation.
+see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes
+documentation.
 
 1. **The Docker CLI:** For installation instructions,
 see the [Docker documentation](https://docs.docker.com/install/).
 
-1. **A Kubernetes cluster:** You must use Kubernetes v1.14 or later. A default storageClass has to be configured or you need to specify which storageClass to use.
+1. **A Kubernetes cluster:** You must use Kubernetes v1.14 or later. A default storageClass has to be configured
+or you need to specify which storageClass to use.
 
-1. **A private image registry:** Pivotal recommends that you keep the Kubernetes Operator and
-service broker images private even if your repository is publicly accessible.
-If you do not have access to a private image registry, email the team at
-rabbitmq-for-k8s@pivotal.io for help.
+1. **A private image registry:** Pivotal recommends that you keep the Kubernetes Operator and service broker
+images private even if your repository is publicly accessible.
+If you do not have access to a private image registry, email the team at rabbitmq-for-k8s@pivotal.io for help.
 
 ## <a id='overview'></a> Overview
 
 To install and configure <%= vars.product_short %>:
 
-1. [Download Pivotal RabbitMQ for Kubernetes](#artifact)
+1. [Download <%= vars.product_full %>](#artifact)
 1. [Move the Images](#relocate)
 1. [(Optional) Configure Kubernetes Cluster Access to Private Images](#private-images)
 1. [Configure the Image Repository](#image-repo)
@@ -48,12 +49,27 @@ To install and configure <%= vars.product_short %>:
 
 ## <a id='artifact'></a> Download <%= vars.product_short %>
 
-Download the <%= vars.product_short %> artifact from
-[Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/). The artifact contains Docker images and deployment manifests for the Kubernetes Operator and the service broker. The images are for:
+To download the <%= vars.product_short %> artifact:
 
-+ RabbitMQ
-+ The Kubernetes Operator
-+ The Service Broker
+1. Log in to your Early Access user account on [Pivotal Network](https://login.run.pivotal.io/login).
+If you do not have an Early Access account, apply for one through the
+[application form](https://pivotal.io/pivotal-rabbitmq-on-kubernetes).
+<%= vars.product_short %> is currently only available to Early Access users.
+
+1. Download the **<%= vars.product_short %>** artifact from
+[Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
+
+<p class="note">
+  <strong>Note:</strong> You do not need to download the <strong><%= vars.product_short %> CNAB</strong> artifact.
+  It is used for <a href="./installing-cnab.html">Installing and Configuring Using CNAB</a>.
+</p>
+
+The artifact contains Docker images and deployment manifests for the Kubernetes Operator and the service broker.
+The images are for:
+
+* RabbitMQ
+* The Kubernetes Operator
+* The Service Broker
 
 ## <a id='set-ver-var'></a> Set a Version Variable
 
@@ -63,7 +79,7 @@ Download the <%= vars.product_short %> artifact from
     export version=NUMBER-build.NUMBER
     ```
 
-    Where `NUMBER` is the CNAB artifact version listed in the name of the file downloaded in the previous step.
+    Where `NUMBER` is the CNAB artifact version listed in the name of the artifact file you downloaded.
 
     For example:
 
@@ -112,10 +128,12 @@ Download the <%= vars.product_short %> artifact from
 
 ## <a id='private-images'></a> (Optional) Configure Kubernetes Cluster Access to Private Images
 
-If you require authentication to pull images from your private image registry, you must authorize access to the images from the `pivotal-rabbitmq-system` namespace.
+If you require authentication to pull images from your private image registry, you must authorize access to the
+images from the `pivotal-rabbitmq-system` namespace.
 
-<p class=note><strong>Note:</strong> If your repository is publicly accessible,
-  Pivotal recommends that you keep your Kubernetes Operator and service broker images in a private image repository.
+<p class=note>
+  <strong>Note:</strong> If your repository is publicly accessible, Pivotal recommends that you keep your
+  Kubernetes Operator and service broker images in a private image repository.
 </p>
 
 To authorize access to images:
@@ -157,7 +175,8 @@ To authorize access to images:
 To configure the image repository:
 
 1. Provide your repository URL in the Kubernetes Operator manifest `manifests/operator.yaml`.
-1. Replace all instances of `REPLACE-WITH-RABBITMQ-IMAGE-REFERENCE` with your image repository host. If you use a private image registry, also replace the image pull secret as in the example below:
+1. Replace all instances of `REPLACE-WITH-RABBITMQ-IMAGE-REFERENCE` with your image repository host.
+If you use a private image registry, also replace the image pull secret as in the example below:
 
     ```
     apiVersion: v1
@@ -173,7 +192,8 @@ To configure the image repository:
       namespace: pivotal-rabbitmq-system
     ```
 
-1. Replace all instances of `REPLACE-WITH-OPERATOR-IMAGE-URL` with the full Kubernetes Operator image reference. This reference looks similar to the below:
+1. Replace all instances of `REPLACE-WITH-OPERATOR-IMAGE-URL` with the full Kubernetes Operator image reference.
+This reference looks similar to the below:
 
     ```
     YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
@@ -188,13 +208,17 @@ To configure the image repository:
 
 ## <a id='config-service-type'></a> (Optional) Configure the Service Broker ServiceType
 
-The <%= vars.product_short %> service broker is an Open Service Broker API (OSBAPI)-compliant component that enables integration with <%= vars.platform_name %> and other OSBAPI-based
-solutions, such as Service Catalog. For more information, see [Service Catalog](https://github.com/kubernetes-sigs/service-catalog) in GitHub.
+The <%= vars.product_short %> service broker is an Open Service Broker API (OSBAPI)-compliant component that
+enables integration with <%= vars.platform_name %> and other OSBAPI-based solutions, such as Service Catalog.
+For more information, see [Service Catalog](https://github.com/kubernetes-sigs/service-catalog) in GitHub.
 
 When the service broker is deployed, you must expose the service broker using a Kubernetes ServiceType.
-This enables API clients to reach the service broker endpoint. By default, <%= vars.product_short %> configures a `LoadBalancer` ServiceType.
+This enables API clients to reach the service broker endpoint. By default, <%= vars.product_short %> configures
+a `LoadBalancer` ServiceType.
 
-For more information, see [Publishing Services (ServiceTypes)](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) in the Kubernetes documentation.
+For more information, see
+[Publishing Services (ServiceTypes)](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
+in the Kubernetes documentation.
 
 To configure your service broker ServiceType:
 
@@ -254,11 +278,10 @@ To install <%= vars.product_short %>:
     kubectl apply -f manifests/
     ```
 
-1. Apply the Kubernetes manifests you configured in the above steps. When you do so, kubectyl:
-
-+ Deploys the Kubernetes Operator
-+ Deploys the service broker
-+ Installs the `RabbitmqCluster` custom resource definition
+1. Apply the Kubernetes manifests you configured in the above steps. When you do so, kubectl:
+    * Deploys the Kubernetes Operator
+    * Deploys the service broker
+    * Installs the `RabbitmqCluster` custom resource definition
 
 ## <a id='register-broker'></a> Register the Service Broker with Cloud Foundry
 
@@ -271,7 +294,8 @@ To install <%= vars.product_short %>:
 
     Where:
       * `SERVICE-BROKER-NAME` is a name you choose for the service broker
-      * `SERVICE-BROKER-IP` is the external IP assigned to the `LoadBalancer` named `p-rmq-servicebroker`. `LoadBalancer` is deployed in namespace `pivotal-rabbitmq-system`.
+      * `SERVICE-BROKER-IP` is the external IP address assigned to the `LoadBalancer` named `p-rmq-servicebroker`.
+      `LoadBalancer` is deployed in namespace `pivotal-rabbitmq-system`.
       * `BROKER-USERNAME` is the service broker username you used to create the Kubernetes secrets in
       [Create Service Broker Credentials](#broker-creds) above.
       * `BROKER-PASSWORD` is the service broker password you used to create the Kubernetes secrets in
@@ -285,8 +309,9 @@ To install <%= vars.product_short %>:
 
 ## <a id='configure'></a> (Optional) Configure the Operator
 
-For more information about configuring the Kubernetes Operator, see [Configuring <%= vars.product_full %>](./configuring.html).
+For more information about configuring the Kubernetes Operator, see
+[Configuring <%= vars.product_full %>](./configuring.html).
 
 ## <a id='uninstall'></a> Uninstall <%= vars.product_short %>
 
-If you want to uninstall the product, follow the steps in [Uninstall using Manifests](./upgrading.html#uninstall-manifests).
+To uninstall the product, follow the steps in [Uninstall Through the Manifests](./upgrading.html#uninstall-manifests).
