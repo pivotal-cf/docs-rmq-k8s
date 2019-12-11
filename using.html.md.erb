@@ -39,16 +39,35 @@ For more information about pod security policies, see the
 
 ### <a id='minimum-psp'></a> Minimum Pod Security Policies
 
-For the minimum resources required to deploy the Operator successfully, see
-[Pod Security Policy Example for the Operator](examples-annex.html#operator-psp-example).
+The table below provides links to pod security policy examples that include the
+minimum resources required to deploy RabbitMQ for Kubernetes components:
 
-For the minimum resources required to deploy the Service Broker successfully, see
-[Pod Security Policy Example for the Service Broker](examples-annex.html#servicebroker-psp-example).
+<table>
+  <col width="35%">
+  <col width="65%">
+  <tr>
+    <th>For the minimum resources required to deploy the...</th>
+    <th>See...</th>
+  </tr>
+  <tr>
+    <td>Operator</td>
+    <td><a href="examples-annex.html#operator-psp-example">Pod Security Policy Example for the Operator</a></td>
+  </tr>
+  <tr>
+    <td>Service Broker</td>
+    <td><a href="examples-annex.html#servicebroker-psp-example">Pod Security Policy Example for the Service Broker</a></td>
+  </tr>
+  <tr>
+    <td>RabbitMQ Instance</td>
+    <td><a href="examples-annex.html#rabbitmq-psp-example">Pod Security Policy Example for a RabbitMQ Instance</a></td>
+  </tr>
+</table>
 
-For the minimum resources required to deploy a RabbitMQ instance successfully, see
-[Pod Security Policy Example for a RabbitMQ Instance](examples-annex.html#rabbitmq-psp-example).<br>
-RabbitMQ instances need to run as a `root` user and mount volumes of the types `secret`, `configMap`,
-`persistentVolumeClaim`, and `emptyDir`.
+
+<p class="note"><strong>Note:</strong>
+  RabbitMQ instances need to run as a <code>root</code> user and mount volumes of the types
+  <code>secret</code>, <code>configMap</code>, <code>persistentVolumeClaim</code>, and <code>emptyDir</code>.
+</p>
 
 ## <a id='create'></a> Create a RabbitMQ Instance
 
