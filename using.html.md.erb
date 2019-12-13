@@ -32,11 +32,27 @@ To confirm this availability:
 
 ## <a id='psp'></a> Pod Security Policies
 
-If you have Pod security policies enabled in the Kubernetes cluster, you must create a `ClusterRole` and
-`ClusterRoleBinding` to enable the Pods to be scheduled.
+If you have pod security policies enabled in the Kubernetes cluster, you must create a `ClusterRole` and
+`ClusterRoleBinding` to enable the pods to be scheduled.
+For more information about pod security policies, see the
+[Kubernetes documentation](https://kubernetes.io/docs/concepts/policy/pod-security-policy/).
+
 If you do not have Pod security policies enabled, skip to <a href="#create">Create a RabbitMQ Instance</a> below.
 
-For more information about Pod security policies, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/policy/pod-security-policy/).
+To create a `ClusterRole` and `ClusterRoleBinding`:
+
+1. Create YAML files to define the security policies for the Operator, Service Broker, and
+RabbitMQ Instance, using the examples in [Examples of Pod Security Policies](./examples-annex.html).
+  <p class="note"><strong>Note:</strong>
+    RabbitMQ instances need to run as a <code>root</code> user and mount volumes of the types
+    <code>secret</code>, <code>configMap</code>, <code>persistentVolumeClaim</code>, and <code>emptyDir</code>.
+  </p>
+
+1. Run the following command with each of the three YAML files you created in step 1:
+
+    ```
+    kubectl apply -f POD-SECURITY-POLICY.yaml
+    ```
 
 ### <a id='psp-for-operator'></a> Minimum Pod Security Policy for the Operator
 
