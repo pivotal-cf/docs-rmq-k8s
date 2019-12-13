@@ -11,7 +11,7 @@ This topic describes how to troubleshoot common problems with <%= vars.product_f
 
 After creating a RabbitMQ instance, it is not available within a few minutes.
 
-### <a id='failed-instance-symptom'></a> Symptom
+### <a name='failed-instance-symptom'></a> Symptom
 
 Symptoms include:
 
@@ -19,7 +19,7 @@ Symptoms include:
 * When using a service broker, the service instance provision status is `create in progress` for more than a few
 minutes.
 
-### <a id='failed-instance-explanation'></a> Explanation
+### <a name='failed-instance-explanation'></a> Explanation
 
 Common reasons for such failure are:
 
@@ -27,7 +27,7 @@ Common reasons for such failure are:
 * Incorrect `storageClassName` configuration. More specifically, no default storage class has been configured in
 the Kubernetes cluster and `p-rmq-operator-config` does not contain a valid `storageClassName` value.
 
-### <a id='failed-instance-solution'></a> Solution
+### <a name='failed-instance-solution'></a> Solution
 
 See more details about the failure by following the step in
 [Check the Status of an Instance](#check-instance-status) below to check the status of the RabbitMQ cluster
@@ -163,3 +163,20 @@ Follow the step below to check if an instance is running and see information abo
       NAME                                       READY   AGE
       statefulset.apps/pivotal-rabbitmq-server   1/1     2m28s
     </pre>
+
+## <a id='no-pods'></a> Pods Are Not Being Created
+
+### <a name='failed-instance-symptom'></a> Symptom
+
+If you see this error message:
+<%# Get error message. Also get when user would likely see the error message. %>
+
+### <a name='failed-instance-explanation'></a> Explanation
+
+This might occur if pod security policies are enabled in the Kubernetes cluster,
+but you have not created a `ClusterRole` and `ClusterRoleBinding`.
+
+### <a name='failed-instance-solution'></a> Solution
+
+Create a `ClusterRole` and `ClusterRoleBinding` by following the procedure in
+[Pod Security Policies](./using.html#psp).
