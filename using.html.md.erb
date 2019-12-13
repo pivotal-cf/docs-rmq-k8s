@@ -32,42 +32,25 @@ following the steps in [Installing and Configuring Using CNAB](./installing-cnab
 
 If you have pod security policies enabled in the Kubernetes cluster, you must create a `ClusterRole` and
 `ClusterRoleBinding` to enable the pods to be scheduled.
-If you do not have Pod security policies enabled, skip to <a href="#create">Create a RabbitMQ Instance</a> below.
-
 For more information about pod security policies, see the
 [Kubernetes documentation](https://kubernetes.io/docs/concepts/policy/pod-security-policy/).
 
-### <a id='minimum-psp'></a> Minimum Pod Security Policies
+If you do not have Pod security policies enabled, skip to <a href="#create">Create a RabbitMQ Instance</a> below.
 
-The table below provides links to pod security policy examples that include the
-minimum resources required to deploy RabbitMQ for Kubernetes components:
+To create a `ClusterRole` and `ClusterRoleBinding`:
 
-<table>
-  <col width="35%">
-  <col width="65%">
-  <tr>
-    <th>For the minimum resources required to deploy the...</th>
-    <th>See...</th>
-  </tr>
-  <tr>
-    <td>Operator</td>
-    <td><a href="examples-annex.html#operator-psp-example">Pod Security Policy Example for the Operator</a></td>
-  </tr>
-  <tr>
-    <td>Service Broker</td>
-    <td><a href="examples-annex.html#servicebroker-psp-example">Pod Security Policy Example for the Service Broker</a></td>
-  </tr>
-  <tr>
-    <td>RabbitMQ Instance</td>
-    <td><a href="examples-annex.html#rabbitmq-psp-example">Pod Security Policy Example for a RabbitMQ Instance</a></td>
-  </tr>
-</table>
+1. Create YAML files to define the security policies for the Operator, Service Broker, and
+RabbitMQ Instance, using the examples in [Examples of Pod Security Policies](./examples-annex.html).
+  <p class="note"><strong>Note:</strong>
+    RabbitMQ instances need to run as a <code>root</code> user and mount volumes of the types
+    <code>secret</code>, <code>configMap</code>, <code>persistentVolumeClaim</code>, and <code>emptyDir</code>.
+  </p>
 
+1. Run the following command with each of the three YAML files you created in step 1:
 
-<p class="note"><strong>Note:</strong>
-  RabbitMQ instances need to run as a <code>root</code> user and mount volumes of the types
-  <code>secret</code>, <code>configMap</code>, <code>persistentVolumeClaim</code>, and <code>emptyDir</code>.
-</p>
+    ```
+    kubectl apply -f POD-SECURITY-POLICY.yaml
+    ```
 
 ## <a id='create'></a> Create a RabbitMQ Instance
 
