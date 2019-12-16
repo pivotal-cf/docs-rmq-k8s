@@ -203,8 +203,8 @@ These configurations are listed in the table below.
         <code>metadata.labels</code>
       </td>
       <td>
-        Labels to be added to every child resource (StatefulSet, Service and others).
-        Labels starting with <code>app.kubernetes.io</code> are ignored as these are reserved for internal use.
+        Labels to be added to every child resource, such as StatefulSet and Service.
+        Labels starting with <code>app.kubernetes.io</code> are ignored because these are reserved for internal use.
         Modifying labels triggers a rolling restart of the StatefulSet.
       </td>
     </tr>
