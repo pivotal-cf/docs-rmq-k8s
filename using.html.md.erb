@@ -164,6 +164,29 @@ along with their values.
       <code>kubectl edit rabbitmqcluster definition</code>.
     </p>
 
+1. You can add [affinity and anti-affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)
+to the custom resource if required. Rules are structured as they would be in a kubernetes resource.
+
+For example:
+
+```
+    apiVersion: rabbitmq.pivotal.io/v1beta1
+    kind: RabbitmqCluster
+    metadata:
+      name: rabbitmqcluster-sample
+    spec:
+      replicas: 3
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - node-1
+```
+
 1. Save your changes to `definition.yaml`.
 
 1. Apply the definition by running:
