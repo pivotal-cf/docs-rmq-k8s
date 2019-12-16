@@ -14,7 +14,12 @@ For an app to use <%= vars.product_short %>, the product must be deployed to you
 
 To confirm this availability:
 
-1. Run `kubectl get customresourcedefinitions.apiextensions.k8s.io`.
+1. Run:
+
+    ```
+    kubectl get customresourcedefinitions.apiextensions.k8s.io
+    ```
+
 1. Check that `rabbitmqclusters.rabbitmq.pivotal.io` is on the list, as in the example below.
 
     <pre class="terminal">
@@ -32,7 +37,7 @@ To confirm this availability:
 
 <%# use a better title starting with a verb %>
 
-## <a id='psp'></a> Pod Security Policies
+## <a id='psp'></a> (Optional) Apply Pod Security Policies
 
 If you have pod security policies enabled in the Kubernetes cluster, you must create a `ClusterRole` and
 `ClusterRoleBinding` to enable the pods to be scheduled.
