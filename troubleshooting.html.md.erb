@@ -168,15 +168,22 @@ Follow the step below to check if an instance is running and see information abo
 
 ### <a name='failed-instance-symptom'></a> Symptom
 
-If you see this error message:
-<%# Get error message. Also get when user would likely see the error message. %>
+You see an error such as:
+
+<pre class="terminal">
+pods POD-NAME is forbidden: unable to validate against any pod security policy: []
+</pre>
+
+as an event of the underlying `ReplicaSet` of the Operator deployment, or as an
+event of the underlying `StatefulSet` of the `RabbitmqCluster`.
 
 ### <a name='failed-instance-explanation'></a> Explanation
 
-This might occur if pod security policies are enabled in the Kubernetes cluster,
-but you have not created a `ClusterRole` and `ClusterRoleBinding`.
+This might occur if pod security policy admission control is enabled for the
+Kubernetes cluster, but you have not created the necessary `PodSecurityPolicy` and
+corresponding RBAC resources.
 
 ### <a name='failed-instance-solution'></a> Solution
 
-Create a `ClusterRole` and `ClusterRoleBinding` by following the procedure in
+Create the `PodSecurityPolicy` and RBAC resources by following the procedure in
 [Pod Security Policies](./using.html#psp).
