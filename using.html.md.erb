@@ -128,6 +128,8 @@ For example:
     kind: RabbitmqCluster
     metadata:
       name: rabbitmqcluster-sample
+      labels:
+        mylabel: labelValue
     spec:
       replicas: 3
       service:
@@ -196,6 +198,12 @@ These configurations are listed in the table below.
 <table class="nice">
       <th>Custom Resource attribute</th>
       <th>Impact on the RabbitMQ cluster</th>
+    <tr>
+      <td>
+        <code>metadata.labels</code>
+      </td>
+      <td>Labels to be added to every child resource (StatefulSet, Service and others). Labels starting with `app.kubernetes.io` are ignored as these are reserved for internal use. Please note that modifying labels triggers a rolling restart of the StatefulSet.</td>
+    </tr>
     <tr>
       <td>
         <code>spec.service.annotations</code>
