@@ -62,7 +62,7 @@ RabbitMQ Instance, using the examples in [Examples of Pod Security Policies](./e
 ## <a id='create'></a> Create a RabbitMQ Instance
 
 To create a RabbitMQ instance, you must create a `RabbitmqCluster` resource definition and apply it.
-RabbitMQ Operator creates the necessary resources, such as `services` and `statefulset`, in the same namespace
+RabbitMQ Operator creates the necessary resources, such as Services and StatefulSet, in the same namespace
 in which the `RabbitmqCluster` was defined.
 
 1. Create a YAML file to define a `RabbitmqCluster` resource named `definition.yaml`.
@@ -263,10 +263,12 @@ To update a RabbitMQ instance:
     ```
     kubectl describe service definition-rabbitmq-ingress
     ```
+
     and
 
     ```
     kubectl describe statefulset definition-rabbitmq-server
+    ```
 
 ## <a id='connect'></a> Connect an App to RabbitMQ
 
