@@ -222,30 +222,21 @@ These configurations are listed in the table below.
         <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-limits-are-run">per 100 ms</a>
       </td>
     </tr>
+    <tr>
+      <td>
+        <code>spec.affinity</code>
+      </td>
+      <td>
+        <a href="https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity">Pod affinity and anti-affinity rules</a>
+      </td>
+    </tr>
 </table>
 
 To update a RabbitMQ instance:
 
 1. Open `definition.yaml`.
 
-1. Add any of the properties listed in the table above along with their values.
-<br><br>
-    For example:
-
-    ```
-    apiVersion: rabbitmq.pivotal.io/v1beta1
-    kind: RabbitmqCluster
-    metadata:
-      name: simple
-    spec:
-      annotations:
-        service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
-      resource:
-        request:
-          cpu: 2000m
-        limit:
-          cpu: 2000m
-    ```
+1. Add or modify any of the properties listed in the table.
 
 1. Save your changes to `definition.yaml`.
 
