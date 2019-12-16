@@ -3,12 +3,13 @@ title: Examples of Pod Security Policies
 owner: RMQ for k8s
 ---
 
-## <a id='overview'></a> Overview
-
-Below are examples of pod security policies for the Operator, the Service Broker, and a RabbitMQ instance.
-
+This topic provides examples of pod security policies for the Operator, the Service
+Broker, and a RabbitMQ instance.
 
 ## <a id='operator-psp-example'></a> Pod Security Policy Example for the Operator
+
+The example pod security policy below contains the minimum resources required to
+deploy the Operator:
 
 ```yaml
 apiVersion: extensions/v1beta1
@@ -73,6 +74,9 @@ subjects:
 
 ## <a id='servicebroker-psp-example'></a>Pod Security Policy Example for the Service Broker
 
+The example pod security policy below contains the minimum resources required to
+deploy the Service Broker:
+
 ```yaml
 apiVersion: extensions/v1beta1
 kind: PodSecurityPolicy
@@ -134,6 +138,9 @@ subjects:
 
 
 ## <a id='rabbitmq-psp-example'></a>Pod Security Policy Example for a RabbitMQ Instance
+
+The example pod security policy below contains the minimum resources required to
+deploy the RabbitMQ Instance:
 
 ```yaml
 apiVersion: extensions/v1beta1
