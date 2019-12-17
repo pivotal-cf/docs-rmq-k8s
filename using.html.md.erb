@@ -11,7 +11,8 @@ To use it with <%= vars.platform_name %> and Cloud Foundry instead, see
 
 ## <a id='availability'></a> Confirm Service Availability
 
-For an app to use <%= vars.product_short %>, the product must be deployed to your Kubernetes cluster.
+Before configuring your app to use <%= vars.product_short %>, ensure that <%= vars.product_short %> is deployed
+to your Kubernetes cluster and is available.
 
 To confirm this availability:
 
@@ -33,7 +34,6 @@ If it is on the list, <%= vars.product_short %> is available. If it is not, ask 
 following the steps in [Installing and Configuring Using CNAB](./installing-cnab.html) or
 [Installing and Configuring Using Kubernetes Manifests](./installing.html).
 
-<%# use a better title starting with a verb %>
 
 ## <a id='psp'></a> (Optional) Apply Pod Security Policies
 
@@ -53,7 +53,7 @@ RabbitMQ Instance, using the examples in [Examples of Pod Security Policies](./e
     <code>secret</code>, <code>configMap</code>, <code>persistentVolumeClaim</code>, and <code>emptyDir</code>.
   </p>
 
-1. Run the following command with each of the three YAML files you created in step 1:
+1. For each of the three YAML files you created in step 1, run:
 
     ```
     kubectl apply -f POD-SECURITY-POLICY.yaml
@@ -113,7 +113,9 @@ in which the `RabbitmqCluster` was defined.
 ## <a id='configure'></a> Configure a RabbitMQ Instance
 
 The `RabbitmqCluster` definition can include multiple settings.
-When these settings are not specified, the Operator configuration provides default values.
+When these settings are not specified, the default values in the `configmap` in the
+`pivotal-rabbitmq-system namespace` are used.
+For more information, see [Configuring Pivotal RabbitMQ for Kubernetes](http://docs-pcf-staging.cfapps.io/rabbitmq-kubernetes/0-n/configuring.html).
 
 To configure a RabbitMQ instance:
 
@@ -148,7 +150,11 @@ For example:
       <code>kubectl edit rabbitmqcluster definition</code>.
     </p>
 
-1. (Optional) Add resource requirements. CPU requirements must be in [cpu units](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu). Memory requirements must be in [bytes](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-memory). The RabbitMQ cluster will not deploy if these configurations are provided but not valid. For more information, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).<br><br>
+1. (Optional) Add resource requirements.
+
+* CPU requirements must be in CPU units.
+* Memory requirements must be in bytes.
+
 For example:
 
     ```
@@ -167,11 +173,23 @@ For example:
           memory: 2Gi
     ```
 
-    <p class="note"> <strong>Note:</strong> The default values set out in <a href="./configuring.html#configure" >the configuration section</a> will be applied if no <code>resources</code> are specified in the custom resource. If you don't want any resource requirements set on the deployed RabbitMQ cluster, add a <code>resources</code> section in the custom resource with <code>requests: {}</code> and <code>limits: {}</code>.</p>
+The RabbitMQ cluster does not deploy if these configurations are provided but not valid.
+For more information on<%# "information about" is preferred. %> these requirements, see the
+[Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
+
+
+    <p class="note">
+      <strong>Note:</strong> The default values described in
+      <a href="./configuring.html#configure">Configure the Kubernetes Operator</a> are applied if no resources
+      are specified in the custom resource.
+      To avoid setting resource requirements on the deployed RabbitMQ cluster, add a <code>resources</code>
+      section in the custom resource with <code>requests: {}</code> and <code>limits: {}</code>.
+    </p>
 
 1. (Optional) Add affinity and anti-affinity rules to the custom resource.
-For more information about affinity and anti-affinity, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
 Rules are structured in the same way as a Kubernetes resource.<br><br>
+
 For example:
 
     ```
@@ -191,6 +209,9 @@ For example:
                 values:
                 - node-1
     ```
+
+For more information about affinity and anti-affinity, see the
+[Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 1. Save your changes to `definition.yaml`.
 
