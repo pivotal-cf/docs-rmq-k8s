@@ -12,8 +12,9 @@ Then, if necessary, immediately cherry-pick/copy any changes that you want to pu
 
 | Branch Name| Use for… |
 |------------| ---------|
-| master     | 0.5 (staged here: http://docs-pcf-staging.cfapps.io/rabbitmq-kubernetes/0-n/index.html) |
-| 0.4        | 0.4 (live here: http://docs.pivotal.io/rabbitmq-kubernetes/0-4/index.html) | 
+| master     | 0.6 (staged here: http://docs-pcf-staging.cfapps.io/rabbitmq-kubernetes/0-n/index.html) |
+| 0.5        | 0.5 (staged here: http://docs-pcf-staging.cfapps.io/rabbitmq-kubernetes/0-5/index.html) |
+| 0.4        | 0.4 (live here: http://docs.pivotal.io/rabbitmq-kubernetes/0-4/index.html) |
 
 
 [docs-book-rmq-k8s]: https://github.com/pivotal-cf/docs-book-rmq-k8s/blob/master/config.yml
@@ -78,5 +79,4 @@ This is a word list for terminology and word usage specific to the RabbitMQ for 
 | Kubernetes Operator |This operator refers to an Operator pattern, which is a Kubernetes concept. You can have a container image for the Operator code but it is not an image itself. Always capitalize it to help differentiate the term from the Alana persona operator.|
 | service broker |Unless you are specifically refering to the Open Source Service Broker API, do not capitalize service broker.|
 | `RabbitmqCluster` vs RabbitMQ cluster | _Both are used and I think both are needed but should define and disambiguate._ [JD] |
-| ServiceType vs service type |  _Both are used but I'm not clear about the distinction._ [JD] | 
-
+| ServiceType vs service type |  _Both are used but I'm not clear about the distinction._ [JD] |
