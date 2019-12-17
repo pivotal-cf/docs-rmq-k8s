@@ -141,19 +141,33 @@ For example:
       persistence:
         storageClassName: fast
         storage: 20Gi
-      resource:
-        request:
-          cpu: 1000m
-          memory: 2Gi
-        limit:
-          cpu: 1000m
-          memory: 2Gi
     ```
 
     <p class="note">
       <strong>Note:</strong> You can also edit the the configuration in place by running
       <code>kubectl edit rabbitmqcluster definition</code>.
     </p>
+
+1. (Optional) Add resource requirements. CPU requirements must be in [cpu units](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu). Memory requirements must be in [bytes](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-memory). The RabbitMQ cluster will not deploy if these configurations are provided but not valid. For more information, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).<br><br>
+For example:
+
+    ```
+    apiVersion: rabbitmq.pivotal.io/v1beta1
+    kind: RabbitmqCluster
+    metadata:
+      name: rabbitmqcluster-sample
+    spec:
+      replicas: 3
+      resources:
+        requests:
+          cpu: 1000m
+          memory: 2Gi
+        limits:
+          cpu: 1000m
+          memory: 2Gi
+    ```
+
+    <p class="note"> <strong>Note:</strong> The default values set out in <a href="./configuring.html#configure" >the configuration section</a> will be applied if no <code>resources</code> are specified in the custom resource. If you don't want any resource requirements set on the deployed RabbitMQ cluster, add a <code>resources</code> section in the custom resource with <code>requests: {}</code> and <code>limits: {}</code>.</p>
 
 1. (Optional) Add affinity and anti-affinity rules to the custom resource.
 For more information about affinity and anti-affinity, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
