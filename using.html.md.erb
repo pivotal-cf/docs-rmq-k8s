@@ -172,7 +172,7 @@ These configurations are listed in the table below.
 
 <table class="nice">
       <th>Custom Resource attribute</th>
-      <th>Impact on the RabbitMQ cluster</th>
+      <th>Description</th>
     <tr>
       <td>
         <code>spec.service.annotations</code>
@@ -184,22 +184,24 @@ These configurations are listed in the table below.
         <code>spec.resource.request.cpu</code>
       </td>
       <td>
-        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu">CPU units</a>
-        required
-        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-requests-are-scheduled">by the Kubernetes scheduler</a>
-        for the container running RabbitMQ</td>
+        CPU units required by the Kubernetes scheduler for the container running RabbitMQ
+      </td>
     </tr>
     <tr>
       <td>
         <code>spec.resource.limit.cpu</code>
       </td>
       <td>
-        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu">CPU units</a>
-        used to calculated the share of CPU time available to the RabbitMQ container
-        <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-limits-are-run">per 100 ms</a>
+        CPU units used to calculated the share of CPU time available to the RabbitMQ container per 100 ms
       </td>
     </tr>
 </table>
+
+For more information about CPU units, the Kubernetes scheduler, and CPU time availability, see the
+[Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container).
+
+For more information about Pod affinity and anti-affinity rules, see the
+[Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 To update a RabbitMQ instance:
 
