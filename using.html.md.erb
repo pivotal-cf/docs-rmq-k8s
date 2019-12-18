@@ -151,11 +151,10 @@ For example:
     </p>
 
 1. (Optional) Add resource requirements.
+  * CPU requirements must be in CPU units.
+  * Memory requirements must be in bytes.
 
-* CPU requirements must be in CPU units.
-* Memory requirements must be in bytes.
-
-For example:
+    For example:
 
     ```
     apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -173,9 +172,9 @@ For example:
           memory: 2Gi
     ```
 
-The RabbitMQ cluster does not deploy if these configurations are provided but not valid.
-For more information about these requirements, see the
-[Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
+    The RabbitMQ cluster does not deploy if these configurations are provided but not valid.
+    For more information about these requirements, see the
+    [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
 
 
     <p class="note">
@@ -188,9 +187,9 @@ For more information about these requirements, see the
 
 1. (Optional) Add affinity and anti-affinity rules to the custom resource.
 
-Rules are structured in the same way as a Kubernetes resource.<br><br>
+    Rules are structured in the same way as a Kubernetes resource.<br><br>
 
-For example:
+    For example:
 
     ```
     apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -210,8 +209,8 @@ For example:
                 - node-1
     ```
 
-For more information about affinity and anti-affinity, see the
-[Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+    For more information about affinity and anti-affinity, see the
+    [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 1. Save your changes to `definition.yaml`.
 
