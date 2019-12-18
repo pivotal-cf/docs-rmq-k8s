@@ -259,7 +259,9 @@ To configure your service broker ServiceType:
 The <%= vars.product_short %> service broker looks for its username and password in a Kubernetes secret called
 `broker-credentials` in the `pivotal-rabbitmq-system` namespace.
 
-1. To create a secret, run the following commands:
+To create a secret:
+
+1. Run these commands:
 
     ```
     echo -n BROKER-USERNAME > ./username
