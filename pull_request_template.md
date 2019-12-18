@@ -2,4 +2,4 @@
 
 
 
-### Should this be merged to the current release branch (for e.g 0.4)?
+### Should this be merged to any or all of the current released branches (i.e., for 0.5 &/or 0.4)?
