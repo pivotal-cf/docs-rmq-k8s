@@ -37,9 +37,9 @@ following the steps in [Installing and Configuring Using CNAB](./installing-cnab
 
 ## <a id='psp'></a> (Optional) Apply Pod Security Policies
 
-If you have pod security policies enabled in the Kubernetes cluster, you must create a `ClusterRole` and
+If you have Pod security policies enabled in the Kubernetes cluster, you must create a `ClusterRole` and
 `ClusterRoleBinding` to enable the pods to be scheduled.
-For more information about pod security policies, see the
+For more information about Pod security policies, see the
 [Kubernetes documentation](https://kubernetes.io/docs/concepts/policy/pod-security-policy/).
 
 If you do not have Pod security policies enabled, skip to <a href="#create">Create a RabbitMQ Instance</a> below.
@@ -93,7 +93,7 @@ in which the `RabbitmqCluster` was defined.
     kubectl get all -l app=definition
     ```
 
-    If successful, you see a running pod and a service that exposes the instance.<br><br>
+    If successful, you see a running Pod and a service that exposes the instance.<br><br>
 
     For example:
     <pre class="terminal">
@@ -106,7 +106,7 @@ in which the `RabbitmqCluster` was defined.
     service/definition-rabbitmq-ingress    ClusterIP   10.103.214.196   \<none\>        5672/TCP,15672/TCP,15692/TCP   113s
     </pre>
 
-    If the pod is not running within a few minutes, follow the steps in
+    If the Pod is not running within a few minutes, follow the steps in
     [Troubleshooting <%= vars.product_full %>](./troubleshooting.html#failed-instance).
     If you cannot solve the problem, contact your operator or email pivotal-cf-feedback@pivotal.io.
 
@@ -115,7 +115,7 @@ in which the `RabbitmqCluster` was defined.
 The `RabbitmqCluster` definition can include multiple settings.
 When these settings are not specified, the default values in the `configmap` in the
 `pivotal-rabbitmq-system namespace` are used.
-For more information, see [Configuring Pivotal RabbitMQ for Kubernetes](./configuring.html).
+For more information, see [Configuring <%= vars.product_full %>](./configuring.html).
 
 To configure a RabbitMQ instance:
 

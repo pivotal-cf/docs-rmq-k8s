@@ -21,7 +21,7 @@ There are two methods to install <%= vars.product_short %>. Use one of the follo
 Before you install and configure <%= vars.product_short %>, you must install and configure the following software:
 
 1. **kubectl:** For installation instructions,
-see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes
+see the [Kubernetes documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes
 documentation.
 
 1. **The Docker CLI:** For installation instructions,
@@ -282,7 +282,7 @@ To install <%= vars.product_short %>:
 1. Apply the Kubernetes manifests you configured in the above steps. When you do so, kubectl:
     * Deploys the Kubernetes Operator
     * Deploys the service broker
-    * Installs the `RabbitmqCluster` custom resource definition
+    * Installs the `RabbitmqCluster` custom resource definition (CRD)
 
 ## <a id='register-broker'></a> Register the Service Broker with Cloud Foundry
 
