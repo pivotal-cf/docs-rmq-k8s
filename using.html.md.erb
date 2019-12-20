@@ -47,7 +47,7 @@ If you do not have Pod security policies enabled, skip to <a href="#create">Crea
 To create a `ClusterRole` and `ClusterRoleBinding`:
 
 1. Create YAML files to define the security policies for the Operator, Service Broker, and
-RabbitMQ Instance, using the examples in [Examples of Pod Security Policies](./examples-annex.html).
+RabbitMQ instance, using the examples in [Examples of Pod Security Policies](./examples-annex.html).
   <p class="note"><strong>Note:</strong>
     RabbitMQ instances need to run as a <code>root</code> user and mount volumes of the types
     <code>secret</code>, <code>configMap</code>, <code>persistentVolumeClaim</code>, and <code>emptyDir</code>.
@@ -313,7 +313,7 @@ For an app to use RabbitMQ, you must configure it with the correct service name 
 
 The service name is `INSTANCE-rabbitmq-ingress` in the namespace where RabbitMQ is deployed, where `INSTANCE`
 is the name of your instance.
-For example, for the `RabbitmqCluster` created in [Create a RabbitMQ instance](#create) above, the service name
+For example, for the `RabbitmqCluster` created in [Create a RabbitMQ Instance](#create) above, the service name
 is `definition-rabbitmq-ingress`.
 
 Admin credentials for a RabbitMQ cluster are stored in a Kubernetes secret called `INSTANCE-rabbitmq-admin`,
