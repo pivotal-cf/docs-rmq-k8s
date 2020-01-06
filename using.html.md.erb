@@ -307,14 +307,34 @@ To update a RabbitMQ instance:
     kubectl describe statefulset definition-rabbitmq-server
     ```
 
-## <a id='connect'></a> Connect an App to RabbitMQ
+## <a id='find'></a> Find Your RabbitMQ Cluster Service Name and Admin Credentials
 
-For an app to use RabbitMQ, you must configure it with the correct service name and credentials.
+If an app is deployed in the same Kubernetes cluster as RabbitMQ, you can use the RabbitMQ cluster service name
+and admin credentials to connect that app to RabbitMQ.
+The steps required to make that connection can vary greatly by deployment and are beyond the scope of this
+documentation.
 
-The service name is `INSTANCE-rabbitmq-ingress` in the namespace where RabbitMQ is deployed, where `INSTANCE`
-is the name of your instance.
+Follow the procedures below to find your RabbitMQ cluster service name and admin credentials.
+
+
+### <a id='name'></a> Find Your RabbitMQ Cluster Service Name
+
+To find your RabbitMQ cluster service name:
+
+1. Run:
+
+    ```
+    kubectl get all -l app=definition
+    ```
+
+1. Read the `INSTANCE` part of `INSTANCE-rabbitmq-ingress` in the namespace where RabbitMQ is deployed.
+`INSTANCE` is the service name.
+
 For example, for the `RabbitmqCluster` created in [Create a RabbitMQ Instance](#create) above, the service name
 is `definition-rabbitmq-ingress`.
+
+
+### <a id='creds'></a> Retrieve Your RabbitMQ Admin Credentials
 
 Admin credentials for a RabbitMQ cluster are stored in a Kubernetes secret called `INSTANCE-rabbitmq-admin`,
 where `INSTANCE` is the name of your instance.
