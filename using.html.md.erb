@@ -249,11 +249,12 @@ These configurations are listed in the table below.
       </td>
       <td>
         Annotations to be added to every child resource, such as StatefulSet and Service.
-        Annotations containing <code>kubernetes.io</code> and <code>k8s.io</code> are ignored because these are reserved for Kubernetes core components.
-        When <code>spec.service.annotations</code> is specified, annotations for ingress will be merged between <code>spec.service.annotations</code> and
-        <code>metadata.annotations</code>
-        If the same key is specified in both configurations, value from <code>spec.service.annotations</code> will be applied.
-        Modifying annotations triggers a rolling restart of the StatefulSet.
+        Annotations containing <code>kubernetes.io</code> and <code>k8s.io</code> are ignored because these
+        are reserved for Kubernetes core components.
+        When <code>spec.service.annotations</code> is specified, annotations for ingress are merged between
+        <code>spec.service.annotations</code> and <code>metadata.annotations</code>.
+        If the same key is specified in both configurations, the value from <code>spec.service.annotations</code>
+        is applied. Modifying annotations triggers a rolling restart of the StatefulSet.
       </td>
     </tr>
     <tr>
@@ -262,7 +263,8 @@ These configurations are listed in the table below.
       </td>
       <td>
       Annotations on the ingress service
-      Annotations containing <code>kubernetes.io</code> and <code>k8s.io</code> are ignored because these are reserved for Kubernetes core components.
+      Annotations containing <code>kubernetes.io</code> and <code>k8s.io</code> are ignored because these are
+      reserved for Kubernetes core components.
       </td>
     </tr>
     <tr>
