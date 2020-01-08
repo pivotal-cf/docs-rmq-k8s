@@ -1,4 +1,4 @@
-we outsource to someone else---
+---
 title: Release Notes for Pivotal RabbitMQ for Kubernetes
 owner: RMQ for k8s
 ---
@@ -10,35 +10,33 @@ owner: RMQ for k8s
 
 ## <a id="0-5-0"></a> v0.5.0
 
-**Release Date: January 09, 2020**
+**Release Date: January 9, 2020**
 
 ### Features
 
 New features and changes in this release:
 
-* New fields on the RabbitmqCluster Custom Resource:
-  * image - an image can now be set explicitly on the RabbitmqCluster level
-  * resources - CPU and RAM requests and limits can now be defined
-* All child resources now have default labels
-* RabbitMQ clusters are now configured to use `pause_minority` partition handling strategy by default
-
-### Documentation
-
-* The process to automatically monitor new RabbitMQ clusters with Prometheus has been simplified
-* Sample Pod Security Policies are now provided
+* New fields on the RabbitmqCluster custom resource:
+  * `image` - You can set an image on the RabbitmqCluster level
+  * `resource` - You can define requests and limits for CPU and RAM
+  For more information about configuring these fields, see [Configure a RabbitMQ Instance](./using.html#configure).
+* All child resources now have default labels.
+* RabbitMQ clusters are now configured to use `pause_minority` as the partition handling strategy by default.
+* The documented process to automatically monitor new RabbitMQ clusters with Prometheus has been simplified.
+* The documentation now provides sample Pod Security Policies.
 
 ### Resolved Issues
 
 This release has the following fix:
 
 * RabbitMQ Operator and Service Broker are no longer running as root.
-* The Operator now makes sure there is only one instance managing the resources (there is an election process on startup)
-* Operator and Service Broker deployments now have resource limits set
+* The Operator now makes sure there is only one instance managing the resources.
+There is an election process on startup.
+* Operator and Service Broker deployments now have resource limits set.
 * ReadinessProbe is now faster. This should reduce false-negatives if CPU requests are set low.
 * RabbitmqCluster pod `terminationGracePeriodSeconds` has been increased to 150 seconds.
-* Changes to RabbitmqCluster spec.service.annotations are now reconciled (Service object is updated)
+* Changes to RabbitmqCluster spec.service.annotations are now reconciled (Service object is updated).
 
 ### Known Issues
 
-[//]: # (all known issues were fixed so we can say...)
 There are no known issues for this release.
