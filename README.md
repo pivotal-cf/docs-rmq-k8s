@@ -13,7 +13,7 @@ Then, if necessary, immediately cherry-pick/copy any changes that you want to pu
 | Branch Name| Use for… |
 |------------| ---------|
 | master     | 0.6 (staged here: http://docs-pcf-staging.cfapps.io/rabbitmq-kubernetes/0-n/index.html) |
-| 0.5        | 0.5 (staged here: http://docs.pivotal.io/rabbitmq-kubernetes/0-5/index.html) |
+| 0.5        | 0.5 (live here: http://docs.pivotal.io/rabbitmq-kubernetes/0-5/index.html) |
 | 0.4        | 0.4 (live here: http://docs.pivotal.io/rabbitmq-kubernetes/0-4/index.html) |
 
 
