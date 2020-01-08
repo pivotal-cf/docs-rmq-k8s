@@ -19,7 +19,9 @@ New features and changes in this release:
 * New fields on the RabbitmqCluster custom resource:
   * `image` - You can set an image on the RabbitmqCluster level
   * `resource` - You can define requests and limits for CPU and RAM
-  For more information about configuring these fields, see [Configure a RabbitMQ Instance](./using.html#configure).
+
+    For more information about configuring these fields, see [Configure a RabbitMQ Instance](./using.html#configure).
+
 * All child resources now have default labels.
 * RabbitMQ clusters are now configured to use `pause_minority` as the partition handling strategy by default.
 * The documented process to automatically monitor new RabbitMQ clusters with Prometheus has been simplified.
@@ -27,16 +29,21 @@ New features and changes in this release:
 
 ### Resolved Issues
 
-This release has the following fix:
+This release has the following fixes:
 
-* RabbitMQ Operator and Service Broker are no longer running as root.
-* The Operator now makes sure there is only one instance managing the resources.
+* The RabbitMQ Operator and Service Broker no longer run as root.
+* The Operator now makes sure that there is only one instance managing the resources.
 There is an election process on startup.
 * Operator and Service Broker deployments now have resource limits set.
-* ReadinessProbe is now faster. This should reduce false-negatives if CPU requests are set low.
+* ReadinessProbe is now faster. This should reduce false negatives if you have set CPU requests low.
 * RabbitmqCluster pod `terminationGracePeriodSeconds` has been increased to 150 seconds.
-* Changes to RabbitmqCluster spec.service.annotations are now reconciled (Service object is updated).
+* Changes to RabbitmqCluster `spec.service.annotations` are now reconciled (Service object is updated).
 
 ### Known Issues
 
 There are no known issues for this release.
+
+## <a id="view"></a> View Release Notes for Another Version
+
+To view the release notes for another product version, select the version from the dropdown at the top of this
+page.
