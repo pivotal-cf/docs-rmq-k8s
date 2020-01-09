@@ -16,8 +16,8 @@ owner: RMQ for k8s
 
 New features and changes in this release:
 
-* New fields on the RabbitmqCluster custom resource:
-  * `image` - You can set an image on the RabbitmqCluster level
+* New fields on the `RabbitmqCluster` custom resource:
+  * `image` - You can set an image on the `RabbitmqCluster` level
   * `resource` - You can define requests and limits for CPU and RAM
 
     For more information about configuring these fields, see [Configure a RabbitMQ Instance](./using.html#configure).
@@ -34,10 +34,10 @@ This release has the following fixes:
 * The RabbitMQ Operator and Service Broker no longer run as root.
 * The Operator now makes sure that there is only one instance managing the resources.
 There is an election process on startup.
-* Operator and Service Broker deployments now have resource limits set.
-* ReadinessProbe is now faster. This should reduce false negatives if you have set CPU requests low.
-* RabbitmqCluster pod `terminationGracePeriodSeconds` has been increased to 150 seconds.
-* Changes to RabbitmqCluster `spec.service.annotations` are now reconciled (Service object is updated).
+* The Operator and Service Broker deployments now have resource limits set.
+* The `ReadinessProbe` is now faster. This should reduce false negatives if you have set CPU requests low.
+* The `RabbitmqCluster` pod `terminationGracePeriodSeconds` has been increased to 150 seconds.
+* Changes to `spec.service.annotations` for the `RabbitmqCluster` now update the service.
 
 ### Known Issues
 
