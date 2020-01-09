@@ -238,9 +238,9 @@ These configurations are listed in the table below.
         <code>metadata.labels</code>
       </td>
       <td>
-        Labels to be added to every child resource, such as StatefulSet and Service.
+        These are labels to be added to every child resource, such as StatefulSet and Service.
         Labels starting with <code>app.kubernetes.io</code> are ignored because these are reserved for internal use.
-        Modifying labels triggers a rolling restart of the StatefulSet.
+        Modifying labels triggers a rolling restart of StatefulSet.
       </td>
     </tr>
     <tr>
@@ -248,13 +248,13 @@ These configurations are listed in the table below.
         <code>metadata.annotations</code>
       </td>
       <td>
-        Annotations to be added to every child resource, such as StatefulSet and Service.
+        These are annotations to be added to every child resource, such as StatefulSet and Service.<br><br>
         Annotations containing <code>kubernetes.io</code> and <code>k8s.io</code> are ignored because these
         are reserved for Kubernetes core components.
         When <code>spec.service.annotations</code> is specified, annotations for ingress are merged between
-        <code>spec.service.annotations</code> and <code>metadata.annotations</code>.
+        <code>spec.service.annotations</code> and <code>metadata.annotations</code>.<br><br>
         If the same key is specified in both configurations, the value from <code>spec.service.annotations</code>
-        is applied. Modifying annotations triggers a rolling restart of the StatefulSet.
+        is applied. Modifying annotations triggers a rolling restart of StatefulSet.
       </td>
     </tr>
     <tr>
@@ -262,7 +262,7 @@ These configurations are listed in the table below.
         <code>spec.service.annotations</code>
       </td>
       <td>
-      Annotations on the ingress service
+      These are annotations on the ingress service.
       Annotations containing <code>kubernetes.io</code> and <code>k8s.io</code> are ignored because these are
       reserved for Kubernetes core components.
       </td>
