@@ -210,7 +210,30 @@ For example:
     ```
 
     For more information about affinity and anti-affinity, see the
-    [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+    [Kubernetes affinity documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+1. (Optional) Add tolerations for a pod to the custom resource.
+
+    The value of <code>tolerations</code> is structured the same way as in Kubernetes PodSpec.<br><br>
+
+    For example:
+
+    ```
+    apiVersion: rabbitmq.pivotal.io/v1beta1
+    kind: RabbitmqCluster
+    metadata:
+      name: rabbitmqcluster-sample
+    spec:
+      replicas: 3
+      tolerations:
+        - key: "dedicated"
+          operator: "Equal"
+          value: "rabbitmq"
+          effect: "NoSchedule"
+    ```
+
+    For more information about taints and tolerations, see the
+    [Kubernetes tolerations documentation](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration).
 
 1. Save your changes to `definition.yaml`.
 
