@@ -10,19 +10,6 @@ owner: RMQ for k8s
 
 Product upgrades are currently not supported. If you want to test a newer version, uninstall the previous version first.
 
-## <a id='overview'></a> Overview
-
-Use the uninstall method that corresponds to the method you used for installation.
-
-
-## <a id='uninstall-bundle'></a> Uninstall the Cloud Native Application Bundle (CNAB)
-
-To uninstall the CNAB, run:
-
-  ```
-  duffle uninstall rabbitmq --credentials rabbitmq-creds --relocation-mapping=relmap.json
-  ```
-
 ## <a id='uninstall-manifests'></a> Uninstall Through the Manifests
 
 To uninstall the product if it was installed through the Kubernetes manifests, run the following commands:
@@ -34,4 +21,4 @@ To uninstall the product if it was installed through the Kubernetes manifests, r
 
 ## <a id='install'> Install the Latest Version
 
-Follow the steps in [Installing and Configuring Using CNAB](./installing-cnab.html) or [Installing and Configuring Using Kubernetes Manifests](./installing.html) to install the latest version of <%= vars.product_full %>.
+Follow the steps in [Installing and Configuring Using Kubernetes Manifests](./installing.html) to install the latest version of <%= vars.product_full %>.
