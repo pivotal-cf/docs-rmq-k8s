@@ -38,8 +38,8 @@ not possible, please email pivotal-cf-feedback@pivotal.io for help.
 
 ## <a id='ts-install'></a> Troubleshoot the Installation
 
-Follow the steps in the sections below to check that the operator and service broker are installed successfully and that you can provision
-an instance without registering the service broker with <%= vars.app_runtime %>.
+Follow the steps in the sections below to check that the operator and service broker are installed successfully and
+that you can provision an instance without registering the service broker with <%= vars.app_runtime %>.
 
 ### <a id='verify-operator-and-broker'></a> Verify the Kubernetes Operator and Service Broker Installation
 
@@ -171,7 +171,7 @@ Follow the step below to check if an instance is running and see information abo
 You see an error such as:
 
 <pre class="terminal">
-pods POD-NAME is forbidden: unable to validate against any pod security policy: []
+$ pods POD-NAME is forbidden: unable to validate against any pod security policy: []
 </pre>
 
 as an event of the underlying `ReplicaSet` of the Operator deployment, or as an
@@ -179,7 +179,7 @@ event of the underlying `StatefulSet` of the `RabbitmqCluster`.
 
 ### <a name='failed-instance-explanation'></a> Explanation
 
-This occurs if pod security policy admission control is enabled for the
+This occurs if Pod security policy admission control is enabled for the
 Kubernetes cluster, but you have not created the necessary `PodSecurityPolicy` and
 corresponding RBAC resources.
 
