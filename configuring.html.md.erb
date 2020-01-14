@@ -9,10 +9,6 @@ This topic describes how to configure the Kubernetes Operator using a configmap.
 The configmap for the Kubernetes Operator is in the `pivotal-rabbitmq-system` namespace.
 You must install <%= vars.product_full %> before you configure <%= vars.product_short %>.
 
-If you installed using Cloud Native Application Bundle (CNAB),
-the initial values for the configmap are populated automatically based on the parameters
-provided to the `--set` argument in the `duffle install` command.
-
 ## <a id='configure'></a> Configure the Kubernetes Operator
 
 To configure the Kubernetes Operator:
@@ -67,8 +63,7 @@ The following parameters and settings are supported:
       </tr>
       <tr>
         <td><code>image</code></td>
-        <td>This is the RabbitMQ image to be used for RabbitMQ instances. If you installed using CNAB, it should be
-          configured automatically.</td>
+        <td>This is the RabbitMQ image to be used for RabbitMQ instances. </td>
       </tr>
       <tr>
         <td>(Optional) <code>imagePullSecret</code></td>

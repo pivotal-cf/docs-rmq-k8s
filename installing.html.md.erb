@@ -7,15 +7,6 @@ owner: RMQ for k8s
 
 This topic describes how to install and configure <%= vars.product_full %>.
 
-There are two methods to install <%= vars.product_short %>. Use one of the following:
-
-* **Kubernetes Manifests:** The Kubernetes manifests method, documented below, requires manually editing YAML
-  but is more flexible than the CNAB method.
-  Pivotal recommends this method for advanced users.
-* **CNAB:** The CNAB method uses CNAB to automate the installation process.
-  For instructions, see [Installing and Configuring Using CNAB](./installing-cnab.html).
-  For information about CNAB, see [Cloud Native Application Bundle](https://cnab.io).
-
 ## <a id='prerequisites'></a> Prerequisites
 
 Before you install and configure <%= vars.product_short %>, you must install and configure the following software:
@@ -59,11 +50,6 @@ If you do not have an Early Access account, apply for one through the
 1. Download the **<%= vars.product_short %>** artifact from
 [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
 
-<p class="note">
-  <strong>Note:</strong> You do not need to download the <strong><%= vars.product_short %> CNAB</strong> artifact.
-  It is used for <a href="./installing-cnab.html">Installing and Configuring Using CNAB</a>.
-</p>
-
 The artifact contains Docker images and deployment manifests for the Kubernetes Operator and the service broker.
 The images are for:
 
@@ -81,7 +67,7 @@ To set a version variable:
     export version=NUMBER-build.NUMBER
     ```
 
-    Where `NUMBER` is the CNAB artifact version listed in the name of the artifact file you downloaded.
+    Where `NUMBER` is the installation artifact version listed in the name of the artifact file you downloaded.
 
     For example:
 
