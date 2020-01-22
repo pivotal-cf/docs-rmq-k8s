@@ -31,7 +31,7 @@ To confirm this availability:
     </pre>
 
 If it is on the list, <%= vars.product_short %> is available. If it is not, ask your operator to install it by
-following the steps in [Installing Pivotal RabbitMQ for Kubernetes](./installing.html).
+following the steps in [Installing <%= vars.product_full %>](./installing.html).
 
 
 ## <a id='psp'></a> (Optional) Apply Pod Security Policies
@@ -117,190 +117,215 @@ To configure a RabbitMQ instance:
 
 1. Add any of the properties described in the steps below along with their values.
 
-      - <strong>Replicas</strong> (Optional): Specify the number of replicas for the `RabbitMQCluster`.
+- <strong>Replicas</strong> (Optional): Specify the number of replicas for the `RabbitMQCluster`.
 
-          For example:
+For example:
 
-          ```
-          apiVersion: rabbitmq.pivotal.io/v1beta1
-          kind: RabbitmqCluster
-          metadata:
-            name: rabbitmqcluster-sample
-          spec:
-            replicas: 3
-          ```
+```
+apiVersion: rabbitmq.pivotal.io/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmqcluster-sample
+spec:
+  replicas: 3
+```
 
-          The default value of replicas is 1.
+The default value of `replicas` is 1.
 
-      - <strong>Image</strong> (Optional): Specify the RabbitMQ image reference. For instance, this is necessary if you are using a private repository.
+- <strong>Image</strong> (Optional): Specify the RabbitMQ image reference. For instance, this is necessary if you are using a private repository.
 
-          For example:
+For example:
 
-          ```
-          apiVersion: rabbitmq.pivotal.io/v1beta1
-          kind: RabbitmqCluster
-          metadata:
-            name: rabbitmqcluster-sample
-          spec:
-            image: my-private-repository/rabbitmq:3.8
-          ```
+```
+apiVersion: rabbitmq.pivotal.io/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmqcluster-sample
+spec:
+  image: my-private-repository/rabbitmq:3.8
+```
 
-          The default image is the official `rabbitmq` image on [Dockerhub](https://hub.docker.com/_/rabbitmq). See [release notes](./release-notes.html) for the version tag on the image.
+The default image is the official `rabbitmq` image on [Dockerhub](https://hub.docker.com/_/rabbitmq). See the [release notes](./release-notes.html) for the version tag on the image.
 
-      - <strong>imagePullSecret</strong> (Optional): Specify `imagePullSecret` for the RabbitMQ image. If your
-      registry requires authentication, this is the name of the secret used to pull
-      images. You can create the secret by running `kubectl -n
-      pivotal-rabbitmq-system create secret docker-registry`.
+- <strong>imagePullSecret</strong> (Optional): Specify `imagePullSecret` for the RabbitMQ image. If your
+registry requires authentication, this is the name of the secret used to pull
+images. You can create the secret by running `kubectl -n
+pivotal-rabbitmq-system create secret docker-registry`.
 
-          For example:
+For example:
 
-          ```
-          apiVersion: rabbitmq.pivotal.io/v1beta1
-          kind: RabbitmqCluster
-          metadata:
-            name: rabbitmqcluster-sample
-          spec:
-            image: my-private-repository/rabbitmq:3.8
-            imagePullSecret: some-secret
-          ```
+```
+apiVersion: rabbitmq.pivotal.io/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmqcluster-sample
+spec:
+  image: my-private-repository/rabbitmq:3.8
+  imagePullSecret: some-secret
+```
 
-      - <strong>Service Type</strong> (Optional): Specify the Kubernetes Service type for the `RabbitmqCluster` Service.
-          The available types are:
-          - ClusterIP (default)
-          - NodePort
-          - LoadBalancer
+- <strong>Service Type</strong> (Optional): Specify the Kubernetes Service type for the RabbitmqCluster Service.
+The available types are:
+- ClusterIP (default)
+- NodePort
+- LoadBalancer
 
-          <%= vars.product_full %> currently does not support the ExternalName ServiceType.
+<%= vars.product_short %> currently does not support the ExternalName ServiceType.
 
-          For example:
+For example:
 
-          ```
-          apiVersion: rabbitmq.pivotal.io/v1beta1
-          kind: RabbitmqCluster
-          metadata:
-            name: rabbitmqcluster-sample
-          spec:
-            service:
-              type: LoadBalancer
-          ```
+```
+apiVersion: rabbitmq.pivotal.io/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmqcluster-sample
+spec:
+  service:
+    type: LoadBalancer
+```
 
-      - <strong>Service Annotations</strong> (Optional): Specify the Kubernetes Service annotations for the `RabbitmqCluster` Service.
+- <strong>Service Annotations</strong> (Optional): Specify the Kubernetes Service annotations for the `RabbitmqCluster` Service.
 
-          For example:
+For example:
 
-          ```
-          apiVersion: rabbitmq.pivotal.io/v1beta1
-          kind: RabbitmqCluster
-          metadata:
-            name: rabbitmqcluster-sample
-          spec:
-            service:
-              annotations:
-                service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
-          ```
+```
+apiVersion: rabbitmq.pivotal.io/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmqcluster-sample
+spec:
+  service:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+```
 
-      - <strong>Persistence</strong> (Optional): Specify the persistence settings for the `RabbitmqCluster` Service.
-      The available settings are `storageClassName` and `storage`. `storageClassName`
-      is the name of the Kubernetes
-      [`StorageClass`](https://kubernetes.io/docs/concepts/storage/storage-classes/#the-storageclass-resource)
-      to use. `storage` is the
-      [capacity](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#capacity)
-      of the persistent volume. This value must be expressed as a [Kubernetes
-      Resource
-      Quantity](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/scheduling/resources.md#resource-quantities).
+- <strong>Persistence</strong> (Optional): Specify the persistence settings for the RabbitmqCluster Service.
+The available settings are `storageClassName` and `storage`. `storageClassName` is the name of the Kubernetes
+StorageClass to use.
+`storage` is the capacity of the persistent volume. This value must be expressed as a Kubernetes resource
+quantity.
 
-          For example:
+For example:
 
-          ```
-          apiVersion: rabbitmq.pivotal.io/v1beta1
-          kind: RabbitmqCluster
-          metadata:
-            name: rabbitmqcluster-sample
-          spec:
-             persistence:
-              storageClassName: fast
-              storage: 20Gi
-          ```
+```
+apiVersion: rabbitmq.pivotal.io/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmqcluster-sample
+spec:
+   persistence:
+    storageClassName: fast
+    storage: 20Gi
+```
 
-          If no `storageClassName` is
-          provided, the default `StorageClass` for the Kubernetes cluster is used.
-          Check `kubectl get storageclasses` to verify the default `StorageClass`.
+If no `storageClassName` is
+provided, the default `StorageClass` for the Kubernetes cluster is used.
+Check `kubectl get storageclasses` to verify the default `StorageClass`.
 
-          The default value of `storage` is 10Gi.
+The default value of `storage` is 10Gi.
 
-      - <strong>Resource Requirements</strong> (Optional): The resource `requests` and `limits` of the `RabbitMQCluster` Pods. For more information about these requirements, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
+For more information about concepts mentioned above, see:
+<table class="nice">
+<col width="50%">
+<col width="50%">
+	<th>Concept</th>
+	<th>More information in…</th>
+	<tr>
+		<td>StorageClass</td>
+		<td>The <a href="https://kubernetes.io/docs/concepts/storage/storage-classes/#the-storageclass-resource">Kubernetes documentation</a></td>
+	</tr>
+	<tr>
+		<td>Persistent volume capacity</td>
+		<td>The <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#capacity">Kubernetes documentation</a></td>
+	</tr>
+	<tr>
+		<td>Kubernetes Resource Quantity</td>
+		<td>The <a href="https://github.com/kubernetes/community/blob/master/contributors/design-proposals/scheduling/resources.md#resource-quantities">Kubernetes Resource Model documentation</a> in GitHub</td>
+	</tr>
+ </table>
 
-          For example:
+- <strong>Resource Requirements</strong> (Optional): The resource requests and limits of the RabbitMQCluster Pods.
+For more information about these requirements, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
 
-          ```
-          apiVersion: rabbitmq.pivotal.io/v1beta1
-          kind: RabbitmqCluster
-          metadata:
-            name: rabbitmqcluster-sample
-          spec:
-            resources:
-              requests:
-                cpu: 1000m
-                memory: 2Gi
-              limits:
-                cpu: 1000m
-                memory: 2Gi
-          ```
-          CPU requirements must be in CPU units. Memory requirements must be in
-          bytes. Both values must be expressed as a [Kubernetes Resource
-          Quantity](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/scheduling/resources.md#resource-quantities).
-          The `RabbitMQCluster` does not deploy if these configurations are
-          provided but not valid.
+For example:
 
-          The default memory limit is 2Gi, and the
-          default cpu limit is 2000
-          [millicores](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu).
-          The default memory request is 2Gi, and the default cpu request is
-          1000 millicores.
+```
+apiVersion: rabbitmq.pivotal.io/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmqcluster-sample
+spec:
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+```
 
-          The RabbitMQ [high-water mark](https://www.rabbitmq.com/memory.html#threshold) is set to 0.4 times the
-          memory limit. Pivotal recommends keeping the memory requests and
-          limits as the same value.
+CPU requirements must be in CPU units. Memory requirements must be in
+bytes. Both values must be expressed as a Kubernetes resource
+quantity.
+The `RabbitMQCluster` does not deploy if these configurations are
+provided but not valid.
 
-      - <strong>Affinity And Anti-affinity Rules</strong> (Optional):
+The default values are:
 
-          Rules are structured in the same way as [Kubernetes affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+* Memory limit: 2 Gi
+* CPU limit: 2000 millicores
+* Memory request: 2 Gi
+* CPU request: 1000 millicores
 
-          For example:
+For more information about CPU measurement, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu).
 
-          ```
-          apiVersion: rabbitmq.pivotal.io/v1beta1
-          kind: RabbitmqCluster
-          metadata:
-            name: rabbitmqcluster-sample
-          spec:
-            affinity:
-              nodeAffinity:
-                requiredDuringSchedulingIgnoredDuringExecution:
-                  nodeSelectorTerms:
-                  - matchExpressions:
-                    - key: kubernetes.io/hostname
-                      operator: In
-                      values:
-                      - node-1
-          ```
+The RabbitMQ high-water mark is set to 0.4 times the memory limit.
+Pivotal recommends keeping the memory requests and limits as the same value.
+For more information about the high-water mark, see the [RabbitMQ documentation](https://www.rabbitmq.com/memory.html#threshold).
 
-      - <strong>Pod Tolerations</strong> (Optional): Add [tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration) for the `RabbitMQCluster` Pods.
+- <strong>Affinity and Anti-affinity Rules</strong> (Optional):
 
-          For example:
+Rules are structured in the same way as Kubernetes affinity rules.
 
-          ```
-          apiVersion: rabbitmq.pivotal.io/v1beta1
-          kind: RabbitmqCluster
-          metadata:
-            name: rabbitmqcluster-sample
-          spec:
-            tolerations:
-              - key: "dedicated"
-                operator: "Equal"
-                value: "rabbitmq"
-                effect: "NoSchedule"
-          ```
+For example:
+
+```
+apiVersion: rabbitmq.pivotal.io/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmqcluster-sample
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - node-1
+```
+
+For more information about affinity, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+- <strong>Pod Tolerations</strong> (Optional): Add tolerations for the `RabbitMQCluster` Pods.
+
+For example:
+
+```
+apiVersion: rabbitmq.pivotal.io/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmqcluster-sample
+spec:
+  tolerations:
+    - key: "dedicated"
+      operator: "Equal"
+      value: "rabbitmq"
+      effect: "NoSchedule"
+```
+
+For more information about toleration, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration).
 
 1. Save your changes to `definition.yaml`.
 
@@ -411,19 +436,19 @@ To update a RabbitMQ instance:
     kubectl describe statefulset definition-rabbitmq-server
     ```
 
-## <a id='find'></a> Find Your `RabbitMQCluster` Service Name and Admin Credentials
+## <a id='find'></a> Find Your RabbitMQCluster Service Name and Admin Credentials
 
-If an app is deployed in the same Kubernetes cluster as RabbitMQ, you can use the `RabbitMQCluster` Service name
+If an app is deployed in the same Kubernetes cluster as RabbitMQ, you can use the RabbitMQCluster Service name
 and admin credentials to connect that app to RabbitMQ.
 The steps required to make that connection can vary greatly by deployment and are beyond the scope of this
 documentation.
 
-Follow the procedures below to find your `RabbitMQCluster` Service name and admin credentials.
+Follow the procedures below to find your RabbitMQCluster Service name and admin credentials.
 
 
-### <a id='name'></a> Find Your `RabbitMQCluster` Service Name
+### <a id='name'></a> Find Your RabbitMQCluster Service Name
 
-To find your `RabbitMQCluster` Service name:
+To find your RabbitMQCluster Service name:
 
 1. Run:
 
@@ -434,13 +459,13 @@ To find your `RabbitMQCluster` Service name:
 1. Read the `INSTANCE` part of `INSTANCE-rabbitmq-ingress` in the namespace where RabbitMQ is deployed.
 `INSTANCE` is the service name.
 
-For example, for the `RabbitmqCluster` created in [Create a RabbitMQ Instance](#create) above, the service name
+For example, for the RabbitmqCluster created in [Create a RabbitMQ Instance](#create) above, the service name
 is `definition-rabbitmq-ingress`.
 
 
 ### <a id='creds'></a> Retrieve Your RabbitMQ Admin Credentials
 
-Admin credentials for a `RabbitMQCluster` are stored in a Kubernetes secret called `INSTANCE-rabbitmq-admin`,
+Admin credentials for a RabbitMQCluster are stored in a Kubernetes secret called `INSTANCE-rabbitmq-admin`,
 where `INSTANCE` is the name of your instance.
 Kubernetes encodes secrets using base64.
 
@@ -493,7 +518,7 @@ To delete a service instance:
     kubectl delete -f INSTANCE.yaml
     ```
 
-    Where `INSTANCE` is the name of your `RabbitmqCluster`.<br><br>
+    Where `INSTANCE` is the name of your RabbitmqCluster.<br><br>
 
     For example:
 
