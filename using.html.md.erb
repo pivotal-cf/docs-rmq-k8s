@@ -132,7 +132,7 @@ spec:
 
 The default value of `replicas` is 1.
 
-- <strong>Image</strong> (Optional): Specify the RabbitMQ image reference. For instance, this is necessary if you are using a private repository.
+- <strong>Image</strong> (Optional): Specify the RabbitMQ image reference. For instance, this is necessary if you are using a private registry.
 
 For example:
 
@@ -142,7 +142,7 @@ kind: RabbitmqCluster
 metadata:
   name: rabbitmqcluster-sample
 spec:
-  image: my-private-repository/rabbitmq:3.8
+  image: my-private-registry/rabbitmq:3.8
 ```
 
 The default image is the official `rabbitmq` image on [Dockerhub](https://hub.docker.com/_/rabbitmq). See the [release notes](./release-notes.html) for the version tag on the image.
@@ -160,7 +160,7 @@ kind: RabbitmqCluster
 metadata:
   name: rabbitmqcluster-sample
 spec:
-  image: my-private-repository/rabbitmq:3.8
+  image: my-private-registry/rabbitmq:3.8
   imagePullSecret: some-secret
 ```
 

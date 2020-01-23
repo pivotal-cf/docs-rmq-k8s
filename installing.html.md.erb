@@ -22,7 +22,7 @@ see the [Docker documentation](https://docs.docker.com/install/).
 or you need to specify which StorageClass to use.
 
 1. **A private image registry:** Pivotal recommends that you keep the Kubernetes Operator and service broker
-images private even if your repository is publicly accessible.
+images private even if your registry is publicly accessible.
 If you do not have access to a private image registry, email the team at rabbitmq-for-k8s@pivotal.io for help.
 
 ## <a id='overview'></a> Overview
@@ -32,7 +32,7 @@ To install and configure <%= vars.product_short %>:
 1. [Download <%= vars.product_full %>](#artifact)
 1. [Move the Images](#relocate)
 1. [(Optional) Configure Kubernetes Cluster Access to Private Images](#private-images)
-1. [Configure the Image Repository](#image-repo)
+1. [Configure the Image Registry](#image-repo)
 1. [(Optional) Configure the Service Type](#config-service-type)
 1. [Create Service Broker Credentials](#broker-creds)
 1. [Install <%= vars.product_short %>](#deploy-op-and-broker)
@@ -90,23 +90,23 @@ To move the images:
     docker load -i images/rabbitmq-for-kubernetes-servicebroker
     ```
 
-1. Tag each image to point to your own image repository by running these commands:
+1. Tag each image to point to your own image registry by running these commands:
 
     ```bash
     ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq \
-    >  YOUR-REPOSITORY/rabbitmq:$version
+    >  YOUR-REGISTRY/rabbitmq:$version
     ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-operator \
-    >  YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
+    >  YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:$version
     ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-servicebroker \
-    >  YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
+    >  YOUR-REGISTRY/rabbitmq-for-kubernetes-servicebroker:$version
     ```
 
-1. Push each image to your own image repository by running these commands:
+1. Push each image to your own image registry by running these commands:
 
     ```bash
-    docker push YOUR-REPOSITORY/rabbitmq:$version
-    docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
-    docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
+    docker push YOUR-REGISTRY/rabbitmq:$version
+    docker push YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:$version
+    docker push YOUR-REGISTRY/rabbitmq-for-kubernetes-servicebroker:$version
     ```
 
 ## <a id='private-images'></a> Create the Namespace
@@ -125,8 +125,8 @@ If you require authentication to pull images from your private image registry, y
 images from the `pivotal-rabbitmq-system` namespace.
 
 <p class=note>
-  <strong>Note:</strong> If your repository is publicly accessible, Pivotal recommends that you keep your
-  Kubernetes Operator and service broker images in a private image repository.
+  <strong>Note:</strong> If your registry is publicly accessible, Pivotal recommends that you keep your
+  Kubernetes Operator and service broker images in a private image registry.
 </p>
 
 To authorize access to images:
@@ -172,7 +172,7 @@ To configure the image registry:
 This reference should look similar to the below:
 
     ```
-    image: YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
+    image: YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:$version
     ```
 
 1. Edit `manifests/servicebroker.yaml`.
@@ -180,7 +180,7 @@ This reference should look similar to the below:
 This reference should look similar to the below:
 
     ```
-    image: YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
+    image: YOUR-REGISTRY/rabbitmq-for-kubernetes-servicebroker:$version
     ```
 
 ## <a id='config-service-type'></a> (Optional) Configure the Service Broker ServiceType
