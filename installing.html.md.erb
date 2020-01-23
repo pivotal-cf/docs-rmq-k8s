@@ -72,7 +72,7 @@ To set a version variable:
     For example:
 
     ```
-    export version=0.6.0-build.32
+    export version=0.6.0-build.22
     ```
 
 ## <a id='relocate'></a> Move the Images
@@ -163,41 +163,24 @@ To authorize access to images:
     default -p '{"imagePullSecrets": [{"name": "p-rmq-registry-access"}]}'
     ```
 
-## <a id='image-repo'></a> Configure the Image Repository
+## <a id='image-repo'></a> Configure the Image Registry
 
-To configure the image repository:
+To configure the image registry:
 
-1. Provide your repository URL in the Kubernetes Operator manifest `manifests/operator.yaml`.
-1. Replace all instances of `REPLACE-WITH-RABBITMQ-IMAGE-REFERENCE` with your image repository host.
-If you use a private image registry, also replace the image pull secret as in the example below:
-
-    ```
-    apiVersion: v1
-    data:
-      config: |
-        service:
-          type: "ClusterIP"
-        image: "example-registry.pivotal.io/example-rabbitmq/rabbitmq:3.8.0"
-        imagePullSecret: "example-secret"
-    kind: ConfigMap
-    metadata:
-      name: p-rmq-operator-config
-      namespace: pivotal-rabbitmq-system
-    ```
-
+1. Edit `manifests/operator.yaml`.
 1. Replace all instances of `REPLACE-WITH-OPERATOR-IMAGE-URL` with the full Kubernetes Operator image reference.
-This reference looks similar to the below:
+This reference should look similar to the below:
 
     ```
-    YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
+    image: YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
     ```
 
-1. Provide your repository URL in the service broker manifest `manifests/servicebroker.yaml`.
+1. Edit `manifests/servicebroker.yaml`.
 1. Replace all instances of `REPLACE-WITH-BROKER-IMAGE-URL` with the full broker image URL.
-This URL looks similar to the below:
+This reference should look similar to the below:
 
     ```
-    YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
+    image: YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
     ```
 
 ## <a id='config-service-type'></a> (Optional) Configure the Service Broker ServiceType
