@@ -5,7 +5,7 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-<%= partial vars.path_to_partials + '/services/beta-notice',
+<%= partial vars.path_to_partials,
 :locals => {:product_full => vars.product_full, :platform_name => vars.platform_name} %>
 
 Product upgrades are currently not supported. To test a newer version, uninstall the previous version first.
