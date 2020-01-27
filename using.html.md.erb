@@ -113,13 +113,19 @@ in which the `RabbitmqCluster` was defined.
 
 To configure a RabbitMQ instance:
 
-1. Open `definition.yaml`. You can also edit the the configuration in place by running `kubectl edit rabbitmqcluster definition`.
+1. Open `definition.yaml`. You can also edit the the configuration in place by running
+`kubectl edit rabbitmqcluster definition`.
 
-1. Add any of the properties described in the steps below along with their values.
+1. Add any of the properties described below along with their values. Every property listed below
+is optional.
 
-- <strong>Replicas</strong> (Optional): Specify the number of replicas for the `RabbitMQCluster`.
+### Replicas
 
-For example:
+**Description:** Specify the number of replicas for the RabbitMQCluster.
+
+**Default Value:** 1
+
+**Example:**
 
 ```
 apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -130,11 +136,15 @@ spec:
   replicas: 3
 ```
 
-The default value of `replicas` is 1.
+### Image
 
-- <strong>Image</strong> (Optional): Specify the RabbitMQ image reference. For instance, this is necessary if you are using a private registry.
+**Description:** Specify the RabbitMQ image reference. This is necessary if, for example, you are using a
+private registry.
 
-For example:
+**Default Value:** The official rabbitmq image on [Dockerhub](https://hub.docker.com/_/rabbitmq).
+See the [release notes](./release-notes.html) for the version tag on the image.
+
+**Example:**
 
 ```
 apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -145,14 +155,13 @@ spec:
   image: my-private-registry/rabbitmq:3.8
 ```
 
-The default image is the official `rabbitmq` image on [Dockerhub](https://hub.docker.com/_/rabbitmq). See the [release notes](./release-notes.html) for the version tag on the image.
+### imagePullSecret
 
-- <strong>imagePullSecret</strong> (Optional): Specify `imagePullSecret` for the RabbitMQ image. If your
-registry requires authentication, this is the name of the secret used to pull
-images. You can create the secret by running `kubectl -n
-pivotal-rabbitmq-system create secret docker-registry`.
+**Description:** Specify `imagePullSecret` for the RabbitMQ image.
+If your registry requires authentication, this is the name of the secret used to pull images.
+You can create the secret by running `kubectl -n pivotal-rabbitmq-system create secret docker-registry`.
 
-For example:
+**Example:**
 
 ```
 apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -164,15 +173,19 @@ spec:
   imagePullSecret: some-secret
 ```
 
-- <strong>Service Type</strong> (Optional): Specify the Kubernetes Service type for the RabbitmqCluster Service.
+### Service Type
+
+**Description:** Specify the Kubernetes Service type for the RabbitmqCluster Service.
 The available types are:
-- ClusterIP (default)
+- ClusterIP
 - NodePort
 - LoadBalancer
 
-<%= vars.product_short %> currently does not support the ExternalName ServiceType.
+<%= vars.product_short %> currently does not support the ExternalName Service Type.
 
-For example:
+**Default Value:** ClusterIP
+
+**Example:**
 
 ```
 apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -184,9 +197,11 @@ spec:
     type: LoadBalancer
 ```
 
-- <strong>Service Annotations</strong> (Optional): Specify the Kubernetes Service annotations for the `RabbitmqCluster` Service.
+### Service Annotations
 
-For example:
+**Description:** Specify the Kubernetes Service annotations for the RabbitmqCluster Service.
+
+**Example:**
 
 ```
 apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -199,13 +214,18 @@ spec:
       service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
 ```
 
-- <strong>Persistence</strong> (Optional): Specify the persistence settings for the RabbitmqCluster Service.
-The available settings are `storageClassName` and `storage`. `storageClassName` is the name of the Kubernetes
-StorageClass to use.
-`storage` is the capacity of the persistent volume. This value must be expressed as a Kubernetes resource
-quantity.
+### Persistence
 
-For example:
+**Description:** Specify the persistence settings for the RabbitmqCluster Service.
+The available settings are:
+- `storageClassName` -- the name of the Kubernetes StorageClass to use
+- `storage` -- the capacity of the persistent volume, expressed as a Kubernetes resource quantity
+
+**Default `storageClassName`:** Default `StorageClass` for the Kubernetes cluster -- run
+`kubectl get storageclasses` to see the default `StorageClass`
+**Default `storage` value:** 10Gi
+
+**Example:**
 
 ```
 apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -218,8 +238,7 @@ spec:
     storage: 20Gi
 ```
 
-If no `storageClassName` is
-provided, the default `StorageClass` for the Kubernetes cluster is used.
+If no `storageClassName` is provided, the default `StorageClass` for the Kubernetes cluster is used.
 Check `kubectl get storageclasses` to verify the default `StorageClass`.
 
 The default value of `storage` is 10Gi.
@@ -244,10 +263,30 @@ For more information about concepts mentioned above, see:
 	</tr>
  </table>
 
-- <strong>Resource Requirements</strong> (Optional): The resource requests and limits of the RabbitMQCluster Pods.
+### Resource Requirements
+
+**Description:** Specify the resource requests and limits of the RabbitMQCluster Pods.
 For more information about these requirements, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
 
-For example:
+CPU requirements must be in CPU units. Memory requirements must be in bytes.
+Both values must be expressed as a Kubernetes resource quantity.
+The `RabbitMQCluster` does not deploy if these configurations are provided but not valid.
+
+For more information about CPU measurement, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu).
+
+The RabbitMQ high-water mark is set to 0.4 times the memory limit.
+Pivotal recommends keeping the memory requests and limits as the same value.
+For more information about the high-water mark, see the
+[RabbitMQ documentation](https://www.rabbitmq.com/memory.html#threshold).
+
+**Default Values:**
+
+  * Memory limit: 2 Gi
+  * CPU limit: 2000 millicores
+  * Memory request: 2 Gi
+  * CPU request: 1000 millicores
+
+**Example:**
 
 ```
 apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -264,30 +303,12 @@ spec:
       memory: 2Gi
 ```
 
-CPU requirements must be in CPU units. Memory requirements must be in
-bytes. Both values must be expressed as a Kubernetes resource
-quantity.
-The `RabbitMQCluster` does not deploy if these configurations are
-provided but not valid.
+### Affinity and Anti-affinity Rules
 
-The default values are:
+**Description:** Affinity and anti-affinity rules are structured in the same way as Kubernetes affinity rules.
+For more information about affinity, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-* Memory limit: 2 Gi
-* CPU limit: 2000 millicores
-* Memory request: 2 Gi
-* CPU request: 1000 millicores
-
-For more information about CPU measurement, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu).
-
-The RabbitMQ high-water mark is set to 0.4 times the memory limit.
-Pivotal recommends keeping the memory requests and limits as the same value.
-For more information about the high-water mark, see the [RabbitMQ documentation](https://www.rabbitmq.com/memory.html#threshold).
-
-- <strong>Affinity and Anti-affinity Rules</strong> (Optional):
-
-Rules are structured in the same way as Kubernetes affinity rules.
-
-For example:
+**Example:**
 
 ```
 apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -306,11 +327,22 @@ spec:
             - node-1
 ```
 
-For more information about affinity, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+### Pod Tolerations
 
-- <strong>Pod Tolerations</strong> (Optional): Add tolerations for the `RabbitMQCluster` Pods.
+**Description:** Add tolerations for the RabbitMQCluster Pods.
+For more information about toleration, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration).
 
-For example:
+To set tolerations:
+
+1. Save your changes to `definition.yaml`.
+
+1. Apply the definition by running:
+
+    ```
+    kubectl apply -f definition.yaml
+    ```
+
+**Example:**
 
 ```
 apiVersion: rabbitmq.pivotal.io/v1beta1
@@ -324,16 +356,6 @@ spec:
       value: "rabbitmq"
       effect: "NoSchedule"
 ```
-
-For more information about toleration, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration).
-
-1. Save your changes to `definition.yaml`.
-
-1. Apply the definition by running:
-
-    ```
-    kubectl apply -f definition.yaml
-    ```
 
 ## <a id='update'></a> Update a RabbitMQ Instance
 
