@@ -89,14 +89,14 @@ in which the `RabbitmqCluster` was defined.
 1. Check that the process was successful by running:
 
     ```
-    kubectl get all -l app=definition
+    kubectl get all -l app.kubernetes.io/name=definition
     ```
 
     If successful, you see a running Pod and a service that exposes the instance.<br><br>
 
     For example:
     <pre class="terminal">
-    $ kubectl get all -l app=definition
+    $ kubectl get all -l app.kubernetes.io/name=definition
     NAME                               READY   STATUS    RESTARTS   AGE
     pod/definition-rabbitmq-server-0   1/1     Running   0          112s
 
@@ -225,7 +225,7 @@ The available settings are:
 
 **Default Values:**
 
-* `storageClassName`: The default `StorageClass` for the Kubernetes cluster
+* `storageClassName`: Not set by default. By not setting a value, the default `StorageClass` for the Kubernetes cluster gets used
 * `storage`: 10Gi
 
 To see the default `StorageClass`, run `kubectl get storageclasses`.
@@ -408,6 +408,30 @@ These configurations are listed in the table below.
     </tr>
     <tr>
       <td>
+        <code>spec.image</code>
+      </td>
+      <td>
+      The RabbitMQ image reference.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.imagePullSecret</code>
+      </td>
+      <td>
+Name of the Kubernetes secret for accessing the registry containing the RabbitMQ image. Only required for private registries.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.service.type</code>
+      </td>
+      <td>
+      The Kubernetes Service type for the RabbitmqCluster Service. Must be ClusterIP, NodePort or LoadBalancer.
+      </td>
+    </tr>
+    <tr>
+      <td>
         <code>spec.service.annotations</code>
       </td>
       <td>
@@ -473,6 +497,9 @@ To update a RabbitMQ instance:
     ```
     kubectl describe statefulset definition-rabbitmq-server
     ```
+### Removing properties from the RabbitMQ instance
+
+It is possible to remove a property from a `RabbitmqCluster` object as part of an update. The property will revert to its default value if it has one. See [configurations](#configure) for default values.
 
 ## <a id='find'></a> Find Your RabbitmqCluster Service Name and Admin Credentials
 
