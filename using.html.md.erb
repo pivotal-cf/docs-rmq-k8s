@@ -113,8 +113,11 @@ in which the `RabbitmqCluster` was defined.
 
 To configure a RabbitMQ instance:
 
-1. Open `definition.yaml` or edit the the configuration in place by running
-`kubectl edit rabbitmqcluster definition`.
+1. Open `definition.yaml` or edit the the configuration in place by running:
+
+    ```
+    kubectl edit rabbitmqcluster definition
+    ```
 
 1. Add any of the properties described below along with their values. Every property listed below
 is optional.
@@ -159,7 +162,11 @@ spec:
 
 **Description:** Specify `imagePullSecret` for the RabbitMQ image.
 If your registry requires authentication, this is the name of the secret used to pull images.
-You can create the secret by running `kubectl -n pivotal-rabbitmq-system create secret docker-registry`.
+You can create the secret by running:
+
+```
+kubectl -n pivotal-rabbitmq-system create secret docker-registry
+```
 
 **Example:**
 
