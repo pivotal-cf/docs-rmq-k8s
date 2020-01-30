@@ -119,8 +119,7 @@ To configure a RabbitMQ instance:
     kubectl edit rabbitmqcluster definition
     ```
 
-1. Add any of the properties described below along with their values. Every property listed below
-is optional.
+1. Add any of the properties described below along with their values. Every property listed below is optional.
 
 ### <a name='replicas'></a> Replicas
 
@@ -141,7 +140,8 @@ spec:
 
 ### <a name='images'></a> Image
 
-**Description:** Specify the RabbitMQ image reference, using the version tag that was used during operator installation. This property is necessary if, for example, you are using a private registry.
+**Description:** Specify the RabbitMQ image reference, using the version tag that was used during operator installation.
+This property is necessary if, for example, you are using a private registry.
 
 **Default Value:** The official [rabbitmq image on Dockerhub](https://hub.docker.com/_/rabbitmq).
 
@@ -165,6 +165,8 @@ You can create the secret by running:
 ```
 kubectl -n pivotal-rabbitmq-system create secret docker-registry
 ```
+
+**Default Value:** N/A
 
 **Example:**
 
@@ -206,6 +208,8 @@ spec:
 ### <a name='service-annotations'></a> Service Annotations
 
 **Description:** Specify the Kubernetes Service annotations for the RabbitmqCluster Service.
+
+**Default Value:** N/A
 
 **Example:**
 
@@ -329,6 +333,8 @@ For more information about concepts mentioned above, see:
 **Description:** Affinity and anti-affinity rules are structured in the same way as Kubernetes affinity rules.
 For more information about affinity, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
+**Default Value:** N/A
+
 **Example:**
 
 ```
@@ -362,6 +368,8 @@ To set tolerations:
     ```
     kubectl apply -f definition.yaml
     ```
+
+**Default Value:** N/A
 
 **Example:**
 
