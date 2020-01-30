@@ -229,12 +229,12 @@ spec:
 **Description:** Specify the persistence settings for the RabbitmqCluster Service.
 The available settings are:
 
-* `storageClassName`: the name of the Kubernetes StorageClass to use
-* `storage`: the capacity of the persistent volume, expressed as a Kubernetes resource quantity
+* `storageClassName`: The name of the Kubernetes StorageClass to use.
+* `storage`: The capacity of the persistent volume, expressed as a Kubernetes resource quantity.
 
 **Default Values:**
 
-* `storageClassName`: Not set by default. By not setting a value, the default `StorageClass` for the Kubernetes cluster gets used
+* `storageClassName`: Not set by default. If you do not set a value, the default `StorageClass` for the Kubernetes cluster is used.
 * `storage`: 10Gi
 
 To see the default `StorageClass`, run `kubectl get storageclasses`.
@@ -388,8 +388,12 @@ spec:
 
 ## <a id='update'></a> Update a RabbitMQ Instance
 
-You can add or change certain configurations for an existing RabbitMQ instance.
-These configurations are listed in the table below.
+You can add, change, or remove properties in a `RabbitmqCluster` object for an existing RabbitMQ instance.
+
+If you remove a property it reverts to its default value, if it has one.
+To view the default values, see [Configure a RabbitMQ Instance](#configure) above.
+
+The configurations are listed in the table below.
 
 <table class="nice">
       <col width="33%">
@@ -431,8 +435,8 @@ These configurations are listed in the table below.
       <td>
         <code>spec.imagePullSecret</code>
       </td>
-      <td>
-Name of the Kubernetes secret for accessing the registry containing the RabbitMQ image. Only required for private registries.
+      <td>The name of the Kubernetes secret that accesses the registry which contains
+        the RabbitMQ image. This is only required for private registries.
       </td>
     </tr>
     <tr>
@@ -440,7 +444,7 @@ Name of the Kubernetes secret for accessing the registry containing the RabbitMQ
         <code>spec.service.type</code>
       </td>
       <td>
-      The Kubernetes Service type for the RabbitmqCluster Service. Must be ClusterIP, NodePort or LoadBalancer.
+      The Kubernetes Service type for the RabbitmqCluster Service. This must be ClusterIP, NodePort, or LoadBalancer.
       </td>
     </tr>
     <tr>
@@ -458,7 +462,7 @@ Name of the Kubernetes secret for accessing the registry containing the RabbitMQ
         <code>spec.resource.request.cpu</code>
       </td>
       <td>
-        CPU units required by the Kubernetes scheduler for the container running RabbitMQ
+        The CPU units required by the Kubernetes scheduler for the container running RabbitMQ.
       </td>
     </tr>
     <tr>
@@ -466,7 +470,7 @@ Name of the Kubernetes secret for accessing the registry containing the RabbitMQ
         <code>spec.resource.limit.cpu</code>
       </td>
       <td>
-        CPU units used to calculate the share of CPU time available to the RabbitMQ container per 100 ms
+        The CPU units used to calculate the share of CPU time available to the RabbitMQ container per 100 ms.
       </td>
     </tr>
     <tr>
@@ -474,7 +478,7 @@ Name of the Kubernetes secret for accessing the registry containing the RabbitMQ
         <code>spec.affinity</code>
       </td>
       <td>
-        Pod affinity and anti-affinity rules
+        The Pod affinity and anti-affinity rules.
       </td>
     </tr>
 </table>
@@ -489,7 +493,7 @@ To update a RabbitMQ instance:
 
 1. Open `definition.yaml`.
 
-1. Add or modify any of the properties listed in the table.
+1. Add or modify any of the properties listed in the table above.
 
 1. Save your changes to `definition.yaml`.
 
@@ -510,9 +514,6 @@ To update a RabbitMQ instance:
     ```
     kubectl describe statefulset definition-rabbitmq-server
     ```
-### Removing properties from the RabbitMQ instance
-
-It is possible to remove a property from a `RabbitmqCluster` object as part of an update. The property will revert to its default value if it has one. See [configurations](#configure) for default values.
 
 ## <a id='find'></a> Find Your RabbitmqCluster Service Name and Admin Credentials
 
