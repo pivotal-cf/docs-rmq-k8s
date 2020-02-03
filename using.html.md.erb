@@ -6,8 +6,6 @@ owner: RMQ for k8s
 <strong><%= modified_date %></strong>
 
 This topic describes how to use <%= vars.product_full %> using kubectl and YAML.
-To use it with <%= vars.platform_name %> and Cloud Foundry instead, see
-[Using with <%= vars.platform_name %>](using-service-broker.html).
 
 ## <a id='availability'></a> Confirm Service Availability
 
@@ -45,7 +43,7 @@ If you do not have Pod security policies enabled, skip to <a href="#create">Crea
 
 To create a `ClusterRole` and `ClusterRoleBinding`:
 
-1. Create YAML files to define the security policies for the Operator, Service Broker, and
+1. Create YAML files to define the security policies for the Operator and
 RabbitMQ instance, using the examples in [Examples of Pod Security Policies](./examples-annex.html).
   <p class="note"><strong>Note:</strong>
     RabbitMQ instances need to run as a <code>root</code> user and mount volumes of the types

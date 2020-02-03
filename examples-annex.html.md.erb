@@ -5,8 +5,7 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-This topic provides examples of Pod security policies for the Operator, the Service
-Broker, and a RabbitMQ instance.
+This topic provides examples of Pod security policies for the Operator and a RabbitMQ instance.
 
 Use these examples when you follow the procedure
 [(Optional) Apply Pod Security Policies](./using.html#psp).
@@ -75,72 +74,6 @@ subjects:
   name: default
   namespace: pivotal-rabbitmq-system
 ```
-
-
-## <a id='servicebroker-psp-example'></a>Pod Security Policy Example for the Service Broker
-
-The example Pod security policy below contains the minimum resources required to
-deploy the Service Broker:
-
-```yaml
-apiVersion: extensions/v1beta1
-kind: PodSecurityPolicy
-metadata:
-  name: rabbitmq-servicebroker
-  annotations:
-    seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'docker/default,runtime/default'
-    apparmor.security.beta.kubernetes.io/allowedProfileNames: 'runtime/default'
-    seccomp.security.alpha.kubernetes.io/defaultProfileName:  'runtime/default'
-    apparmor.security.beta.kubernetes.io/defaultProfileName:  'runtime/default'
-spec:
-  allowPrivilegeEscalation: false
-  fsGroup:
-    ranges:
-    - max: 65535
-      min: 1
-    rule: MustRunAs
-  requiredDropCapabilities:
-  - ALL
-  runAsUser:
-    rule: MustRunAsNonRoot
-  seLinux:
-    rule: RunAsAny
-  supplementalGroups:
-    ranges:
-    - max: 65535
-      min: 1
-    rule: MustRunAs
-  volumes:
-  - secret
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: rabbitmq-servicebroker-psp
-rules:
-- apiGroups:
-  - extensions
-  resourceNames:
-  - rabbitmq-servicebroker
-  resources:
-  - podsecuritypolicies
-  verbs:
-  - use
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: rabbitmq-servicebroker-psp
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: rabbitmq-servicebroker-psp
-subjects:
-- kind: ServiceAccount
-  name: default
-  namespace: pivotal-rabbitmq-system
-```
-
 
 ## <a id='rabbitmq-psp-example'></a>Pod Security Policy Example for a RabbitMQ Instance
 

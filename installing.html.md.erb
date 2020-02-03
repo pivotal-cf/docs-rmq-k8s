@@ -21,8 +21,8 @@ see the [Docker documentation](https://docs.docker.com/install/).
 1. **A Kubernetes cluster:** You must use Kubernetes v1.14 or later. A default StorageClass has to be configured
 or you need to specify which StorageClass to use.
 
-1. **A private image registry:** Pivotal recommends that you keep the Kubernetes Operator and service broker
-images private even if your registry is publicly accessible.
+1. **A private image registry:** Pivotal recommends that you keep the Kubernetes Operator
+image private even if your registry is publicly accessible.
 If you do not have access to a private image registry, email the team at rabbitmq-for-k8s@pivotal.io for help.
 
 ## <a id='overview'></a> Overview
@@ -34,9 +34,7 @@ To install and configure <%= vars.product_short %>:
 1. [(Optional) Configure Kubernetes Cluster Access to Private Images](#private-images)
 1. [Configure the Image Registry](#image-repo)
 1. [(Optional) Configure the Service Type](#config-service-type)
-1. [Create Service Broker Credentials](#broker-creds)
-1. [Install <%= vars.product_short %>](#deploy-op-and-broker)
-1. [Register the Service Broker with Cloud Foundry](#register-broker)
+1. [Install <%= vars.product_short %>](#deploy-op)
 
 ## <a id='artifact'></a> Download <%= vars.product_short %>
 
@@ -45,12 +43,11 @@ To download the <%= vars.product_short %> artifact:
 1. Download the **<%= vars.product_short %>** artifact from
 [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
 
-The artifact contains Docker images and deployment manifests for the Kubernetes Operator and the service broker.
+The artifact contains Docker images, deployment manifests for the Kubernetes Operator, a rabbitmq instance helm chart that can be used with KSM. See [the KSM installation guide](#./ksm.html)
 The images are for:
 
 * RabbitMQ
 * The Kubernetes Operator
-* The Service Broker
 
 ## <a id='set-ver-var'></a> Set a Version Variable
 
@@ -81,7 +78,6 @@ To move the images:
     cd rabbitmq-for-kubernetes-${version}
     docker load -i images/rabbitmq-for-kubernetes-operator
     docker load -i images/rabbitmq
-    docker load -i images/rabbitmq-for-kubernetes-servicebroker
     ```
 
 1. Tag each image to point to your own image registry by running these commands:
@@ -91,8 +87,6 @@ To move the images:
     >  YOUR-REGISTRY/rabbitmq:$version
     ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-operator \
     >  YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:$version
-    ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-servicebroker \
-    >  YOUR-REGISTRY/rabbitmq-for-kubernetes-servicebroker:$version
     ```
 
 1. Push each image to your own image registry by running these commands:
@@ -100,7 +94,6 @@ To move the images:
     ```bash
     docker push YOUR-REGISTRY/rabbitmq:$version
     docker push YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:$version
-    docker push YOUR-REGISTRY/rabbitmq-for-kubernetes-servicebroker:$version
     ```
 
 ## <a id='private-images'></a> Create the Namespace
@@ -120,7 +113,7 @@ images from the `pivotal-rabbitmq-system` namespace.
 
 <p class=note>
   <strong>Note:</strong> If your registry is publicly accessible, Pivotal recommends that you keep your
-  Kubernetes Operator and service broker images in a private image registry.
+  Kubernetes Operator image in a private image registry.
 </p>
 
 To authorize access to images:
@@ -168,80 +161,7 @@ This reference should look similar to the below:
     ```
     image: YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:$version
     ```
-
-1. Edit `manifests/servicebroker.yaml`.
-1. Replace all instances of `REPLACE-WITH-BROKER-IMAGE-URL` with the full broker image URL.
-This reference should look similar to the below:
-
-    ```
-    image: YOUR-REGISTRY/rabbitmq-for-kubernetes-servicebroker:$version
-    ```
-
-## <a id='config-service-type'></a> (Optional) Configure the Service Broker ServiceType
-
-The <%= vars.product_short %> service broker is an Open Service Broker API (OSBAPI)-compliant component that
-enables integration with <%= vars.platform_name %> and other OSBAPI-based solutions, such as Service Catalog.
-For more information, see [Service Catalog](https://github.com/kubernetes-sigs/service-catalog) in GitHub.
-
-When the service broker is deployed, you must expose the service broker using a Kubernetes ServiceType.
-This enables API clients to reach the service broker endpoint. By default, <%= vars.product_short %> configures
-a `LoadBalancer` ServiceType.
-
-For more information, see
-[Publishing Services (ServiceTypes)](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
-in the Kubernetes documentation.
-
-To configure your service broker ServiceType:
-
-1. Open `manifests/servicebroker.yaml` in a text editor.
-1. Edit the `Service` definition to meet your requirements.<br><br>
-    For example, in the below code snippet, the value of `spec.type` is changed from `LoadBalancer` to `NodePort`:
-
-    ```yaml
-    ---
-    apiVersion: v1
-    kind: Service
-    metadata:
-      name: p-rmq-servicebroker
-      namespace: pivotal-rabbitmq-system
-    spec:
-      ports:
-      - port: 8080
-        protocol: TCP
-        targetPort: 8080
-      selector:
-        app: servicebroker
-      sessionAffinity: None
-      type: NodePort
-    status:
-      loadBalancer: {}
-    ---
-    ```
-
-## <a id='broker-creds'></a> Create Service Broker Credentials
-
-The <%= vars.product_short %> service broker looks for its username and password in a Kubernetes secret called
-`broker-credentials` in the `pivotal-rabbitmq-system` namespace.
-
-To create a secret:
-
-1. Run these commands:
-
-    ```
-    echo -n BROKER-USERNAME > ./username
-    echo -n BROKER-PASSWORD > ./password
-    kubectl create secret generic p-rmq-servicebroker-admin -n pivotal-rabbitmq-system --from-file=./username --from-file=./password
-    ```
-
-<p class="note">
-  <strong>Note:</strong>
-  The secret name must be <code>broker-credentials</code> and must be in the <code>pivotal-rabbitmq-system</code>
-  namespace with the username and password as part of the data. If not, the service broker fails to deploy.
-  To read about other ways to create a secret, see
-  <a href="https://kubernetes.io/docs/concepts/configuration/secret">the Kubernetes documentation</a>.
-</p>
-
-## <a id='deploy-op-and-broker'></a> Install <%= vars.product_short %>
+## <a id='deploy-op'></a> Install <%= vars.product_short %>
 
 To install <%= vars.product_short %>:
 
@@ -253,35 +173,6 @@ To install <%= vars.product_short %>:
 
 1. Apply the Kubernetes manifests you configured in the above steps. When you do so, kubectl:
     * Deploys the Kubernetes Operator
-    * Deploys the service broker
     * Installs the `RabbitmqCluster` custom resource definition (CRD)
-
-## <a id='register-broker'></a> Register the Service Broker with Cloud Foundry
-
-To register the service broker with Cloud Foundry:
-
-1. Register the service broker by running:
-
-    ```
-    cf create-service-broker SERVICE-BROKER-NAME BROKER-USERNAME BROKER-PASSWORD \
-    http://SERVICE-BROKER-IP:8080
-    ```
-
-    Where:
-      * `SERVICE-BROKER-NAME` is a name you choose for the service broker
-      * `SERVICE-BROKER-IP` is the external IP address assigned to the `LoadBalancer` named `p-rmq-servicebroker`.
-      `LoadBalancer` is deployed in namespace `pivotal-rabbitmq-system`.
-      * `BROKER-USERNAME` is the service broker username you used to create the Kubernetes secrets in
-      [Create Service Broker Credentials](#broker-creds) above.
-      * `BROKER-PASSWORD` is the service broker password you used to create the Kubernetes secrets in
-      [Create Service Broker Credentials](#broker-creds) above.
-
-2. After the service broker is registered, enable access in the Marketplace by running:
-
-    ```
-    cf enable-service-access p-rabbitmq-k8s -b SERVICE-BROKER-NAME
-    ```
-
-## <a id='uninstall'></a> Uninstall <%= vars.product_short %>
 
 To uninstall the product, follow the steps in [Uninstall Through the Manifests](./upgrading.html#uninstall-manifests).
