@@ -1,27 +1,28 @@
 ---
-title: Deploying Pivotal RabbitMQ for Kubernetes with KSM
+title: Using with KSM
 owner: RMQ for k8s
 ---
 
-
 <strong><%= modified_date %></strong>
 
-This topic describes how to deploy <%= vars.product_full %> to Pivotal Cloud Foundry (PCF) using the
-[Container Service Manager (KSM)](https://docs.pivotal.io/ksm/0-4/index.html).
+This topic describes how to deploy <%= vars.product_full %> to <%= vars.platform_name %> using
+Container Service Manager (KSM). For information about KSM, see [Container Services Manager for Pivotal Platform (Beta)](https://docs.pivotal.io/ksm/index.html).
+
+You can use the procedures in this topic if you have a running <%= vars.app_runtime_full %>  (<%= vars.app_runtime_abbr %>) deployment. If you do not have a <%= vars.app_runtime_abbr %> deployment,
+instead use the procedures in [Using Pivotal RabbitMQ for Kubernetes](./using.html).
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before you deploy <%= vars.product_full %> using KSM, you must have:
+Before you deploy  <%= vars.product_short %>  using KSM, you must:
 
-1. **KSM:** For installation instructions, see
-[Installing and Configuring Kubernetes Service Manager for PCF](https://docs.pivotal.io/ksm/installing.html)
++ **Install KSM:** KSM enables operators to provide app developers with access to <%= vars.product_short %>  through the `cf marketplace`. For instructions, see
+[Installing and Configuring Kubernetes Service Manager for PCF](https://docs.pivotal.io/ksm/installing.html).
 
-1. **Helm 2:** Helm 2 packages the <%= vars.product_short %> service offering and adds it to KSM.
-KSM supports Helm 2.
-For installation instructions, see the [Helm documentation](https://v2.helm.sh/docs/using_helm/#quickstart).
++ **Install Helm 2:** Helm 2 packages the <%= vars.product_short %> Helm chart.
+For instructions, see the [Helm documentation](https://v2.helm.sh/docs/using_helm/#quickstart).
 
-1. **RabbitMQ for Kubernetes Operator:**
-For information, see [Download RabbitMQ for Kubernetes](./installing.html#artifact).
++  **Install <%= vars.product_short %>:**
+For instructions, see [Installing <%= vars.product_full %>](./installing.html).
 
 ## <a id='add'></a> Add <%= vars.product_short %> to KSM
 
@@ -34,13 +35,17 @@ To add <%= vars.product_short %> to KSM:
     tar -C rabbitmq-for-kubernetes-${version} -xf rabbitmq-for-kubernetes-${version}.tar
     ```
 
-1. (Optional) Configure <%= vars.product_short %> plans for the RabbitMQ Helm chart by following the procedures in
-[Define Plans Configuration](https://docs.pivotal.io/ksm/prepare-offer.html#plans).<br>
-By default, <%= vars.product_short %> includes two plans:
-    + `single`: This is one-node cluster plan.
-    + `ha`: This is a three-node cluster plan.
+1. (Optional) Create custom <%= vars.product_short %>  plans by following the procedures in
+    [Define Plans Configuration](https://docs.pivotal.io/ksm/prepare-offer.html#plans) and
+    adding YAML files to:
 
-    You can create custom plans by adding files YAML files to the `rabbitmq-for-kubernetes-${version}/charts/rabbitmq/plans` directory.
-    The `plans/example-configurations.yaml` file contains all the  properties you can use to configure a <%= vars.product_short %> plan.
-    You can also use KSM to configure multiple plans.
-1. Add <%= vars.product_short %> to KSM by following the procedures in [Using KSM](https://docs.pivotal.io/ksm/using.html).
+    ```
+    rabbitmq-for-kubernetes-${version}/charts/rabbitmq/plans
+    ```
+
+    The `plans/example-configurations.yaml` file contains all the properties you can use to configure <%= vars.product_short %> plans. <br><br>
+    By default, <%= vars.product_short %> includes two plans:
+      + `single`: This is one-node cluster plan.
+      + `ha`: This is a three-node cluster plan.
+
+1. Add <%= vars.product_short %> to KSM by following the procedures in [Retrieve Credentials for KSM](https://docs.pivotal.io/ksm/using.html#credentials), [Add a Service Offering to KSM](https://docs.pivotal.io/ksm/using.html#add), and [Enable Service Offering Access](https://docs.pivotal.io/ksm/using.html#enable).

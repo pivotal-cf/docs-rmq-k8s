@@ -43,7 +43,7 @@ To download the <%= vars.product_short %> artifact:
 1. Download the **<%= vars.product_short %>** artifact from
 [Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
 
-The artifact contains Docker images, deployment manifests for the Kubernetes Operator, and a RabbitMQ Helm chart. You can deploy <%= vars.product_short %> with the RabbitMQ Helm chart by using Container Service Manager (KSM). See [Deploying <%= vars.product_full %> with KSM](./ksm.html).
+The artifact contains Docker images, deployment manifests for the Kubernetes Operator, and a Helm chart. You can deploy <%= vars.product_short %> with the Helm chart by using Container Service Manager (KSM). See [Deploying <%= vars.product_full %> with KSM](./ksm.html).
 <br><br>
 The images are for:
 
@@ -162,7 +162,7 @@ This reference should look similar to the below:
     ```
     image: YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:$version
     ```
-    
+
 ## <a id='deploy-op'></a> Install <%= vars.product_short %>
 
 To install <%= vars.product_short %>:
