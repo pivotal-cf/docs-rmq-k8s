@@ -6,39 +6,41 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to deploy <%= vars.product_full %> to Pivotal Cloud Foundry (PCF) using the [Container Service Manager (KSM)](https://docs.pivotal.io/ksm/0-4/index.html).
+This topic describes how to deploy <%= vars.product_full %> to Pivotal Cloud Foundry (PCF) using the
+[Container Service Manager (KSM)](https://docs.pivotal.io/ksm/0-4/index.html).
 
 ## <a id='prerequisites'></a> Prerequisites
 
-1. **KSM:** For installation instructions, see [the KSM documentation](https://docs.pivotal.io/ksm/0-4/installing.html)
+Before you deploy <%= vars.product_full %> using KSM, you must have:
 
-1. **Helm:** Helm2 is used to package our offering and provide to KSM. KSM supports Helm 2. For installation, see [Helm 2 quickstart](https://v2.helm.sh/docs/using_helm/#quickstart)
+1. **KSM:** For installation instructions, see
+[Installing and Configuring Kubernetes Service Manager for PCF](https://docs.pivotal.io/ksm/installing.html)
 
-1. **RabbitMQ for Kubernetes Operator:** see [installation guide](#./installation.html)
+1. **Helm 2:** Helm 2 packages the <%= vars.product_short %> service offering and adds it to KSM.
+KSM supports Helm 2.
+For installation instructions, see the [Helm documentation](https://v2.helm.sh/docs/using_helm/#quickstart).
 
-## <a id='overview'></a> Overview
+1. **RabbitMQ for Kubernetes Operator:**
+For information, see [Download RabbitMQ for Kubernetes](./installing.html#artifact).
 
-To install and configure <%= vars.product_short %> with KSM:
+## <a id='add'></a> Add <%= vars.product_short %> to KSM
 
-1. Unpack RabbitMQ for Kubernetes
+To add <%= vars.product_short %> to KSM:
+
+1. Unpack <%= vars.product_short %> by running:
 
     ```bash
     mkdir rabbitmq-for-kubernetes-${version}
     tar -C rabbitmq-for-kubernetes-${version} -xf rabbitmq-for-kubernetes-${version}.tar
-    ``
-
-1. (Optional) Configure rabbitmq helm chart
-You can configure multiple [plans](https://docs.pivotal.io/ksm/0-4/using.html#plans) for how to deploy RabbitMQ for Kubernetes with KSM. By default, RabbitMQ for Kubernetes ships with two plans `single` (1-node cluster) and `ha` (3-node cluster). `plans/example-configurations.yaml` contains all available properties you can use to configure a RabbitMQ for Kubernetes plan.
-Place any custom plans in `rabbitmq-for-kubernetes-${version}/charts/rabbitmq/plans` before packaging.
-
-1. Package rabbitmq helm chart
-
-    ```bash
-    cd rabbitmq-for-kubernetes-${version}/charts/rabbitmq
-    helm package .
     ```
-You should be able to find a packaged helm chart called `rabbitmq-0.1.tgz` in our current directory.
 
-1. Add rabbitmq service offering to KSM for PCF
+1. (Optional) Configure <%= vars.product_short %> plans for the RabbitMQ Helm chart by following the procedures in
+[Define Plans Configuration](https://docs.pivotal.io/ksm/prepare-offer.html#plans).<br>
+By default, <%= vars.product_short %> includes two plans:
+    + `single`: This is one-node cluster plan.
+    + `ha`: This is a three-node cluster plan.
 
-Follow [KSM documentation](https://docs.pivotal.io/ksm/0-4/using.html#add)
+    You can create custom plans by adding files YAML files to the `rabbitmq-for-kubernetes-${version}/charts/rabbitmq/plans` directory.
+    The `plans/example-configurations.yaml` file contains all the  properties you can use to configure a <%= vars.product_short %> plan.
+    You can also use KSM to configure multiple plans.
+1. Add <%= vars.product_short %> to KSM by following the procedures in [Using KSM](https://docs.pivotal.io/ksm/using.html).
