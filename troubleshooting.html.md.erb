@@ -19,24 +19,24 @@ After creating a RabbitMQ instance, it is not available within a few minutes.
 
 Common reasons for such failure are:
 
-* Incorrect `imagePullSecret` configuration. This prevents the image from being pulled from a Docker registry.
+* Incorrect `imagePullSecret` configuration.
+This prevents the image from being pulled from a Docker registry.
 * Incorrect `storageClassName` configuration.
 
 ### <a name='failed-instance-solution'></a> Solution
 
 See more details about the failure by following the step in
-[Check the Status of an Instance](#check-instance-status) below to check the status of the RabbitMQ cluster
-resources in your Kubernetes cluster.
+[Check the Status of an Instance](#check-instance-status) below to check
+the status of the RabbitMQ cluster resources in your Kubernetes cluster.
 
-After learning more about the failure, follow advice in this topic that best corresponds to it or, if that is
-not possible, please email pivotal-cf-feedback@pivotal.io for help.
+After learning more about the failure, follow the advice in this topic that best corresponds to it or,
+if that is not possible, please email pivotal-cf-feedback@pivotal.io for help.
 
 ## <a id='ts-install'></a> Troubleshoot the Installation
 
-Follow the steps in the sections below to check that the Kubernetes Operator is installed successfully and
-that you can provision an instance with <%= vars.app_runtime_full %> (<%= vars.app_runtime_abbr %>).
+Follow the steps in the sections below to check that you can provision an instance with
+<%= vars.app_runtime_full %> (<%= vars.app_runtime_abbr %>).
 
-### <a id='verify-operator'></a> Verify the Kubernetes Operator Installation
 
 ### <a id='check-instance-status'></a> Check the Status of an Instance
 
