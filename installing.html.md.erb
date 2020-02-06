@@ -94,31 +94,55 @@ To move the images:
 
 1. Load the images to your local Docker by running the following commands:
 
-    ```bash
+    ```
     mkdir rabbitmq-for-kubernetes-${version}
+    ```
+
+    ```
     tar -C rabbitmq-for-kubernetes-${version} -xf rabbitmq-for-kubernetes-${version}.tar
+    ```
+
+    ```
     cd rabbitmq-for-kubernetes-${version}
+    ```
+
+    ```
     docker load -i images/rabbitmq-for-kubernetes-operator
+    ```
+
+    ```
     docker load -i images/rabbitmq
     docker load -i images/rabbitmq-for-kubernetes-servicebroker
     ```
 
 1. Tag each image to point to your own image repository by running these commands:
 
-    ```bash
-    ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq \
-    >  YOUR-REPOSITORY/rabbitmq:$version
-    ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-operator \
-    >  YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
-    ~$ docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-servicebroker \
-    >  YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
+    ```
+    docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq \
+      YOUR-REGISTRY/rabbitmq:$version
+    ```
+
+    ```
+    docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-operator \
+      YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:$version
+    ```
+
+    ```
+    docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-servicebroker \
+      YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
     ```
 
 1. Push each image to your own image repository by running these commands:
 
-    ```bash
+    ```
     docker push YOUR-REPOSITORY/rabbitmq:$version
+    ```
+
+    ```
     docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-operator:$version
+    ```
+
+    ```
     docker push YOUR-REPOSITORY/rabbitmq-for-kubernetes-servicebroker:$version
     ```
 
