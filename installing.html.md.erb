@@ -30,10 +30,11 @@ If you do not have access to a private image registry, email the team at rabbitm
 To install and configure <%= vars.product_short %>:
 
 1. [Download <%= vars.product_full %>](#artifact)
+1. [Set a Version Variable](#set-ver-var)
 1. [Move the Images](#relocate)
+1. [Create the Namespace and Role-Based Access Control Objects](#namespace-rbac)
 1. [(Optional) Configure Kubernetes Cluster Access to Private Images](#private-images)
 1. [Configure the Image Registry](#image-repo)
-1. [(Optional) Configure the Service Type](#config-service-type)
 1. [Install <%= vars.product_short %>](#deploy-op)
 
 ## <a id='artifact'></a> Download <%= vars.product_short %>
@@ -97,14 +98,18 @@ To move the images:
     docker push YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:$version
     ```
 
-## <a id='private-images'></a> Create the Namespace
+## <a id='namespace-rbac'></a> Create the Namespace and Role-Based Access Control Objects
 
-To create the namespace and rbac objects:
+To create the namespace and role-based access control (RBAC) objects:
 
-1. Create a `pivotal-rabbitmq-system` namespace and rbac objects in the namespace by running the following command:
+1. Create a `pivotal-rabbitmq-system` namespace by running:
 
     ```
     kubectl apply -f manifests/namespace.yaml
+    ```
+1. Create RBAC objects in the `pivotal-rabbitmq-system` namespace by running:
+
+    ```
     kubectl apply -f manifests/rbac.yaml
     ```
 
