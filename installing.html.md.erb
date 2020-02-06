@@ -99,12 +99,13 @@ To move the images:
 
 ## <a id='private-images'></a> Create the Namespace
 
-To create the namespace:
+To create the namespace and rbac objects:
 
-1. Create a `pivotal-rabbitmq-system` namespace by running the following command:
+1. Create a `pivotal-rabbitmq-system` namespace and rbac objects in the namespace by running the following command:
 
     ```
     kubectl apply -f manifests/namespace.yaml
+    kubectl apply -f manifests/rbac.yaml
     ```
 
 ## <a id='private-images'></a> (Optional) Configure Kubernetes Cluster Access to Private Images
@@ -148,7 +149,7 @@ To authorize access to images:
 
     ```
     kubectl -n pivotal-rabbitmq-system patch serviceaccount \
-    default -p '{"imagePullSecrets": [{"name": "p-rmq-registry-access"}]}'
+    p-rmq-operator -p '{"imagePullSecrets": [{"name": "p-rmq-registry-access"}]}'
     ```
 
 ## <a id='image-repo'></a> Configure the Image Registry
