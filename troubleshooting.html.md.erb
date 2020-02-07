@@ -7,44 +7,77 @@ owner: RMQ for k8s
 
 This topic describes how to troubleshoot common problems with <%= vars.product_full %>.
 
-## <a id='failed-instance'></a> RabbitMQ Cluster Fails to Deploy
+## <a id="#errors"></a>Troubleshoot Errors
 
-After creating a RabbitMQ instance, it is not available within a few minutes.
+If you are responding to a specific error or error message, refer to the following sections:
 
-### <a name='failed-instance-symptom'></a> Symptom
++ [RabbitMQ Cluster Fails to Deploy](#failed-instance)
++ [Pods Are Not Being Created](#no-pods)
 
-* RabbitMQ Pods do not run.
 
-### <a name='failed-instance-explanation'></a> Explanation
+<%= partial vars.path_to_partials + "/troubleshoot-template", locals: {
+    id: "failed-instance",
+    description: "RabbitMQ Cluster Fails to Deploy",
+    symptom: "After creating a RabbitMQ instance,
+    it is not available within a few minutes and RabbitMQ Pods do not run.",
+    cause: "Common reasons for such failure are: <br><br>
+        <ul>
+          <li> Incorrect <code>imagePullSecret</code> configuration.
+          This prevents the image from being pulled from a Docker registry.</li>
+          <li>Incorrect <code>storageClassName</code> configuration.</li>
+        </ul>",
+    solution: " To resolve this issue:
+          <br><br>
+          <ol>
+            <li>Correct the <code>imagePullSecret</code> and <code>storageClassName</code>
+            configurations. See <a href='./using.html#image-pull-secret'>imagePullSecret</a>,
+            <a href='./using.html#persistence'>Persistence</a>, and
+            <a href='./using.html#update'>Update a RabbitMQ Instance</a>.</li>
+            <li>If the issue persists after updating the above configurations, view the status
+            of your RabbitMQ cluster resources by following in the procedure in
+            <a href='#check-instance-status'>Check the Status of an Instance</a>.
+            </li>
+            <li>
+              Contact pivotal-cf-feedback@pivotal.io for assistance and
+              provide the information you gather from the previous step.
+            </li>
+          </ol>"
 
-Common reasons for such failure are:
+} %>
 
-* Incorrect `imagePullSecret` configuration.
-This prevents the image from being pulled from a Docker registry.
-* Incorrect `storageClassName` configuration.
 
-### <a name='failed-instance-solution'></a> Solution
+<%= partial vars.path_to_partials + "/troubleshoot-template", locals: {
+  id: "no-pods",
+  description: "Pods Are Not Being Created",
+  symptom: "You see an error such as:
 
-See more details about the failure by following the step in
-[Check the Status of an Instance](#check-instance-status) below to check
-the status of the RabbitMQ cluster resources in your Kubernetes cluster.
-
-After learning more about the failure, follow the advice in this topic that best corresponds to it or,
-if that is not possible, please email pivotal-cf-feedback@pivotal.io for help.
+  <pre class='terminal'>pods POD-NAME is forbidden: unable to validate against any pod security policy: []</pre>
+  as an event of the underlying <code>ReplicaSet</code> of the Kubernetes Operator deployment, or as an
+  event of the underlying <code>StatefulSet</code> of the <code>RabbitmqCluster</code>.",
+  cause: "This occurs if Pod security policy admission control is enabled for the
+  Kubernetes cluster, but you have not created the necessary <code>PodSecurityPolicy</code> and
+  corresponding role-based access control (RBAC) resources.",
+  solution: "Create the <code>PodSecurityPolicy</code> and RBAC resources by following the procedure in
+  <a href='./using.html#psp#'>Pod Security Policies</a>."
+} %>
 
 ## <a id='ts-install'></a> Troubleshoot the Installation
 
-Follow the steps in the sections below to check that you can provision an instance with
+This section lists troubleshooting techniques for
+checking that you can provision an instance with
 <%= vars.app_runtime_full %> (<%= vars.app_runtime_abbr %>).
-
 
 ### <a id='check-instance-status'></a> Check the Status of an Instance
 
-Follow the step below to check if an instance is running and see information about it.
+To check if an instance is running and see information about it:
 
-1. View the status of an instance by running `kubectl -n NAMESPACE get all`.<br><br>
+1. View the status of an instance by running
 
-    Where `NAMESPACE` is the Kubernetes namespace of the instance.<br><br>
+    ```
+    kubectl -n NAMESPACE get all
+    ```
+
+    Where `NAMESPACE` is the Kubernetes namespace of the instance. <br><br>
 
     For example:
 
@@ -60,27 +93,3 @@ Follow the step below to check if an instance is running and see information abo
       NAME                                       READY   AGE
       statefulset.apps/pivotal-rabbitmq-server   1/1     2m28s
     </pre>
-
-## <a id='no-pods'></a> Pods Are Not Being Created
-
-### <a name='failed-instance-symptom'></a> Symptom
-
-You see an error such as:
-
-<pre class="terminal">
-$ pods POD-NAME is forbidden: unable to validate against any pod security policy: []
-</pre>
-
-as an event of the underlying `ReplicaSet` of the Operator deployment, or as an
-event of the underlying `StatefulSet` of the `RabbitmqCluster`.
-
-### <a name='failed-instance-explanation'></a> Explanation
-
-This occurs if Pod security policy admission control is enabled for the
-Kubernetes cluster, but you have not created the necessary `PodSecurityPolicy` and
-corresponding RBAC resources.
-
-### <a name='failed-instance-solution'></a> Solution
-
-Create the `PodSecurityPolicy` and RBAC resources by following the procedure in
-[Pod Security Policies](./using.html#psp).
