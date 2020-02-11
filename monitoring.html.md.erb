@@ -57,8 +57,11 @@ output, as in the example below:
           "prometheus.io/port": "15692"
     ```
 
-    If `"prometheus.io/scrape": "true"` does not exist, consider following the steps in
-    [Monitor RabbitMQ Using the Prometheus Operator](#prom-operator) below instead.
+    If `"prometheus.io/scrape": "true"` or `"prometheus.io/port": "15692"` does not exist, consider following
+    the steps in [Monitor RabbitMQ Using the Prometheus Operator](#prom-operator) below instead.
+
+    Alternatively, add the missing service annotations by following the
+    [Update a RabbitMQ Instance](./using#update.html) procedure.
 
 ## <a id='prom-operator'></a> Monitor RabbitMQ Using the Prometheus Operator
 
@@ -111,6 +114,7 @@ To use the Prometheus Operator to monitor RabbitMQ clusters:
     `ServiceMonitor` can be created in any namespace, as long as the Prometheus Operator has permissions to find it.
     For more information about these permissions, see
     [Configure Permissions for the Prometheus Operator](#config-perm) below.
+
 
 ### <a id='config-perm'></a> (Optional) Configure Permissions for the Prometheus Operator
 
