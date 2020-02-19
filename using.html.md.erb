@@ -298,6 +298,59 @@ To update a RabbitMQ instance:
 
     ```
     kubectl describe statefulset definition-rabbitmq-server
+    ```
+
+## <a id='set-pdb'></a> (Optional) Set a Pod Disruption Budget
+
+A Pod Disruption Budget (PDB) limits the number of Pod replicas that are down simultaneously because of
+voluntary disruptions.
+
+For example, a PDB can help:
+  * maintain the availability of quorum-based distributed workloads during maintenance events, such
+  as Kubernetes API upgrades or kernel upgrades.
+  * reduce downtime for RabbitMQ configurations that normally sacrifice availability in favor of data
+  consistency, such as pause-minority mode for partition tolerance.
+
+### <a id='create-pdb'></a> Create a `PodDisruptionBudget`
+
+For the PDB to be effective, set the following:
+
+```
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: YOUR-RABBITMQ-CR-NAME
+```
+
+For more information about concepts mentioned above, see:
+<table class="nice">
+<col width="50%">
+<col width="50%">
+	<th>Concept</th>
+	<th>More information in…</th>
+	<tr>
+		<td>PDBs</td>
+		<td>The <a href="https://kubernetes.io/docs/tasks/run-application/configure-pdb/">Kubernetes documentation</a></td>
+	</tr>
+	<tr>
+		<td>voluntary and involuntary disruptions</td>
+		<td>The <a href="https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#voluntary-and-involuntary-disruptions">Kubernetes documentation</a></td>
+	</tr>
+	<tr>
+		<td>pause-minority mode</td>
+		<td>The <a href="https://www.rabbitmq.com/partitions.html#automatic-handling">RabbitMQ documentation</a></td>
+	</tr>
+ </table>
+
+## <a id='find'></a> Find Your RabbitmqCluster Service Name and Admin Credentials
+
+If an app is deployed in the same Kubernetes cluster as RabbitMQ, you can use the RabbitmqCluster Service name
+and admin credentials to connect that app to RabbitMQ.
+The steps required to make that connection can vary greatly by deployment and are beyond the scope of this
+documentation.
 
 ## <a id='connect'></a> Connect an App to RabbitMQ
 
