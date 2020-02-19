@@ -516,17 +516,20 @@ To update a RabbitMQ instance:
     kubectl describe statefulset definition-rabbitmq-server
     ```
 
-## <a id='psp'></a> (Optional) Setting a Pod Disruption Budget
+## <a id='set-pdb'></a> (Optional) Set a Pod Disruption Budget
 
-A Pod Disruption Budget (PDB) limits the number of Pod replicas that are down simultaneously from [voluntary disruptions](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#voluntary-and-involuntary-disruptions).
-For more information about PDBs, please refer to their [documentation](https://kubernetes.io/docs/tasks/run-application/configure-pdb/).
+A Pod Disruption Budget (PDB) limits the number of Pod replicas that are down simultaneously because of
+voluntary disruptions.
 
-PDBs can help maintain the availability of quorum based distributed workloads during maintenance events like Kubernetes API or kernel upgrades. Configurations of RabbitMQ that normally sacrifice availability in favour of data consistency, like [pause-minority](https://www.rabbitmq.com/partitions.html#automatic-handling)
-for partition tolerance, can benefit from less downtime if the appropriate PDB has been configured.
+For example, a PDB can help:
+  * maintain the availability of quorum-based distributed workloads during maintenance events, such
+  as Kubernetes API upgrades or kernel upgrades.
+  * reduce downtime for RabbitMQ configurations that normally sacrifice availability in favor of data
+  consistency, such as pause-minority mode for partition tolerance.
 
-###Create a `PodDisruptionBudget`:
+### <a id='create-pdb'></a> Create a `PodDisruptionBudget`
 
-In order for the PDB to be effective, you will need to set the follow:
+For the PDB to be effective, set the following:
 
 ```
 apiVersion: policy/v1beta1
@@ -535,8 +538,28 @@ spec:
   maxUnavailable: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: <YOUR_RABBITMQ_CR_NAME>
+      app.kubernetes.io/name: YOUR-RABBITMQ-CR-NAME
 ```
+
+For more information about concepts mentioned above, see:
+<table class="nice">
+<col width="50%">
+<col width="50%">
+	<th>Concept</th>
+	<th>More information in…</th>
+	<tr>
+		<td>PDBs</td>
+		<td>The <a href="https://kubernetes.io/docs/tasks/run-application/configure-pdb/">Kubernetes documentation</a></td>
+	</tr>
+	<tr>
+		<td>voluntary and involuntary disruptions</td>
+		<td>The <a href="https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#voluntary-and-involuntary-disruptions">Kubernetes documentation</a></td>
+	</tr>
+	<tr>
+		<td>pause-minority mode</td>
+		<td>The <a href="https://www.rabbitmq.com/partitions.html#automatic-handling">RabbitMQ documentation</a></td>
+	</tr>
+ </table>
 
 ## <a id='find'></a> Find Your RabbitmqCluster Service Name and Admin Credentials
 
