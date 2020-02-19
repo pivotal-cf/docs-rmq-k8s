@@ -516,6 +516,28 @@ To update a RabbitMQ instance:
     kubectl describe statefulset definition-rabbitmq-server
     ```
 
+## <a id='psp'></a> (Optional) Setting a Pod Disruption Budget
+
+A Pod Disruption Budget (PDB) limits the number of Pod replicas that are down simultaneously from [voluntary disruptions](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#voluntary-and-involuntary-disruptions).
+For more information about PDBs, please refer to their [documentation](https://kubernetes.io/docs/tasks/run-application/configure-pdb/).
+
+PDBs can help maintain the availability of quorum based distributed workloads during maintenance events like Kubernetes API or kernel upgrades. Configurations of RabbitMQ that normally sacrifice availability in favour of data consistency, like [pause-minority](https://www.rabbitmq.com/partitions.html#automatic-handling)
+for partition tolerance, can benefit from less downtime if the appropriate PDB has been configured.
+
+###Create a `PodDisruptionBudget`:
+
+In order for the PDB to be effective, you will need to set the follow:
+
+```
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: <YOUR_RABBITMQ_CR_NAME>
+```
+
 ## <a id='find'></a> Find Your RabbitmqCluster Service Name and Admin Credentials
 
 If an app is deployed in the same Kubernetes cluster as RabbitMQ, you can use the RabbitmqCluster Service name
