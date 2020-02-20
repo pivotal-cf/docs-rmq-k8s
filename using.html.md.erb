@@ -500,17 +500,25 @@ For example, a PDB can help:
 
 ### <a id='create-pdb'></a> Create a `PodDisruptionBudget`
 
-For the PDB to be effective, set the following:
+In order for the PDB to be effective, you will need to do the following:
 
-```
-apiVersion: policy/v1beta1
-kind: PodDisruptionBudget
-spec:
-  maxUnavailable: 1
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: YOUR-RABBITMQ-CUSTOM-RESOURCE-NAME
-```
+1. Create a file called rabbitmq-pdb.yaml
+
+  ```
+  apiVersion: policy/v1beta1
+  kind: PodDisruptionBudget
+  spec:
+    maxUnavailable: 1
+    selector:
+      matchLabels:
+        app.kubernetes.io/name: <YOUR_RABBITMQ_CR_NAME>
+  ```
+
+1. Run:
+
+  ```
+  kubectl apply -f rabbitmq-pdb.yaml
+  ```
 
 For more information about concepts mentioned above, see:
 <table class="nice">
