@@ -522,10 +522,11 @@ A Pod Disruption Budget (PDB) limits the number of Pod replicas that are down si
 voluntary disruptions.
 
 For example, a PDB can help:
-  * maintain the availability of quorum-based distributed workloads during maintenance events, such
-  as Kubernetes API upgrades or kernel upgrades.
-  * reduce downtime for RabbitMQ configurations that normally sacrifice availability in favor of data
-  consistency, such as pause-minority mode for partition tolerance.
+
+* maintain the availability of quorum-based distributed workloads during maintenance events, such
+as Kubernetes API upgrades or kernel upgrades.
+* reduce downtime for RabbitMQ configurations that normally sacrifice availability in favor of data
+consistency, such as pause-minority mode for partition tolerance.
 
 ### <a id='create-pdb'></a> Create a `PodDisruptionBudget` Object
 
