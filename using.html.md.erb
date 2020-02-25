@@ -504,21 +504,21 @@ To create and set a `PodDisruptionBudget` object:
 
 1. Create a file called `rabbitmq-pdb.yaml` that includes the following:
 
-  ```
-  apiVersion: policy/v1beta1
-  kind: PodDisruptionBudget
-  spec:
-    maxUnavailable: 1
-    selector:
-      matchLabels:
-        app.kubernetes.io/name: YOUR-RABBITMQ-CUSTOM-RESOURCE-NAME
-  ```
+    ```
+    apiVersion: policy/v1beta1
+    kind: PodDisruptionBudget
+    spec:
+      maxUnavailable: 1
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: YOUR-RABBITMQ-CUSTOM-RESOURCE-NAME
+    ```
 
 1. Run:
 
-  ```
-  kubectl apply -f rabbitmq-pdb.yaml
-  ```
+    ```
+    kubectl apply -f rabbitmq-pdb.yaml
+    ```
 
 For more information about concepts mentioned above, see:
 <table class="nice">
