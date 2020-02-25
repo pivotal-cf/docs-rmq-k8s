@@ -311,11 +311,11 @@ For example, a PDB can help:
   * reduce downtime for RabbitMQ configurations that normally sacrifice availability in favor of data
   consistency, such as pause-minority mode for partition tolerance.
 
-### <a id='create-pdb'></a> Create a `PodDisruptionBudget`
+### <a id='create-pdb'></a> Create a `PodDisruptionBudget` Object
 
-In order for the PDB to be effective, you will need to do the following:
+To create and set a `PodDisruptionBudget` object:
 
-1. Create a file called rabbitmq-pdb.yaml
+1. Create a file called `rabbitmq-pdb.yaml` that includes the following:
 
   ```
   apiVersion: policy/v1beta1
@@ -324,7 +324,7 @@ In order for the PDB to be effective, you will need to do the following:
     maxUnavailable: 1
     selector:
       matchLabels:
-        app.kubernetes.io/name: <YOUR_RABBITMQ_CR_NAME>
+        app.kubernetes.io/name: YOUR-RABBITMQ-CUSTOM-RESOURCE-NAME
   ```
 
 1. Run:
