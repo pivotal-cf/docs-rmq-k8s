@@ -21,7 +21,7 @@ Before you deploy  <%= vars.product_short %>  using KSM, you must:
 + **Install KSM:** KSM enables operators to provide app developers with access to <%= vars.product_short %>
 through the `cf marketplace`.
 For instructions, see
-[Installing and Configuring Kubernetes Service Manager for PCF](https://docs.pivotal.io/ksm/installing.html).
+[Installing and Configuring KSM](https://docs.pivotal.io/ksm/installing.html).
 
 + **Install Helm 2:** Helm 2 packages the <%= vars.product_short %> Helm chart.
 For instructions, see the [Helm documentation](https://v2.helm.sh/docs/using_helm/#quickstart).
@@ -35,7 +35,7 @@ To add <%= vars.product_short %> to KSM:
 
 1. Unpack <%= vars.product_short %> by running:
 
-    ```bash
+    ```
     mkdir rabbitmq-for-kubernetes-${version}
     tar -C rabbitmq-for-kubernetes-${version} -xf rabbitmq-for-kubernetes-${version}.tar
     ```
