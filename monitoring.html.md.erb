@@ -66,7 +66,7 @@ output, as in the example below:
 ## <a id='prom-operator'></a> Monitor RabbitMQ Using the Prometheus Operator
 
 The Prometheus Operator ignores Prometheus annotations and, instead, defines scraping configuration through a
-more flexible custom resource called `ServiceMonitor`.
+more flexible custom resource called `PodMonitor`.
 For more information, see the [Prometheus Operator](https://github.com/coreos/prometheus-operator) in GitHub.
 
 To use the Prometheus Operator to monitor RabbitMQ clusters:
@@ -74,25 +74,41 @@ To use the Prometheus Operator to monitor RabbitMQ clusters:
 1. Deploy the Prometheus Operator. There are several ways to do so. Guidance is provided in the
 [kube-prometheus](https://github.com/coreos/kube-prometheus/#quickstart) documentation in GitHub.
 
-1. Verify that you have deployed the Prometheus Operator by running:
+1. Verify that you have deployed the Prometheus PodMonitor CRD by running:
 
     ```
-    kubectl get customresourcedefinitions.apiextensions.k8s.io servicemonitors.monitoring.coreos.com
+    kubectl get customresourcedefinitions.apiextensions.k8s.io podmonitors.monitoring.coreos.com
     ```
 
     If this command returns an error, you do not have the Prometheus Operator deployed.
 
-1. Create a YAML file somewhere on your local machine named `rabbitmq-servicemonitor.yaml`.
+1. Create a YAML file somewhere on your local machine named `rabbitmq-prometheus-patch.yaml`
 
-1. Copy and paste the content below into `rabbitmq-servicemonitor.yaml` and save the file.
+1. Copy and paste the content below into `rabbitmq-prometheus-patch.yaml`
+
+    ```
+    spec:
+      podMonitorNamespaceSelector:
+        any: 'true'
+    ```
+
+1. Patch Prometheus Operator using the below command:
+
+    ```
+    kubectl -n monitoring patch prometheuses k8s --type merge --patch "$(cat rabbitmq-prometheus-patch.yaml)"
+    ```
+
+1. Create a YAML file somewhere on your local machine named `rabbitmq-podmonitor.yaml`.
+
+1. Copy and paste the content below into `rabbitmq-podmonitor.yaml` and save the file.
 
     ```
     apiVersion: monitoring.coreos.com/v1
-    kind: ServiceMonitor
+    kind: PodMonitor
     metadata:
       name: rabbitmq
     spec:
-      endpoints:
+      podMetricsEndpoints:
       - interval: 15s
         port: prometheus
       selector:
@@ -102,16 +118,16 @@ To use the Prometheus Operator to monitor RabbitMQ clusters:
         any: true
     ```
 
-    You now have the `ServiceMonitor` resource, which is needed to configure the automatic discovery of RabbitMQ
+    You now have the `PodMonitor` resource, which is needed to configure the automatic discovery of RabbitMQ
     clusters.
 
-1. Apply the `ServiceMonitor` resource by running:
+1. Apply the `PodMonitor` resource by running:
 
     ```
-    kubectl apply -f rabbitmq-servicemonitor.yaml
+    kubectl apply -f rabbitmq-podmonitor.yaml
     ```
 
-    `ServiceMonitor` can be created in any namespace, as long as the Prometheus Operator has permissions to find it.
+    `PodMonitor` can be created in any namespace, as long as the Prometheus Operator has permissions to find it.
     For more information about these permissions, see
     [Configure Permissions for the Prometheus Operator](#config-perm) below.
 
