@@ -82,9 +82,9 @@ To use the Prometheus Operator to monitor RabbitMQ clusters:
 
     If this command returns an error, you do not have the Prometheus Operator deployed.
 
-1. Create a YAML file somewhere on your local machine named `rabbitmq-prometheus-patch.yaml`
+1. Create a YAML file named `rabbitmq-prometheus-patch.yaml` on your local machine.
 
-1. Copy and paste the content below into `rabbitmq-prometheus-patch.yaml`
+1. Copy and paste the content below into `rabbitmq-prometheus-patch.yaml`, then save the file.
 
     ```
     spec:
@@ -92,15 +92,15 @@ To use the Prometheus Operator to monitor RabbitMQ clusters:
         any: 'true'
     ```
 
-1. Patch Prometheus Operator using the below command:
+1. Patch the Prometheus Operator by running:
 
     ```
     kubectl -n monitoring patch prometheuses k8s --type merge --patch "$(cat rabbitmq-prometheus-patch.yaml)"
     ```
 
-1. Create a YAML file somewhere on your local machine named `rabbitmq-podmonitor.yaml`.
+1. Create a YAML file named `rabbitmq-podmonitor.yaml` on your local machine.
 
-1. Copy and paste the content below into `rabbitmq-podmonitor.yaml` and save the file.
+1. Copy and paste the content below into `rabbitmq-podmonitor.yaml`, then save the file.
 
     ```
     apiVersion: monitoring.coreos.com/v1
