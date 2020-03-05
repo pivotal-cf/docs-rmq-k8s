@@ -66,7 +66,7 @@ output, as in the example below:
 ## <a id='prom-operator'></a> Monitor RabbitMQ Using the Prometheus Operator
 
 The Prometheus Operator ignores Prometheus annotations and, instead, defines scraping configuration through a
-more flexible Custom Resource Definition (CRD) called `PodMonitor`.
+more flexible custom resource called `PodMonitor`.
 For more information, see the [Prometheus Operator](https://github.com/coreos/prometheus-operator) in GitHub.
 
 To use the Prometheus Operator to monitor RabbitMQ clusters:
@@ -74,7 +74,7 @@ To use the Prometheus Operator to monitor RabbitMQ clusters:
 1. Deploy the Prometheus Operator. There are several ways to do so. Guidance is provided in the
 [kube-prometheus](https://github.com/coreos/kube-prometheus/#quickstart) documentation in GitHub.
 
-1. Verify that you have deployed the Prometheus `PodMonitor` CRD by running:
+1. Verify that you have deployed the Prometheus `PodMonitor` Custom Resource Definition (CRD) by running:
 
     ```
     kubectl get customresourcedefinitions.apiextensions.k8s.io podmonitors.monitoring.coreos.com
