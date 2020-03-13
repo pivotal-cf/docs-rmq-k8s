@@ -13,6 +13,7 @@ If you are responding to a specific error or error message, refer to the followi
 
 + [RabbitMQ Cluster Fails to Deploy](#failed-instance)
 + [Pods Are Not Being Created](#no-pods)
++ [Pods Are Stuck in Terminating State](#not-terminating-pods)
 
 
 <%= partial vars.path_to_partials + "/troubleshoot-template", locals: {
@@ -59,6 +60,23 @@ If you are responding to a specific error or error message, refer to the followi
   corresponding role-based access control (RBAC) resources.",
   solution: "Create the <code>PodSecurityPolicy</code> and RBAC resources by following the procedure in
   <a href='./using.html#psp'>Pod Security Policies</a>."
+} %>
+
+<%= partial vars.path_to_partials + "/troubleshoot-template", locals: {
+    id: "not-terminating-pods",
+    description: "Pods Are Stuck In Terminating State",
+    symptom: "After deleting a RabbitMQCluster instance, some Pods
+    are in Terminating state. RabbitMQ is still running in the affected Pods",
+    cause: "Common reasons for such failure is a Quorum Queue is left over in RabbitMQ",
+    solution: " To resolve this issue:
+          <br><br>
+          <ol>
+            <li>Ensure there are no messages left in the queue, or that is acceptable to
+            delete those messages.</li>
+            <li>Perform a 'force' delete using <code>kubectl delete pod --force POD-NAME</code>.
+            </li>
+          </ol>"
+
 } %>
 
 ## <a id='ts-install'></a> Troubleshoot the Installation
