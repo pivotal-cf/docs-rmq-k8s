@@ -1,4 +1,4 @@
-# Pivotal RabbitMQ for Kubernetes docs
+# RabbitMQ for VMware Tanzu [Kubernetes] docs
 
 ## Branches in this Content Repo
 
@@ -59,7 +59,7 @@ then you will need to:
 
 ### Partials
 
-Cross-product partials (if any) for **Pivotal RabbitMQ for Kubernetes** are single sourced from the [PCF Docs Partials](https://github.com/pivotal-cf/docs-partials) repository.
+Cross-product partials (if any) for **RabbitMQ for VMware Tanzu [Kubernetes] are single sourced from the [Docs Partials](https://github.com/pivotal-cf/docs-partials) repository.
 
 ### Releasing a New Minor Version
 

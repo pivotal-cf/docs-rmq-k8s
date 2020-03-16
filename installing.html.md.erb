@@ -1,5 +1,5 @@
 ---
-title: Installing Pivotal RabbitMQ for Kubernetes
+title: Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;
 owner: RMQ for k8s
 ---
 
@@ -21,7 +21,7 @@ see the [Docker documentation](https://docs.docker.com/install/).
 1. **A Kubernetes cluster:** You must use Kubernetes v1.14 or later. A default StorageClass has to be configured
 or you need to specify which StorageClass to use.
 
-1. **A private image registry:** Pivotal recommends that you keep the Kubernetes Operator
+1. **A private image registry:** VMware recommends that you keep the Kubernetes Operator
 image private even if your registry is publicly accessible.
 If you do not have access to a private image registry, email the team at rabbitmq-for-k8s@pivotal.io for help.
 
@@ -42,7 +42,7 @@ To install and configure <%= vars.product_short %>:
 To download the <%= vars.product_short %> artifact:
 
 1. Download the **<%= vars.product_short %>** artifact from
-[Pivotal Network](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
+[<%= vars.product_network %>](https://network.pivotal.io/products/p-rabbitmq-for-kubernetes/).
 
 The artifact contains Docker images, deployment manifests for the Kubernetes Operator, and a Helm chart.
 You can deploy <%= vars.product_short %> with the Helm chart by using Container Service Manager (KSM).
@@ -139,7 +139,7 @@ If you require authentication to pull images from your private image registry, y
 images from the `pivotal-rabbitmq-system` namespace.
 
 <p class=note>
-  <strong>Note:</strong> If your registry is publicly accessible, Pivotal recommends that you keep your
+  <strong>Note:</strong> If your registry is publicly accessible, VMware recommends that you keep your
   Kubernetes Operator image in a private image registry.
 </p>
 
