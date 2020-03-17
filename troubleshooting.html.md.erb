@@ -9,7 +9,7 @@ This topic describes how to troubleshoot common problems with <%= vars.product_f
 
 ## <a id="#errors"></a>Troubleshoot Errors
 
-If you are responding to a specific error or error message, refer to the following sections:
+If you are responding to a specific error or error message, see the following sections:
 
 + [RabbitMQ Cluster Fails to Deploy](#failed-instance)
 + [Pods Are Not Being Created](#no-pods)
@@ -23,7 +23,7 @@ If you are responding to a specific error or error message, refer to the followi
     it is not available within a few minutes and RabbitMQ Pods do not run.",
     cause: "Common reasons for such failure are: <br><br>
         <ul>
-          <li> Incorrect <code>imagePullSecret</code> configuration.
+          <li> Incorrect <code> imagePullSecret</code> configuration.
           This prevents the image from being pulled from a Docker registry.</li>
           <li>Incorrect <code>storageClassName</code> configuration.</li>
         </ul>",
@@ -52,7 +52,7 @@ If you are responding to a specific error or error message, refer to the followi
   description: "Pods Are Not Being Created",
   symptom: "You see an error such as:
 
-  <pre class='terminal'>pods POD-NAME is forbidden: unable to validate against any pod security policy: []</pre>
+  <pre class='terminal'> pods POD-NAME is forbidden: unable to validate against any pod security policy: []</pre>
   as an event of the underlying <code>ReplicaSet</code> of the Kubernetes Operator deployment, or as an
   event of the underlying <code>StatefulSet</code> of the <code>RabbitmqCluster</code>.",
   cause: "This occurs if Pod security policy admission control is enabled for the
@@ -65,11 +65,11 @@ If you are responding to a specific error or error message, refer to the followi
 
 <%= partial vars.path_to_partials + "/troubleshoot-template", locals: {
     id: "not-terminating-pods",
-    description: "Pods Are Stuck In Terminating State",
-    symptom: "After deleting a RabbitMQCluster instance, some Pods
-    are in Terminating state. RabbitMQ is still running in the affected Pods",
-    cause: "Common reasons for such failure is a Quorum Queue is left over in RabbitMQ",
-    solution: " To resolve this issue:
+    description: "Pods Are Stuck in the Terminating State",
+    symptom: "After deleting a RabbitmqCluster instance, some Pods
+    are stuck in the terminating state. RabbitMQ is still running in the affected Pods.",
+    cause: "The likely cause is a leftover quorum queue in RabbitMQ.",
+    solution: "To resolve this issue:
           <br><br>
           <ol>
             <li>Ensure there are no messages in the queue, or that it is acceptable to delete those messages.</li>
@@ -93,11 +93,6 @@ If you are responding to a specific error or error message, refer to the followi
             pod 'rabbit-rollout-restart-rabbitmq-server-1' force deleted
           </pre>"
 
-<pre class='terminal'>
-$ kubectl delete pod --force rabbit-rollout-restart-rabbitmq-server-1
-warning: Immediate deletion does not wait for confirmation that the running resource has been terminated. The resource may continue to run on the cluster indefinitely.
-pod 'rabbit-rollout-restart-rabbitmq-server-1' force deleted
-</pre>"
 } %>
 
 
