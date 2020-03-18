@@ -639,23 +639,5 @@ To delete a service instance:
     rabbitmqcluster.rabbitmq.pivotal.io "definition" deleted
     </pre>
 
-If you had created any [quorum queues](https://www.rabbitmq.com/quorum-queues.html) in RabbitMQ, the Pods
-might stop the termination process due to a safety mechanism that prevents data loss. In this case, the Pods
-enter a terminating state, but RabbitMQ does not receive a shutdown signal.
-
-In this situation, run `kubectl delete pod --force`.
-In the following example, `INSTANCE` is `rabbit-rollout-restart`:
-
-```bash
-kubectl -n pivotal-rabbitmq-system get all
-  NAME                                           READY   STATUS        RESTARTS   AGE
-  pod/rabbit-rollout-restart-rabbitmq-server-0   1/1     Terminating   0          30h
-  pod/rabbit-rollout-restart-rabbitmq-server-1   1/1     Terminating   0          30h
-
-kubectl delete pod --force --grace-period=0 -l 'app.kubernetes.io/name=rabbit-rollout-restart'
-  warning: Immediate deletion does not wait for confirmation that the running resource has been terminated. The resource may continue to run on the cluster indefinitely.
-  pod "rabbit-rollout-restart-rabbitmq-server-0" force deleted
-  pod "rabbit-rollout-restart-rabbitmq-server-1" force deleted
-```
-
-This behavior will<%# Avoid "will": present tense is preferred. %> be improved in a future<%# Only document what exists. There are legal ramifications to making promises. %> release to remove the Pods gracefully when a RabbitMQ instance is deleted.
+If any Pods get stuck in the terminating state, see
+[Pods Are Stuck in the Terminating State](./troubleshooting.html#not-terminating-pods).
