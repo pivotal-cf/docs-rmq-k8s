@@ -75,11 +75,11 @@ If you are responding to a specific error or error message, see the following se
           <br><br>
           <ol>
             <li>Ensure there are no messages in the queue, or that it is acceptable to delete those messages.</li>
-            <li>Run <br>
-              <code>kubectl delete pod --force --grace-period=0 -l 'POD-LABEL'</code> <br>
-              or <br>
-              <code>kubectl delete pod --force POD-NAME</code> <br>
-              to delete a queue by force.</li>
+            <li>Delete the queue by force by running:
+              <pre><code>kubectl delete pod --force --grace-period=0 -l 'POD-LABEL'</code></pre>
+              or 
+              <pre><code>kubectl delete pod --force POD-NAME</code></pre>
+            </li>
           </ol>
 
 This example uses a Pod label:
