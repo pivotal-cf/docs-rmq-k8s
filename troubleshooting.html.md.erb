@@ -80,20 +80,20 @@ If you are responding to a specific error or error message, see the following se
             </li>
           </ol>
 
-          This example uses a Pod label:
-          <pre class='terminal'>
-            kubectl delete pod --force --grace-period=0 -l 'app.kubernetes.io/name=rabbit-rollout-restart'
-            warning: Immediate deletion does not wait for confirmation that the running resource has been terminated. The resource may continue to run on the cluster indefinitely.
-            pod 'rabbit-rollout-restart-rabbitmq-server-0' force deleted
-            pod 'rabbit-rollout-restart-rabbitmq-server-1' force deleted
-          </pre>
+This example uses a Pod label:
+<pre class='terminal'>
+  $ kubectl delete pod --force --grace-period=0 -l 'app.kubernetes.io/name=rabbit-rollout-restart'
+  warning: Immediate deletion does not wait for confirmation that the running resource has been terminated. The resource may continue to run on the cluster indefinitely.
+  pod 'rabbit-rollout-restart-rabbitmq-server-0' force deleted
+  pod 'rabbit-rollout-restart-rabbitmq-server-1' force deleted
+</pre>
 
-          This example uses a Pod name:
-          <pre class='terminal'>
-            kubectl delete pod --force rabbit-rollout-restart-rabbitmq-server-1
-            warning: Immediate deletion does not wait for confirmation that the running resource has been terminated. The resource may continue to run on the cluster indefinitely.
-            pod 'rabbit-rollout-restart-rabbitmq-server-1' force deleted
-          </pre>"
+This example uses a Pod name:
+<pre class='terminal'>
+  $ kubectl delete pod --force rabbit-rollout-restart-rabbitmq-server-1
+  warning: Immediate deletion does not wait for confirmation that the running resource has been terminated. The resource may continue to run on the cluster indefinitely.
+  pod 'rabbit-rollout-restart-rabbitmq-server-1' force deleted
+</pre>"
 
 } %>
 
