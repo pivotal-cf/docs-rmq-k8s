@@ -22,9 +22,9 @@ New features and changes in this release:
 * Nodes have a pre-stop check now: a node should not be stopped if doing so would lead to a quorum loss.
 * RabbitMQ is upgraded to v3.8.3. This version contains an important fix to correctly handle SIGTERM.
 * The RabbitmqCluster resource now has a status field to expose the status of RabbitmqCluster.
-* The documentation now describes how to monitor with PodMonitor instead of ServiceMonitor.
-Pods are removed from the service endpoints when Pod termination is triggered, which creates a gap in the metrics.
-PodMonitor bridges this gap by scraping the Pods during the shutdown process.
+* The documentation now describes how to monitor with PodMonitor instead of ServiceMonitor.<br>
+Pods are removed from the service endpoints when Pod termination is triggered, which creates a gap in the metrics.<br>
+PodMonitor bridges this gap by scraping the Pods during the shutdown process.<br>
 For more information, see [Monitor RabbitMQ Using the Prometheus Operator](monitoring.html#prom-operator).
 
 ### Known Issues
