@@ -17,14 +17,18 @@ owner: RMQ for k8s
 New features and changes in this release:
 
 * A Helm chart to deploy RabbitmqCluster is now available
-* The Helm chart can be used to integrate with KSM, [see KSM page for more details](ksm.html)
-* A dedicated service broker is no longer included - please use KSM for OSBAPI integration
-* Nodes have a pre-stop check now - the node should not be stopped if that would lead to a quorum loss
-* RabbitMQ upgraded to 3.8.3. This version contains an important fix to correctly handle SIGTERM
-* RabbitmqCluster resource now has a Status field to expose the status of RabbitmqCluster
-* [Monitoring page](monitoring.html) has been updated to use PodMonitor rather than ServiceMonitor. Pods are removed from the service endpoints when pod termination is triggered, which led to a gap in the metrics. PodMonitor keeps scraping the pods during the shutdown process.
+* You can use the Helm chart to integrate with KSM. For more information, see [Using with Container Service Manager](ksm.html).
+* A dedicated service broker is no longer included: use KSM for OSBAPI integration.
+* Nodes have a pre-stop check now: a node should not be stopped if doing so would lead to a quorum loss.
+* RabbitMQ is upgraded to v3.8.3. This version contains an important fix to correctly handle SIGTERM.
+* The RabbitmqCluster resource now has a status field to expose the status of RabbitmqCluster.
+* The documentation now describes how to monitor with PodMonitor instead of ServiceMonitor.
+Pods are removed from the service endpoints when Pod termination is triggered, which creates a gap in the metrics.
+PodMonitor bridges this gap by scraping the Pods during the shutdown process.
+For more information, see [Monitor RabbitMQ Using the Prometheus Operator](monitoring.html#prom-operator).
 
 ### Known Issues
 
-* Pre-stop check may lead to pods being left in the terminating state. See [troubleshooting page](troubleshooting.html#not-terminating-pods) for more details.
-* This version is not compatible with KSM 0.7. Support will be added in the next version.
+* A pre-stop check might cause Pods to get stuck in the terminating state. For more information, see
+[Pods Are Stuck in the Terminating State](troubleshooting.html#not-terminating-pods).
+* This version is not compatible with KSM v0.7. Support is planned for the next version.
