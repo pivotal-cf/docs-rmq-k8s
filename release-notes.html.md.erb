@@ -19,7 +19,7 @@ New features and changes in this release:
 * A Helm chart to deploy RabbitmqCluster is now available
 * You can use the Helm chart to integrate with KSM. For more information, see [Using with Container Service Manager](ksm.html).
 * A dedicated service broker is no longer included. Use KSM for OSBAPI integration.
-* Nodes have a pre-stop check now. A node should not be stopped if doing so would lead to a quorum loss.
+* Nodes now have a pre-stop check that prevents nodes from stopping if doing so would lead to a quorum loss.
 * RabbitMQ is upgraded to v3.8.3. This version contains an important fix to correctly handle SIGTERM.
 * The RabbitmqCluster resource now has a status field to expose the status of RabbitmqCluster.
 * The documentation now describes how to monitor with PodMonitor instead of ServiceMonitor.<br>
