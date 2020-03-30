@@ -110,6 +110,8 @@ in which the `RabbitmqCluster` was defined.
     [Troubleshooting <%= vars.product_full %>](./troubleshooting.html#failed-instance).
     If you cannot solve the problem, contact your operator or email pivotal-cf-feedback@pivotal.io.
 
+1. You can now [start using RabbitMQ in your application](#use) or continue with more advanced configuration options.
+
 ## <a id='configure'></a> Configure a RabbitMQ Instance
 
 To configure a RabbitMQ instance:
@@ -636,6 +638,35 @@ To retrieve credentials and display them in plaintext:
 
 For information about how to start using your apps, see the
 [RabbitMQ documentation](https://www.rabbitmq.com/getstarted.html).
+
+To quickly validate that your instance is running correctly, you can deploy [PerfTest](https://github.com/rabbitmq/rabbitmq-perf-test) with the following commands:
+```
+instance=rabbitmqcluster-sample
+
+username=$(kubectl get secret ${instance}-rabbitmq-admin -o jsonpath="{.data.username}" | base64 --decode)
+password=$(kubectl get secret ${instance}-rabbitmq-admin -o jsonpath="{.data.password}" | base64 --decode)
+service=${instance}-rabbitmq-ingress
+
+kubectl run perf-test --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}"
+```
+
+Please make sure you are in the same namespace or add `-n NAMESPACE` to all `kubectl` commands above.
+
+If PerfTest connected successfully, you should see it is sending and receiving messages:
+```
+$ kubectl logs -f perf-test
+id: test-104555-858, starting consumer #0
+id: test-104555-858, starting consumer #0, channel #0
+id: test-104555-858, starting producer #0
+id: test-104555-858, starting producer #0, channel #0
+id: test-104555-858, time: 1.000s, sent: 19057 msg/s, received: 11768 msg/s, min/median/75th/95th/99th consumer latency: 4042/140608/190841/251618/258979 ?s
+id: test-104555-858, time: 2.000s, sent: 24020 msg/s, received: 16283 msg/s, min/median/75th/95th/99th consumer latency: 222998/507432/642110/754038/776600 ?s
+```
+
+You can now delete PerfTest with:
+```
+kubectl delete pod perf-test
+```
 
 ## <a id="delete"></a> Delete a RabbitMQ Instance
 
