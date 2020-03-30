@@ -647,15 +647,15 @@ For more information, see [PerfTest](https://github.com/rabbitmq/rabbitmq-perf-t
 
 1. Run these commands:
 
-    ```
-    instance=rabbitmqcluster-sample
+    <pre class="terminal">
+      $ instance=rabbitmqcluster-sample
 
-    username=$(kubectl get secret ${instance}-rabbitmq-admin -o jsonpath="{.data.username}" | base64 --decode)
-    password=$(kubectl get secret ${instance}-rabbitmq-admin -o jsonpath="{.data.password}" | base64 --decode)
-    service=${instance}-rabbitmq-ingress
+      username=$(kubectl get secret ${instance}-rabbitmq-admin -o jsonpath="{.data.username}" | base64 --decode)
+      password=$(kubectl get secret ${instance}-rabbitmq-admin -o jsonpath="{.data.password}" | base64 --decode)
+      service=${instance}-rabbitmq-ingress
 
-    kubectl run perf-test --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}"
-    ```
+      kubectl run perf-test --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}"
+    </pre>
 
     When PerfTest connects successfully, you see it send and receive messages as in this example:
 
