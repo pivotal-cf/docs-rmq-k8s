@@ -642,19 +642,20 @@ For more information, see [PerfTest](https://github.com/rabbitmq/rabbitmq-perf-t
 
 <p class="note">
   <strong>Note:</strong> If you run the below commands from outside the RabbitmqCluster namespace, add
-  `-n NAMESPACE` to the kubectl commands below.
+  <code>-n NAMESPACE</code> to the kubectl commands below.
 </p>
 
 1. Run these commands:
-```
-instance=rabbitmqcluster-sample
 
-username=$(kubectl get secret ${instance}-rabbitmq-admin -o jsonpath="{.data.username}" | base64 --decode)
-password=$(kubectl get secret ${instance}-rabbitmq-admin -o jsonpath="{.data.password}" | base64 --decode)
-service=${instance}-rabbitmq-ingress
+    ```
+    instance=rabbitmqcluster-sample
 
-kubectl run perf-test --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}"
-```
+    username=$(kubectl get secret ${instance}-rabbitmq-admin -o jsonpath="{.data.username}" | base64 --decode)
+    password=$(kubectl get secret ${instance}-rabbitmq-admin -o jsonpath="{.data.password}" | base64 --decode)
+    service=${instance}-rabbitmq-ingress
+
+    kubectl run perf-test --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}"
+    ```
 
 When PerfTest connects successfully, you see it send and receive messages as in this example:
 
@@ -669,9 +670,10 @@ When PerfTest connects successfully, you see it send and receive messages as in 
 </pre>
 
 1. Delete PerfTest by running:
-```
-kubectl delete pod perf-test
-```
+
+    ```
+    kubectl delete pod perf-test
+    ```
 
 ## <a id='use'></a> Use the RabbitMQ Service in Your App
 
