@@ -657,17 +657,17 @@ For more information, see [PerfTest](https://github.com/rabbitmq/rabbitmq-perf-t
     kubectl run perf-test --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}"
     ```
 
-When PerfTest connects successfully, you see it send and receive messages as in this example:
+    When PerfTest connects successfully, you see it send and receive messages as in this example:
 
-<pre class="terminal">
-  $ kubectl logs -f perf-test
-  id: test-104555-858, starting consumer #0
-  id: test-104555-858, starting consumer #0, channel #0
-  id: test-104555-858, starting producer #0
-  id: test-104555-858, starting producer #0, channel #0
-  id: test-104555-858, time: 1.000s, sent: 19057 msg/s, received: 11768 msg/s, min/median/75th/95th/99th consumer latency: 4042/140608/190841/251618/258979 ?s
-  id: test-104555-858, time: 2.000s, sent: 24020 msg/s, received: 16283 msg/s, min/median/75th/95th/99th consumer latency: 222998/507432/642110/754038/776600 ?s
-</pre>
+    <pre class="terminal">
+      $ kubectl logs -f perf-test
+      id: test-104555-858, starting consumer #0
+      id: test-104555-858, starting consumer #0, channel #0
+      id: test-104555-858, starting producer #0
+      id: test-104555-858, starting producer #0, channel #0
+      id: test-104555-858, time: 1.000s, sent: 19057 msg/s, received: 11768 msg/s, min/median/75th/95th/99th consumer latency: 4042/140608/190841/251618/258979 ?s
+      id: test-104555-858, time: 2.000s, sent: 24020 msg/s, received: 16283 msg/s, min/median/75th/95th/99th consumer latency: 222998/507432/642110/754038/776600 ?s
+    </pre>
 
 1. Delete PerfTest by running:
 
