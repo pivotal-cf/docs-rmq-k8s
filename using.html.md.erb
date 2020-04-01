@@ -645,19 +645,23 @@ For more information, see [PerfTest](https://github.com/rabbitmq/rabbitmq-perf-t
   <code>-n NAMESPACE</code> to the kubectl commands below.
 </p>
 
-1. Run these commands:
+1. To install and run PerfTest, run these commands:
 
-    <pre class="terminal">
-    $ instance=rabbitmqcluster-sample
+    ```
+    instance=INSTANCE-NAME
+    username=$(kubectl get secret ${instance}-rabbitmq-admin -o jsonpath="{.data.username}" | base64 --decode)
+    password=$(kubectl get secret ${instance}-rabbitmq-admin -o jsonpath="{.data.password}" | base64 --decode)
+    service=${instance}-rabbitmq-ingress
+    kubectl run perf-test --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}"
+    ```
 
-    $ username=$(kubectl get secret ${instance}-rabbitmq-admin -o jsonpath="{.data.username}" | base64 --decode)
-    $ password=$(kubectl get secret ${instance}-rabbitmq-admin -o jsonpath="{.data.password}" | base64 --decode)
-    $ service=${instance}-rabbitmq-ingress
+1. Verify that PerfTest is sending and receiving messages by running:
 
-    $ kubectl run perf-test --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}"
-    </pre>
+    ```
+    kubectl logs -f perf-test
+    ```
 
-    When PerfTest connects successfully, you see it send and receive messages as in this example:
+    A log appears as in this example:
 
     <pre class="terminal">
     $ kubectl logs -f perf-test
