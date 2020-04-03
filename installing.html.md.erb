@@ -203,5 +203,154 @@ To install <%= vars.product_short %>:
     * Deploys the Kubernetes Operator
     * Installs the `RabbitmqCluster` custom resource definition (CRD)
 
-To uninstall the product,
-follow the procedure in [Uninstall <%= vars.product_short %> ](./upgrading.html#uninstall-manifests).
+To uninstall the product, follow the steps in [Uninstall Through the Manifests](./upgrading.html#uninstall-manifests).
+
+## <a id='using-helm'></a> Install and Configure <%= vars.product_full %> Using a Helm Chart
+
+This alternative method describes how to install and configure <%= vars.product_full %> using a Helm chart
+hosted on VMware Tanzu Network.
+For more information, see the [Helm documentation](https://helm.sh/docs/topics/charts/).
+
+## Additional Prerequisites
+
+In addition to the [prerequisites](#prerequisites) listed above, this method requires:
+
+1. An account in VMware Tanzu Network
+1. The Helm CLI. For installation instructions, see the [Helm documentation](https://helm.sh/docs/intro/install/).
+1. Access to the Pivotal Network registry.
+For more information, see [Verify Your Access to the Image Registry](#helm-verify-docker-access) below.
+
+## <a id='helm-verify-docker-access'></a> Verify Your Access to the Image Registry
+
+To verify your access to the VMware Tanzu Network registry:
+
+1. Run:
+
+    ```bash
+    $ docker login registry.pivotal.io
+    ```
+
+    This command prompts a username and a password.
+    The username is the email address used to register in VMware Tanzu Network.
+    The password is your VMware Tanzu Network account password.
+
+1. To pull the registry, run:
+
+    ```bash
+    $ docker pull registry.pivotal.io/p-rabbitmq-for-kubernetes/rabbitmq-for-kubernetes-operator:VERSION-NUMBER
+    ```
+
+    Where `VERSION-NUMBER` is the product version in VMware Tanzu Network. For example, `0.7.0-build.41`.
+
+If the above command is successful and you do not want to relocate the Operator image, continue to
+[Configure a Helm Chart Repository](#helm-configure-repo).
+
+If the above command fails with an error similar to
+
+```
+Error response from daemon: pull access denied [...]
+```
+
+then follow the steps in [Set a Version Variable](#set-ver-var) above and then follow the steps in
+[Move the Images](#relocate) above.
+After you have finished these steps, proceed to [Configure Helm Chart Repository](#helm-configure-repo) below
+or use the main [installation method](#overview). <%# After giving the anchor, state whether it is "above" or "below". %>
+
+## <a id='helm-configure-repo'></a> Configure a Helm Chart Repository
+
+To configure a Helm chart repository hosted in VMware Tanzu Network:
+
+1. Run:
+
+    ```bash
+    $ helm repo add p-rabbitmq-for-kubernetes https://registry.pivotal.io/chartrepo/p-rabbitmq-for-kubernetes --username=EMAIL-ADDRESS --password=PASSWORD
+    ```
+
+    Where:
+    * `EMAIL-ADDRESS` is the email address used to register in VMware Tanzu Network
+    * `PASSWORD` is the same password of your VMware Tanzu Network account.
+
+    <p class='note'>
+      <strong>Note:</strong> Helm stores these credentials in a hidden file in plaintext.
+      Consider using a bot or shared account details instead of your personal account credentials.
+    </p>
+
+
+1. Update the local Helm cache by running:
+
+    ```
+    helm repo update
+    ```
+
+
+## <a id='helm-create-values'></a> Create a Values File
+
+To create a values file:
+
+1. Run:
+
+    ```
+    helm show values p-rabbitmq-for-kubernetes/rabbitmq-operator > myvalues.yaml
+    ```
+
+2. Open the values file and customize the properties. See an example below:
+
+    ```
+    global:
+      imageRegistry: registry.pivotal.io
+      # This is Pivotal Network username/email address
+      imageUsername:
+      imagePassword:
+    images:
+      operator:
+        name: registry.pivotal.io/p-rabbitmq-for-kubernetes/rabbitmq-for-kubernetes-operator
+        tag: "0.7.0-build.41"
+    ```
+
+    Customize the values `imageUsername` and `imagePassword`.
+    If you were able to pull the image registry when following the steps in
+    [Verify Your Access to the Image Registry](#helm-verify-docker-access) above, these credentials are your
+    VMware Tanzu Network username and password.
+
+    If you were not able to pull the image registry, these credentials are likely the ones used in the
+    [Move the Images](#relocate) section above.
+    If you had to move the images, you have to customize `imageRegistry` and `images.operator.name` to match
+    the registry and the image name provided when you moved the images.
+
+    This is an example of a customized values file:
+
+    ```
+    global:
+      imageRegistry: someregistry.example.com
+      # This is Pivotal Network username/email address
+      imageUsername: myuser@example.com
+      imagePassword: mypassword
+    images:
+      operator:
+        name: someregistry.example.com/some-project/rabbitmq-for-kubernetes-operator
+        tag: "0.7.0-build.41"
+    ```
+
+## <a id='helm-install-op'></a> Helm Install
+
+To install the Operator using Helm:
+
+1. Run:
+
+    ```
+    helm -n default install -f myvalues.yaml rabbitmq-for-kubernetes p-rabbitmq-for-kubernetes/rabbitmq-operator
+    ```
+
+    Helm uses the option `-n default` to store a Kubernetes secret in the default namespace.
+    Helm does this to avoid potential failures caused by `kubectl` context referencing non-existing namespaces.
+
+1. Verify the output of the `helm install` command. See an example below.
+
+    ```
+    NAME: rabbitmq-for-kubernetes
+    LAST DEPLOYED: Tue Mar 31 16:13:05 2020
+    NAMESPACE: default
+    STATUS: deployed
+    REVISION: 1
+    TEST SUITE: None
+    ```
