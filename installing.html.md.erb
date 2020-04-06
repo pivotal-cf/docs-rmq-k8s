@@ -12,8 +12,7 @@ This topic describes how to install and configure <%= vars.product_full %>.
 Before you install and configure <%= vars.product_short %>, you must install and configure the following software:
 
 1. **kubectl:** For installation instructions,
-see the [Kubernetes documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes
-documentation.
+see the [Kubernetes documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
 
 1. **The Docker CLI:** For installation instructions,
 see the [Docker documentation](https://docs.docker.com/install/).
@@ -46,7 +45,7 @@ To download the <%= vars.product_short %> artifact:
 
 The artifact contains Docker images, deployment manifests for the Kubernetes Operator, and a Helm chart.
 You can deploy <%= vars.product_short %> with the Helm chart by using Container Service Manager (KSM).
-See [Using <%= vars.product_full %> with Container Service Manager](./ksm.html).
+For more information, see [Using <%= vars.product_full %> with Container Service Manager](./ksm.html).
 <br><br>
 The images are for:
 
@@ -211,7 +210,7 @@ This alternative method describes how to install and configure <%= vars.product_
 hosted on VMware Tanzu Network.
 For more information, see the [Helm documentation](https://helm.sh/docs/topics/charts/).
 
-## Additional Prerequisites
+### <a id='helm-prereqs'></a> Prerequisites
 
 In addition to the [prerequisites](#prerequisites) listed above, this method requires:
 
@@ -220,7 +219,7 @@ In addition to the [prerequisites](#prerequisites) listed above, this method req
 1. Access to the Pivotal Network registry.
 For more information, see [Verify Your Access to the Image Registry](#helm-verify-docker-access) below.
 
-## <a id='helm-verify-docker-access'></a> Verify Your Access to the Image Registry
+### <a id='helm-verify-docker-access'></a> Verify Your Access to the Image Registry
 
 To verify your access to the VMware Tanzu Network registry:
 
@@ -254,21 +253,21 @@ Error response from daemon: pull access denied [...]
 then follow the steps in [Set a Version Variable](#set-ver-var) above and then follow the steps in
 [Move the Images](#relocate) above.
 After you have finished these steps, proceed to [Configure Helm Chart Repository](#helm-configure-repo) below
-or use the main [installation method](#overview). <%# After giving the anchor, state whether it is "above" or "below". %>
+or use the [main installation method](#overview) above if you do not have permission to pull the image.
 
-## <a id='helm-configure-repo'></a> Configure a Helm Chart Repository
+### <a id='helm-configure-repo'></a> Configure a Helm Chart Repository
 
 To configure a Helm chart repository hosted in VMware Tanzu Network:
 
 1. Run:
 
     ```bash
-    $ helm repo add p-rabbitmq-for-kubernetes https://registry.pivotal.io/chartrepo/p-rabbitmq-for-kubernetes --username=EMAIL-ADDRESS --password=PASSWORD
+    $ helm repo add p-rabbitmq-for-kubernetes https://registry.pivotal.io/chartrepo/p-rabbitmq-for-kubernetes --username='EMAIL-ADDRESS' --password='PASSWORD'
     ```
 
     Where:
-    * `EMAIL-ADDRESS` is the email address used to register in VMware Tanzu Network
-    * `PASSWORD` is the same password of your VMware Tanzu Network account.
+    * `'EMAIL-ADDRESS'` is the email address used to register in VMware Tanzu Network
+    * `'PASSWORD'` is the same password of your VMware Tanzu Network account.
 
     <p class='note'>
       <strong>Note:</strong> Helm stores these credentials in a hidden file in plaintext.
@@ -283,7 +282,7 @@ To configure a Helm chart repository hosted in VMware Tanzu Network:
     ```
 
 
-## <a id='helm-create-values'></a> Create a Values File
+### <a id='helm-create-values'></a> Create a Values File
 
 To create a values file:
 
@@ -331,7 +330,7 @@ To create a values file:
         tag: "0.7.0-build.41"
     ```
 
-## <a id='helm-install-op'></a> Helm Install
+### <a id='helm-install-op'></a> Helm Install
 
 To install the Operator using Helm:
 
