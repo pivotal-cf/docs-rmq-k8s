@@ -9,8 +9,9 @@ This topic describes how to install and configure <%= vars.product_full %> using
 Tanzu Network.
 For more information, see the [Helm documentation](https://helm.sh/docs/topics/charts/).
 
-If you cannot obtain any of the [prerequisites](#prereqs) listed below, follow the steps in
+If you cannot meet the [prerequisites](#prereqs) listed below, follow the steps in
 [Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing.html)
+
 
 ## <a id='prereqs'></a> Prerequisites
 
@@ -29,6 +30,8 @@ or you need to specify which StorageClass to use.
 image private even if your registry is publicly accessible.
 If you do not have access to a private image registry, email the team at rabbitmq-for-k8s@pivotal.io for help.
 
+To install <%= vars.product_short %> using a Helm chart, you must also have:
+
 1. **A VMware Tanzu Network account:** Create an account from the [Sign-up](https://account.run.pivotal.io/z/uaa/sign-up)
 page if you do not already have one.
 
@@ -36,6 +39,7 @@ page if you do not already have one.
 
 1. **Access to the VMware Tanzu Network registry:** For more information, see
 [Verify Your Access to the Image Registry](#helm-verify-docker-access) below.
+
 
 ## <a id='helm-verify-docker-access'></a> Verify That You Can Access the Image Registry
 
@@ -76,6 +80,7 @@ If you successfully pulled the image registry, and you want to relocate the Oper
 1. Follow the steps in [Set a Version Variable](./installing.html#set-ver-var).
 1. Follow the steps in [Move the Images](./installing.html#relocate).
 1. Proceed to [Configure Helm Chart Repository](#helm-configure-repo) below.
+
 
 ## <a id='helm-configure-repo'></a> Configure a Helm Chart Repository
 
@@ -151,6 +156,7 @@ To create a values file:
         name: someregistry.example.com/some-project/rabbitmq-for-kubernetes-operator
         tag: "0.7.0-build.41"
     ```
+
 
 ## <a id='helm-install-op'></a> Helm Install
 
