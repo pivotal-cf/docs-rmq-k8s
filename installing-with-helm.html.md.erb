@@ -41,6 +41,17 @@ page if you do not already have one.
 [Verify Your Access to the Image Registry](#helm-verify-docker-access) below.
 
 
+## <a id='overview'></a> Overview
+
+To install and configure <%= vars.product_short %> using a Helm chart:
+
+1. [Verify That You Can Access the Image Registry](#helm-verify-docker-access)
+1. [(Optional) Relocate the Operator Image](#relocate-op-image)
+1. [Configure a Helm Chart Repository](#helm-configure-repo)
+1. [Create a Values File](#helm-create-values)
+1. [Helm Install](#helm-install-op)
+
+
 ## <a id='helm-verify-docker-access'></a> Verify That You Can Access the Image Registry
 
 To verify that you have access to the VMware Tanzu Network registry:
@@ -63,11 +74,11 @@ To verify that you have access to the VMware Tanzu Network registry:
 
     Where `VERSION-NUMBER` is the product version in VMware Tanzu Network. For example, `0.7.0-build.41`.
 
-If you see an error similar to:
+If you see an error similar to
 
-    ```
-    Error response from daemon: pull access denied [...]
-    ```
+<pre class="terminal">
+Error response from daemon: pull access denied [...]
+</pre>
 
 install <%= vars.product_short %> by following the steps in
 [Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing.html) instead.
@@ -75,11 +86,13 @@ install <%= vars.product_short %> by following the steps in
 If you successfully pulled the image registry, and you do not want to relocate the Operator image, skip to
 [Configure a Helm Chart Repository](#helm-configure-repo) below.
 
+
+## <a id='relocate-op-image'></a> (Optional) Relocate the Operator Image
+
 If you successfully pulled the image registry, and you want to relocate the Operator image:
 
 1. Follow the steps in [Set a Version Variable](./installing.html#set-ver-var).
 1. Follow the steps in [Move the Images](./installing.html#relocate).
-1. Proceed to [Configure Helm Chart Repository](#helm-configure-repo) below.
 
 
 ## <a id='helm-configure-repo'></a> Configure a Helm Chart Repository
