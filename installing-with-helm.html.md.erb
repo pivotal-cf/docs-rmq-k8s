@@ -31,7 +31,8 @@ If you do not have access to a private image registry, email the team at rabbitm
 
 To use a Helm chart for installation, you must have:
 
-1. **A VMware Tanzu Network account:** Create an account from the [Sign-up] page if you do not already have one.
+1. **A VMware Tanzu Network account:** Create an account from the [Sign-up](https://account.run.pivotal.io/z/uaa/sign-up)
+page if you do not already have one.
 1. **The Helm CLI:** For installation instructions, see the [Helm documentation](https://helm.sh/docs/intro/install/).
 1. **Access to the Pivotal Network registry:** For more information, see
 [Verify Your Access to the Image Registry](#helm-verify-docker-access) below.
@@ -68,9 +69,9 @@ Error response from daemon: pull access denied [...]
 ```
 
 then follow the steps in [Set a Version Variable](./installing.html#set-ver-var) and then follow the steps in
-[Move the Images](#relocate) above.
+[Move the Images](./installing.html#relocate).
 After you have finished these steps, proceed to [Configure Helm Chart Repository](#helm-configure-repo) below
-or use the main [installation method](#overview) above if you do not have permission to pull the image.
+or use the main [installation method](./installing.html#overview) above if you do not have permission to pull the image.
 
 ### <a id='helm-configure-repo'></a> Configure a Helm Chart Repository
 
@@ -129,7 +130,7 @@ To create a values file:
     VMware Tanzu Network username and password.
 
     If you were not able to pull the image registry, these credentials are likely the ones used in the
-    [Move the Images](#relocate) section above.
+    [Move the Images](./installing.html#relocate) section.
     If you had to move the images, you have to customize `imageRegistry` and `images.operator.name` to match
     the registry and the image name provided when you moved the images.
 
