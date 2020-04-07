@@ -5,8 +5,8 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to install and configure <%= vars.product_full %> using a Helm chart
-hosted on VMware Tanzu Network.
+This topic describes how to install and configure <%= vars.product_full %> using a Helm chart hosted on VMware
+Tanzu Network.
 For more information, see the [Helm documentation](https://helm.sh/docs/topics/charts/).
 
 If you cannot obtain any of the [prerequisites](#prereqs) listed below, follow the steps in
@@ -14,7 +14,7 @@ If you cannot obtain any of the [prerequisites](#prereqs) listed below, follow t
 
 ## <a id='prereqs'></a> Prerequisites
 
-Before you install and configure <%= vars.product_short %>, you must install and configure the following software:
+Before you install and configure <%= vars.product_short %>, you must install and configure:
 
 1. **kubectl:** For installation instructions,
 see the [Kubernetes documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
@@ -29,17 +29,17 @@ or you need to specify which StorageClass to use.
 image private even if your registry is publicly accessible.
 If you do not have access to a private image registry, email the team at rabbitmq-for-k8s@pivotal.io for help.
 
-To use a Helm chart for installation, you must have:
-
 1. **A VMware Tanzu Network account:** Create an account from the [Sign-up](https://account.run.pivotal.io/z/uaa/sign-up)
 page if you do not already have one.
+
 1. **The Helm CLI:** For installation instructions, see the [Helm documentation](https://helm.sh/docs/intro/install/).
-1. **Access to the Pivotal Network registry:** For more information, see
+
+1. **Access to the VMware Tanzu Network registry:** For more information, see
 [Verify Your Access to the Image Registry](#helm-verify-docker-access) below.
 
-### <a id='helm-verify-docker-access'></a> Verify Your Access to the Image Registry
+## <a id='helm-verify-docker-access'></a> Verify That You Can Access the Image Registry
 
-To verify your access to the VMware Tanzu Network registry:
+To verify that you have access to the VMware Tanzu Network registry:
 
 1. Run:
 
@@ -59,21 +59,25 @@ To verify your access to the VMware Tanzu Network registry:
 
     Where `VERSION-NUMBER` is the product version in VMware Tanzu Network. For example, `0.7.0-build.41`.
 
-If the above command is successful and you do not want to relocate the Operator image, continue to
-[Configure a Helm Chart Repository](#helm-configure-repo).
+If you see an error similar to:
 
-If you want to relocate the Operator image, or the above command fails with an error similar to
+    ```
+    Error response from daemon: pull access denied [...]
+    ```
 
-```
-Error response from daemon: pull access denied [...]
-```
+install <%= vars.product_short %> by following the steps in
+[Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing.html) instead.
 
-then follow the steps in [Set a Version Variable](./installing.html#set-ver-var) and then follow the steps in
-[Move the Images](./installing.html#relocate).
-After you have finished these steps, proceed to [Configure Helm Chart Repository](#helm-configure-repo) below
-or use the main [installation method](./installing.html#overview) above if you do not have permission to pull the image.
+If you successfully pulled the image registry, and you do not want to relocate the Operator image, skip to
+[Configure a Helm Chart Repository](#helm-configure-repo) below.
 
-### <a id='helm-configure-repo'></a> Configure a Helm Chart Repository
+If you successfully pulled the image registry, and you want to relocate the Operator image:
+
+1. Follow the steps in [Set a Version Variable](./installing.html#set-ver-var).
+1. Follow the steps in [Move the Images](./installing.html#relocate).
+1. Proceed to [Configure Helm Chart Repository](#helm-configure-repo) below.
+
+## <a id='helm-configure-repo'></a> Configure a Helm Chart Repository
 
 To configure a Helm chart repository hosted in VMware Tanzu Network:
 
@@ -100,7 +104,7 @@ To configure a Helm chart repository hosted in VMware Tanzu Network:
     ```
 
 
-### <a id='helm-create-values'></a> Create a Values File
+## <a id='helm-create-values'></a> Create a Values File
 
 To create a values file:
 
@@ -148,7 +152,7 @@ To create a values file:
         tag: "0.7.0-build.41"
     ```
 
-### <a id='helm-install-op'></a> Helm Install
+## <a id='helm-install-op'></a> Helm Install
 
 To install the Operator using Helm:
 
