@@ -58,8 +58,8 @@ To verify that you have access to the <%= vars.product_network %> registry:
 
 1. Run:
 
-    ```bash
-    $ docker login registry.pivotal.io
+    ```
+    docker login registry.pivotal.io
     ```
 
 1. At the username prompt, enter the email address associated with your <%= vars.product_network %> account.
@@ -68,8 +68,8 @@ To verify that you have access to the <%= vars.product_network %> registry:
 
 1. Pull the registry by running:
 
-    ```bash
-    $ docker pull registry.pivotal.io/p-rabbitmq-for-kubernetes/rabbitmq-for-kubernetes-operator:VERSION-NUMBER
+    ```
+    docker pull registry.pivotal.io/p-rabbitmq-for-kubernetes/rabbitmq-for-kubernetes-operator:VERSION-NUMBER
     ```
 
     Where `VERSION-NUMBER` is the product version in <%= vars.product_network %>. For example, `0.7.0-build.41`.
@@ -101,12 +101,12 @@ To configure a Helm chart repository hosted in <%= vars.product_network %>:
 
 1. Run:
 
-    ```bash
-    $ helm repo add p-rabbitmq-for-kubernetes https://registry.pivotal.io/chartrepo/p-rabbitmq-for-kubernetes --username='EMAIL-ADDRESS' --password='PASSWORD'
+    ```
+    helm repo add p-rabbitmq-for-kubernetes https://registry.pivotal.io/chartrepo/p-rabbitmq-for-kubernetes --username='EMAIL-ADDRESS' --password='PASSWORD'
     ```
 
     Where:
-    * `'EMAIL-ADDRESS'` is the email address used to register in <%= vars.product_network %>
+    * `'EMAIL-ADDRESS'` is the email address used to register in <%= vars.product_network %>.
     * `'PASSWORD'` is the same password of your <%= vars.product_network %> account.
 
     <p class='note'>
@@ -132,43 +132,39 @@ To create a values file:
     helm show values p-rabbitmq-for-kubernetes/rabbitmq-operator > myvalues.yaml
     ```
 
-2. Open the values file and customize the properties. See an example below:
+1. Open the values file and paste in the code below.
 
     ```
     global:
-      imageRegistry: registry.pivotal.io
-      # This is Pivotal Network username/email address
-      imageUsername:
-      imagePassword:
+      imageRegistry: IMAGE-REGISTRY-URL
+      imageUsername: USERNAME
+      imagePassword: PASSWORD
     images:
       operator:
-        name: registry.pivotal.io/p-rabbitmq-for-kubernetes/rabbitmq-for-kubernetes-operator
-        tag: "0.7.0-build.41"
+        name: IMAGE-REGISTRY-URL/PROJECT-NAME/rabbitmq-for-kubernetes-operator
+        tag: "VERSION-NUMBER"
     ```
 
-    Customize the values `imageUsername` and `imagePassword`.
-    If you were able to pull the image registry when following the steps in
-    [Verify Your Access to the Image Registry](#helm-verify-docker-access) above, these credentials are your
-    <%= vars.product_network %> username and password.
+    Where:
 
-    If you were not able to pull the image registry, these credentials are likely the ones used in the
-    [Move the Images](./installing.html#relocate) section.
-    If you had to move the images, you have to customize `imageRegistry` and `images.operator.name` to match
-    the registry and the image name provided when you moved the images.
+    * `IMAGE-REGISTRY-URL` is your image registry URL.
+    * `USERNAME` is the email address associated with your <%= vars.product_network %> account.
+    * `PASSWORD` is the password associated with your <%= vars.product_network %> account.
+    * `PROJECT-NAME` is your project name.
+    * `VERSION-NUMBER` is your build version.
 
     This is an example of a customized values file:
 
-    ```
+    <pre class="terminal">
     global:
       imageRegistry: someregistry.example.com
-      # This is Pivotal Network username/email address
       imageUsername: myuser@example.com
-      imagePassword: mypassword
+      imagePassword: example-password
     images:
       operator:
         name: someregistry.example.com/some-project/rabbitmq-for-kubernetes-operator
         tag: "0.7.0-build.41"
-    ```
+    </pre>
 
 
 ## <a id='helm-install-op'></a> Helm Install
@@ -186,11 +182,11 @@ To install the Operator using Helm:
 
 1. Verify the output of the `helm install` command. See an example below.
 
-    ```
+    <pre class="terminal">
     NAME: rabbitmq-for-kubernetes
     LAST DEPLOYED: Tue Mar 31 16:13:05 2020
     NAMESPACE: default
     STATUS: deployed
     REVISION: 1
     TEST SUITE: None
-    ```
+    </pre>
