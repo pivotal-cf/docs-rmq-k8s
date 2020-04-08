@@ -6,8 +6,8 @@ owner: RMQ for k8s
 <strong><%= modified_date %></strong>
 
 This topic describes how to install and configure <%= vars.product_full %>.
-If you want to install and configure <%= vars.product_full %> using a Helm chart hosted on VMware Tanzu Network,
-follow the steps in
+To install and configure <%= vars.product_full %> using a Helm chart hosted on <%= vars.product_network %>, follow
+the steps in
 [Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93; Using a Helm Chart](./installing-with-helm.html).
 
 ## <a id='prerequisites'></a> Prerequisites
@@ -129,6 +129,7 @@ To create the namespace and role-based access control (RBAC) objects:
     ```
     kubectl apply -f manifests/namespace.yaml
     ```
+
 1. Create RBAC objects in the `pivotal-rabbitmq-system` namespace by running:
 
     ```
@@ -210,21 +211,21 @@ To uninstall the product, follow the steps in [Uninstall Through the Manifests](
 ## <a id='using-helm'></a> Install and Configure <%= vars.product_full %> Using a Helm Chart
 
 This alternative method describes how to install and configure <%= vars.product_full %> using a Helm chart
-hosted on VMware Tanzu Network.
+hosted on <%= vars.product_network %>.
 For more information, see the [Helm documentation](https://helm.sh/docs/topics/charts/).
 
 ### <a id='helm-prereqs'></a> Prerequisites
 
 In addition to the [prerequisites](#prerequisites) listed above, this method requires:
 
-1. An account in VMware Tanzu Network
+1. An account in <%= vars.product_network %>.
 1. The Helm CLI. For installation instructions, see the [Helm documentation](https://helm.sh/docs/intro/install/).
 1. Access to the Pivotal Network registry.
 For more information, see [Verify Your Access to the Image Registry](#helm-verify-docker-access) below.
 
 ### <a id='helm-verify-docker-access'></a> Verify Your Access to the Image Registry
 
-To verify your access to the VMware Tanzu Network registry:
+To verify your access to the <%= vars.product_network %> registry:
 
 1. Run:
 
@@ -233,8 +234,8 @@ To verify your access to the VMware Tanzu Network registry:
     ```
 
     This command prompts a username and a password.
-    The username is the email address used to register in VMware Tanzu Network.
-    The password is your VMware Tanzu Network account password.
+    The username is the email address used to register in <%= vars.product_network %>.
+    The password is your <%= vars.product_network %> account password.
 
 1. To pull the registry, run:
 
@@ -242,10 +243,10 @@ To verify your access to the VMware Tanzu Network registry:
     $ docker pull registry.pivotal.io/p-rabbitmq-for-kubernetes/rabbitmq-for-kubernetes-operator:VERSION-NUMBER
     ```
 
-    Where `VERSION-NUMBER` is the product version in VMware Tanzu Network. For example, `0.7.0-build.41`.
+    Where `VERSION-NUMBER` is the product version in <%= vars.product_network %>. For example, `0.7.0-build.41`.
 
 If the above command is successful and you do not want to relocate the Operator image, continue to
-[Configure a Helm Chart Repository](#helm-configure-repo).
+[Configure a Helm Chart Repository](#helm-configure-repo) below.
 
 If the above command fails with an error similar to
 
@@ -260,7 +261,7 @@ or use the [main installation method](#overview) above if you do not have permis
 
 ### <a id='helm-configure-repo'></a> Configure a Helm Chart Repository
 
-To configure a Helm chart repository hosted in VMware Tanzu Network:
+To configure a Helm chart repository hosted in <%= vars.product_network %>:
 
 1. Run:
 
@@ -269,8 +270,8 @@ To configure a Helm chart repository hosted in VMware Tanzu Network:
     ```
 
     Where:
-    * `'EMAIL-ADDRESS'` is the email address used to register in VMware Tanzu Network
-    * `'PASSWORD'` is the same password of your VMware Tanzu Network account.
+    * `'EMAIL-ADDRESS'` is the email address used to register in <%= vars.product_network %>.
+    * `'PASSWORD'` is the same password of your <%= vars.product_network %> account.
 
     <p class='note'>
       <strong>Note:</strong> Helm stores these credentials in a hidden file in plaintext.
@@ -312,7 +313,7 @@ To create a values file:
     Customize the values `imageUsername` and `imagePassword`.
     If you were able to pull the image registry when following the steps in
     [Verify Your Access to the Image Registry](#helm-verify-docker-access) above, these credentials are your
-    VMware Tanzu Network username and password.
+    <%= vars.product_network %> username and password.
 
     If you were not able to pull the image registry, these credentials are likely the ones used in the
     [Move the Images](#relocate) section above.
@@ -344,7 +345,7 @@ To install the Operator using Helm:
     ```
 
     Helm uses the option `-n default` to store a Kubernetes secret in the default namespace.
-    Helm does this to avoid potential failures caused by `kubectl` context referencing non-existing namespaces.
+    Helm does this to avoid potential failures caused by kubectl context-referencing non-existing namespaces.
 
 1. Verify the output of the `helm install` command. See an example below.
 
