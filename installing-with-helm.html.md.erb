@@ -74,17 +74,17 @@ To verify that you have access to the <%= vars.product_network %> registry:
 
     Where `VERSION-NUMBER` is the product version in <%= vars.product_network %>. For example, `0.7.0-build.41`.
 
-If you see an error similar to
+    If you see an error similar to
 
-<pre class="terminal">
-Error response from daemon: pull access denied [...]
-</pre>
+    <pre class="terminal">
+    Error response from daemon: pull access denied [...]
+    </pre>
 
-install <%= vars.product_short %> by following the steps in
-[Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing.html) instead.
+    install <%= vars.product_short %> by following the steps in
+    [Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing.html) instead.
 
-If you successfully pulled the image registry, and you do not want to relocate the Operator image, skip to
-[Configure a Helm Chart Repository](#helm-configure-repo) below.
+    If you successfully pulled the image registry, and you do not want to relocate the Operator image, skip to
+    [Configure a Helm Chart Repository](#helm-configure-repo) below.
 
 
 ## <a id='relocate-op-image'></a> (Optional) Relocate the Operator Image
@@ -106,8 +106,8 @@ To configure a Helm chart repository hosted in <%= vars.product_network %>:
     ```
 
     Where:
-    * `'EMAIL-ADDRESS'` is the email address used to register in <%= vars.product_network %>.
-    * `'PASSWORD'` is the same password of your <%= vars.product_network %> account.
+    * `EMAIL-ADDRESS` is the email address used to register in <%= vars.product_network %>.
+    * `PASSWORD` is the same password of your <%= vars.product_network %> account.
 
     <p class='note'>
       <strong>Note:</strong> Helm stores these credentials in a hidden file in plaintext.
@@ -146,7 +146,6 @@ To create a values file:
     ```
 
     Where:
-
     * `IMAGE-REGISTRY-URL` is your image registry URL.
     * `USERNAME` is the email address associated with your <%= vars.product_network %> account.
     * `PASSWORD` is the password associated with your <%= vars.product_network %> account.
