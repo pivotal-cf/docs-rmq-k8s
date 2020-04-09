@@ -15,6 +15,25 @@ Product upgrades are currently not supported. To test a newer version, uninstall
 To uninstall the product if it was installed through the Kubernetes manifests, run these commands:
 
   ```
+  kubectl delete rabbitmqclusters --all --all-namespaces
+  kubectl wait --for delete pod -l "app.kubernetes.io/component=rabbitmq" --all-namespaces --timeout=300s
+  ```
+
+  If the command `kubectl wait` fails with an error similar to the following, please contact us:
+
+  ```
+  error: timed out waiting for the condition on pods/example-rabbitmq-server-0
+  ```
+
+  The command `kubectl wait` will return a success message similar to:
+
+  ```
+  pod/example-rabbitmq-server-0 condition met
+  ```
+
+  After getting a successful message, run:
+
+  ```
   cd rabbitmq-for-kubernetes-$version
   kubectl delete -f manifests/
   ```
