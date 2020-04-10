@@ -44,9 +44,14 @@ To uninstall <%= vars.product_short %>:
     + If the command returns a message similar to the following, continue to the next step.
       <pre class="terminal">pod/example-rabbitmq-server-0 condition met</pre>
 
-1. Delete the manifest for <%= vars.product_short %> by running:
+1. Move to the directory for <%= vars.product_short %> by running:
 
     ```
     cd rabbitmq-for-kubernetes-$version
+    ```
+
+1. Delete the manifests for <%= vars.product_short %> by running:
+
+    ```
     kubectl delete -f manifests/
     ```
