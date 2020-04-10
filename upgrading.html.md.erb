@@ -5,33 +5,49 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-<%= partial vars.path_to_partials + '/services/beta-notice',
-:locals => {:product_full => vars.product_full, :platform_name => vars.platform_name} %>
-
-Product upgrades are currently not supported. If you want to test a newer version, uninstall the previous version first.
+<%# The below uses the local product variable and math so we do not need this copy
+with every release %>
+<% previous_version = (product_info["local_product_version"].to_f - 0.1).round(2) %>
+<% current_version = product_info['local_product_version'] %>
 
 ## <a id='overview'></a> Overview
 
-Use the uninstall method that corresponds to the method you used for installation.
+You cannot use <%= vars.ops_manager %> to upgrade <%= vars.product_short %>.
+To upgrade to <%= vars.product_short %> v<%= current_version %>:
 
+1. Follow the uninstalling procedure that corresponds to the method you used for installation:
+      + If you used Cloud Native Application Bundle (CNAB) to install
+        <%= vars.product_short %> v<%= previous_version %>,
+        see [Uninstall the Cloud Native Application Bundle](#uninstall-bundle) below.
+      + If you used Kubernetes manifests to install
+        <%= vars.product_short %> v<%= previous_version %>,
+        See [Uninstall the Kubernetes Manifests](#uninstall-manifests) below.
+1. Install <%= vars.product_short %> v<%= current_version %> by following the procedures in
+    [Installing and Configuring Using CNAB](./installing-cnab.html) or
+    [Installing and Configuring Using Kubernetes Manifests](./installing.html).
 
-## <a id='uninstall-bundle'></a> Uninstall the Cloud Native Application Bundle (CNAB)
+## <a id='uninstall-bundle'></a> Uninstall the Cloud Native Application Bundle
 
-To uninstall the CNAB, run:
+To uninstall the CNAB:
 
-  ```
-  duffle uninstall rabbitmq --credentials rabbitmq-creds --relocation-mapping=relmap.json
-  ```
+1. Use Duffle to uninstall <%= vars.product_short %> by running:
 
-## <a id='uninstall-manifests'></a> Uninstall Through the Manifests
+    ```
+    duffle uninstall rabbitmq --credentials rabbitmq-creds --relocation-mapping=relmap.json
+    ```
 
-To uninstall the product if it was installed through the Kubernetes manifests, run the following commands:
+## <a id='uninstall-manifests'></a> Uninstall the Kubernetes Manifests
 
-  ```
-  cd rabbitmq-for-kubernetes-$version
-  kubectl delete -f manifests/
-  ```
+To uninstall the Kubernetes manifests:
 
-## <a id='install'> Install the Latest Version
+1. Move to the directory for <%= vars.product_short %> by running:
 
-Follow the steps in [Installing and Configuring Using CNAB](./installing-cnab.html) or [Installing and Configuring Using Kubernetes Manifests](./installing.html) to install the latest version of <%= vars.product_full %>.
+    ```
+    cd rabbitmq-for-kubernetes-$version
+    ```
+
+1. Delete the manifests for <%= vars.product_short %> by running:
+
+    ```
+    kubectl delete -f manifests/
+    ```
