@@ -1,43 +1,52 @@
 ---
-title: RabbitMQ for VMware Tanzu &#91;Kubernetes&#93; (Beta)
+title: Upgrading RabbitMQ for VMware Tanzu &#91;Kubernetes&#93; (Beta)
 owner: RMQ for k8s
 ---
 
 <strong><%= modified_date %></strong>
 
-<%= partial vars.path_to_partials + '/services/beta-notice',
-:locals => {:product_full => vars.product_full, :platform_name => vars.platform_name} %>
+<%# The below uses the local product variable and math so we do not need this copy
+with every release %>
+<% previous_version = (product_info["local_product_version"].to_f - 0.1).round(2) %>
+<% current_version = product_info['local_product_version'] %>
 
-Product upgrades are currently not supported. To test a newer version, uninstall the previous version first.
+This topic describes how to upgrade <%= vars.product_full %>.
 
-## <a id='uninstall-manifests'></a> Uninstall Through the Manifests
+## <a id="overview"> </a> Overview
 
-To uninstall the product if it was installed through the Kubernetes manifests, run these commands:
+You cannot use <%= vars.ops_manager %> to upgrade <%= vars.product_short %>.
+To upgrade to <%= vars.product_short %> v<%= current_version %>:
 
-  ```
-  kubectl delete rabbitmqclusters --all --all-namespaces
-  kubectl wait --for delete pod -l "app.kubernetes.io/component=rabbitmq" --all-namespaces --timeout=300s
-  ```
+1. Uninstall <%= vars.product_short %> v<%= previous_version %> by removing <%= vars.product_short %>
+    resources and manifest from your Kubernetes cluster.
+   See [Uninstall <%= vars.product_short %>](#uninstall-manifests) below.
+1. Install <%= vars.product_short %> v<%= current_version %> by following the procedures in
+[Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing.html).
 
-  If the command `kubectl wait` fails with an error similar to the following, please contact us:
+## <a id='uninstall-manifests'></a> Uninstall <%= vars.product_short %>.
 
-  ```
-  error: timed out waiting for the condition on pods/example-rabbitmq-server-0
-  ```
+To uninstall <%= vars.product_short %>:
 
-  The command `kubectl wait` will return a success message similar to:
+1. Delete <%= vars.product_short %> resources in all namespaces by running:
 
-  ```
-  pod/example-rabbitmq-server-0 condition met
-  ```
+    ```
+    kubectl delete rabbitmqclusters --all --all-namespaces
+    ```
 
-  After getting a successful message, run:
+1. Verify that all <%= vars.product_short %> resources are deleted by running:
 
-  ```
-  cd rabbitmq-for-kubernetes-$version
-  kubectl delete -f manifests/
-  ```
+    ```
+    kubectl wait --for delete pod \
+    -l "app.kubernetes.io/component=rabbitmq" --all-namespaces --timeout=300s
+    ```
+    + If the command fails with an error similar to the following, email the team at rabbitmq-for-k8s@pivotal.io for help.
+      <pre class="terminal">error: timed out waiting for the condition on pods/example-rabbitmq-server-0</pre>
+    + If the command returns a message similar to the following, continue to the next step.
+      <pre class="terminal">pod/example-rabbitmq-server-0 condition met</pre>
 
-## <a id='install'> Install the Latest Version
+1. Delete the manifest for <%= vars.product_short %> by running:
 
-Follow the steps in [Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing.html) to install the latest version of <%= vars.product_full %>.
+    ```
+    cd rabbitmq-for-kubernetes-$version
+    kubectl delete -f manifests/
+    ```
