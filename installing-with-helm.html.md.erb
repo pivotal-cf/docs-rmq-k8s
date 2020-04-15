@@ -7,37 +7,36 @@ owner: RMQ for k8s
 
 This topic describes how to install and configure <%= vars.product_full %> using a Helm chart hosted on
 <%= vars.product_network %>.
-For more information, see the [Helm documentation](https://helm.sh/docs/topics/charts/).
+For more information about Helm charts, see the [Helm documentation](https://helm.sh/docs/topics/charts/).
 
-If you cannot meet the [prerequisites](#prereqs) listed below, follow the steps in
-[Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing.html)
+To install <%= vars.product_short %> without using a Helm chart, follow the steps in
+[Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing.html).
 
 
 ## <a id='prereqs'></a> Prerequisites
 
 Before you install and configure <%= vars.product_short %>, you must install and configure:
 
-1. **kubectl:** For installation instructions,
+* **kubectl:** For installation instructions,
 see the [Kubernetes documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
 
-1. **The Docker CLI:** For installation instructions,
+* **The Docker CLI:** For installation instructions,
 see the [Docker documentation](https://docs.docker.com/install/).
 
-1. **A Kubernetes cluster:** You must use Kubernetes v1.14 or later. A default StorageClass has to be configured
+* **A Kubernetes cluster:** You must use Kubernetes v1.14 or later. A default StorageClass has to be configured
 or you need to specify which StorageClass to use.
 
-1. **A private image registry:** VMware recommends that you keep the Kubernetes Operator
+* **A private image registry:** VMware recommends that you keep the Kubernetes Operator
 image private even if your registry is publicly accessible.
 If you do not have access to a private image registry, email the team at rabbitmq-for-k8s@pivotal.io for help.
 
 To install <%= vars.product_short %> using a Helm chart, you must also have:
 
-1. **A <%= vars.product_network %> account:** Create an account from the [Sign-up](https://account.run.pivotal.io/z/uaa/sign-up)
-page if you do not already have one.
+* **A <%= vars.product_network %> account:** If you do not already have an account, create one from the [Sign-up page](https://account.run.pivotal.io/z/uaa/sign-up).
 
-1. **The Helm CLI:** For installation instructions, see the [Helm documentation](https://helm.sh/docs/intro/install/).
+* **The Helm CLI:** For installation instructions, see the [Helm documentation](https://helm.sh/docs/intro/install/).
 
-1. **Access to the <%= vars.product_network %> registry:** For more information, see
+* **Access to the <%= vars.product_network %> registry:** For more information, see
 [Verify Your Access to the Image Registry](#helm-verify-docker-access) below.
 
 
@@ -56,7 +55,7 @@ To install and configure <%= vars.product_short %> using a Helm chart:
 
 To verify that you have access to the <%= vars.product_network %> registry:
 
-1. Run:
+1. Log in to the Docker registry by running:
 
     ```
     docker login registry.pivotal.io
@@ -99,7 +98,7 @@ If you successfully pulled the image registry, and you want to relocate the Oper
 
 To configure a Helm chart repository hosted in <%= vars.product_network %>:
 
-1. Run:
+1. Add a chart repository by running:
 
     ```
     helm repo add p-rabbitmq-for-kubernetes https://registry.pivotal.io/chartrepo/p-rabbitmq-for-kubernetes --username='EMAIL-ADDRESS' --password='PASSWORD'
@@ -126,7 +125,7 @@ To configure a Helm chart repository hosted in <%= vars.product_network %>:
 
 To create a values file:
 
-1. Run:
+1. Display the chart values by running:
 
     ```
     helm show values p-rabbitmq-for-kubernetes/rabbitmq-operator > myvalues.yaml
@@ -170,7 +169,7 @@ To create a values file:
 
 To install the Operator using Helm:
 
-1. Run:
+1. Install the chart by running:
 
     ```
     helm -n default install -f myvalues.yaml rabbitmq-for-kubernetes p-rabbitmq-for-kubernetes/rabbitmq-operator

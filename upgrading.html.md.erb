@@ -5,25 +5,26 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-<%# The below uses the local product variable and math so we do not need this copy
-with every release %>
+<%# The below uses the local product variable and math so we do not need this copy with every release %>
 <% previous_version = (product_info["local_product_version"].to_f - 0.1).round(2) %>
 <% current_version = product_info['local_product_version'] %>
 
 This topic describes how to upgrade <%= vars.product_full %>.
 
+
 ## <a id="overview"> </a> Overview
 
-You cannot use <%= vars.ops_manager %> to upgrade <%= vars.product_short %>.
 To upgrade to <%= vars.product_short %> v<%= current_version %>:
 
 1. Uninstall <%= vars.product_short %> v<%= previous_version %> by removing <%= vars.product_short %>
     resources and manifests from your Kubernetes cluster.
    See [Uninstall <%= vars.product_short %>](#uninstall-manifests) below.
 1. Install <%= vars.product_short %> v<%= current_version %> by following the procedures in
-[Installing <%= vars.product_short %>](./installing.html).
+[Installing <%= vars.product_full %>](./installing.html) or
+[Installing <%= vars.product_full %> Using a Helm Chart](./installing-with-helm.html).
 
-## <a id='uninstall-manifests'></a> Uninstall <%= vars.product_short %>.
+
+## <a id='uninstall-manifests'></a> Uninstall <%= vars.product_short %>
 
 To uninstall <%= vars.product_short %>:
 
@@ -39,7 +40,8 @@ To uninstall <%= vars.product_short %>:
     kubectl wait --for delete pod \
     -l "app.kubernetes.io/component=rabbitmq" --all-namespaces --timeout=300s
     ```
-    + If the command fails with an error similar to the following, email the team at rabbitmq-for-k8s@pivotal.io for help.
+    + If the command fails with an error similar to the following, email the team at
+    [RabbitMQ for VMware Tanzu &#91;Kubernetes&#93; Feedback](mailto:rabbitmq-for-k8s@pivotal.io) for help.
       <pre class="terminal">error: timed out waiting for the condition on pods/example-rabbitmq-server-0</pre>
     + If the command returns a message similar to the following, continue to the next step.
       <pre class="terminal">pod/example-rabbitmq-server-0 condition met</pre>
@@ -55,3 +57,13 @@ To uninstall <%= vars.product_short %>:
     ```
     kubectl delete -f manifests/
     ```
+
+
+## <a id='install'></a> Install the Latest Version of <%= vars.product_short %>
+
+To install <%= vars.product_short %> v<%= current_version %>:
+
+1. To check compatibility and known issues <%= vars.product_short %> v<%= current_version %>, see the [release notes](./release-notes.html).
+1. Install <%= vars.product_short %> v<%= current_version %> by following the procedures in
+[Installing <%= vars.product_full %>](./installing.html) or
+[Installing <%= vars.product_full %> Using a Helm Chart](./installing-with-helm.html).
