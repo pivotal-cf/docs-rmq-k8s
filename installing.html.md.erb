@@ -5,7 +5,7 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to install and configure <%= vars.product_full %>.
+This topic describes how to install and configure <%= vars.product_full %>.<br><br>
 To install and configure <%= vars.product_full %> using a Helm chart hosted on <%= vars.product_network %>, follow
 the steps in
 [Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93; Using a Helm Chart](./installing-with-helm.html).
@@ -196,13 +196,13 @@ This reference should look similar to the below:
 
 To install <%= vars.product_short %>:
 
-1. Run:
+1. Apply the Kubernetes manifests you configured in the steps above by running:
 
     ```
     kubectl apply -f manifests/
     ```
 
-1. Apply the Kubernetes manifests you configured in the above steps. When you do so, kubectl:
+    When you do so, kubectl:
     * Deploys the Kubernetes Operator
     * Installs the `RabbitmqCluster` custom resource definition (CRD)
 

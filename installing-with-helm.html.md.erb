@@ -73,13 +73,13 @@ To verify that you have access to the <%= vars.product_network %> registry:
 
     Where `VERSION-NUMBER` is the product version in <%= vars.product_network %>. For example, `0.7.0-build.41`.<br><br>
 
-    If you see an error similar to
+    If you see an error similar to:
 
     <pre class="terminal">
     Error response from daemon: pull access denied [...]
     </pre>
 
-    install <%= vars.product_short %> by following the steps in
+    Install <%= vars.product_short %> by following the steps in
     [Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing.html) instead.<br><br>
 
     If you successfully pulled the image registry, and you do not want to relocate the Operator image, skip to
@@ -128,7 +128,7 @@ To create a values file:
 1. Display the chart values by running:
 
     ```
-    helm show values p-rabbitmq-for-kubernetes/rabbitmq-operator > myvalues.yaml
+    helm show values p-rabbitmq-for-kubernetes/rabbitmq-operator > VALUES-FILE.yaml
     ```
 
 1. Open the values file and paste in the code below.
@@ -153,7 +153,7 @@ To create a values file:
 
     This is an example of a customized values file:
 
-    <pre class="terminal">
+    ```
     global:
       imageRegistry: someregistry.example.com
       imageUsername: myuser@example.com
@@ -162,10 +162,10 @@ To create a values file:
       operator:
         name: someregistry.example.com/some-project/rabbitmq-for-kubernetes-operator
         tag: "0.7.0-build.41"
-    </pre>
+    ```
 
 
-## <a id='helm-install-op'></a> Helm Install
+## <a id='helm-install-op'></a> Install <%= vars.product_short %>
 
 To install the Operator using Helm:
 
@@ -175,8 +175,10 @@ To install the Operator using Helm:
     helm -n default install -f myvalues.yaml rabbitmq-for-kubernetes p-rabbitmq-for-kubernetes/rabbitmq-operator
     ```
 
-    Helm uses the option `-n default` to store a Kubernetes secret in the default namespace.
-    Helm does this to avoid potential failures caused by kubectl context-referencing non-existing namespaces.
+    <p class="note">
+      <strong>Note:</strong> Helm uses the option `-n default` to store a Kubernetes secret in the default namespace.
+      Helm does this to avoid potential failures caused by kubectl referencing non-existing namespaces.
+    </p>
 
 1. Verify that the output of the `helm install` command is similar to the example below.
 
