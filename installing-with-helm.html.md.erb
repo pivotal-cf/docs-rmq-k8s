@@ -7,10 +7,11 @@ owner: RMQ for k8s
 
 This topic describes how to install and configure <%= vars.product_full %> using a Helm chart hosted on
 <%= vars.product_network %>.
+This is the fastest way to install <%= vars.product_short %> in most cases.
 For more information about Helm charts, see the [Helm documentation](https://helm.sh/docs/topics/charts/).
 
-To install <%= vars.product_short %> without using a Helm chart, follow the steps in
-[Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing.html).
+If this procedure is not feasible for you, follow the steps in
+[Installing <%= vars.product_full %>](./installing.html) instead.
 
 
 ## <a id='prereqs'></a> Prerequisites
@@ -26,32 +27,24 @@ see the [Docker documentation](https://docs.docker.com/install/).
 * **A Kubernetes cluster:** You must use Kubernetes v1.14 or later. A default StorageClass has to be configured
 or you need to specify which StorageClass to use.
 
-* **A private image registry:** VMware recommends that you keep the Kubernetes Operator
-image private even if your registry is publicly accessible.
-If you do not have access to a private image registry, email the team at rabbitmq-for-k8s@pivotal.io for help.
-
-To install <%= vars.product_short %> using a Helm chart, you must also have:
-
-* **A <%= vars.product_network %> account:** If you do not already have an account, create one from the [Sign-up page](https://account.run.pivotal.io/z/uaa/sign-up).
-
 * **The Helm CLI:** For installation instructions, see the [Helm documentation](https://helm.sh/docs/intro/install/).
 
-* **Access to the <%= vars.product_network %> registry:** For more information, see
-[Verify Your Access to the Image Registry](#helm-verify-docker-access) below.
+* **Access to the <%= vars.product_network %> image registry:** For more information, see
+[Verify Your Access to the <%= vars.product_network %> Image Registry](#helm-verify-docker-access) below.
 
 
 ## <a id='overview'></a> Overview
 
 To install and configure <%= vars.product_short %> using a Helm chart:
 
-1. [Verify That You Can Access the Image Registry](#helm-verify-docker-access)
+1. [Verify That You Can Access the <%= vars.product_network %> Image Registry](#helm-verify-docker-access)
 1. [(Optional) Relocate the Operator Image](#relocate-op-image)
 1. [Configure a Helm Chart Repository](#helm-configure-repo)
 1. [Create a Values File](#helm-create-values)
 1. [Helm Install](#helm-install-op)
 
 
-## <a id='helm-verify-docker-access'></a> Verify That You Can Access the Image Registry
+## <a id='helm-verify-docker-access'></a> Verify That You Can Access the <%= vars.product_network %> Image Registry
 
 To verify that you have access to the <%= vars.product_network %> registry:
 
@@ -87,6 +80,12 @@ To verify that you have access to the <%= vars.product_network %> registry:
 
 
 ## <a id='relocate-op-image'></a> (Optional) Relocate the Operator Image
+
+<p class="note">
+  <strong>Note:</strong> To relocate the Operator image, you need a separate image registry.
+  VMware recommends that you keep the Kubernetes Operator image private even if your registry is publicly accessible.
+  If you do not have access to a private image registry, email the team at rabbitmq-for-k8s@pivotal.io for help.
+</p>
 
 If you successfully pulled the image registry, and you want to relocate the Operator image:
 
