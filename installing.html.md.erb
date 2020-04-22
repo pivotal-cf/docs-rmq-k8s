@@ -5,26 +5,27 @@ owner: RMQ for k8s
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to install and configure <%= vars.product_full %>.
-To install and configure <%= vars.product_full %> using a Helm chart hosted on <%= vars.product_network %>, follow
-the steps in
-[Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93; Using a Helm Chart](./installing-with-helm.html).
+This topic describes how to install and configure <%= vars.product_full %> without using a Helm chart.<br><br>
+
+In most cases, it is faster to install and configure <%= vars.product_short %> using a Helm chart.
+To install and configure <%= vars.product_full %> using a Helm chart hosted on <%= vars.product_network %>,
+follow the steps in [Installing <%= vars.product_full %> Using a Helm Chart](./installing-with-helm.html) instead.
 
 ## <a id='prerequisites'></a> Prerequisites
 
 Before you install and configure <%= vars.product_short %>, you must install and configure:
 
-1. **kubectl:** For installation instructions,
+* **kubectl:** For installation instructions,
 see the [Kubernetes documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
 
-1. **The Docker CLI:** For installation instructions,
+* **The Docker CLI:** For installation instructions,
 see the [Docker documentation](https://docs.docker.com/install/).
 
-1. **A Kubernetes cluster:** You must use Kubernetes v1.14 or later. A default StorageClass has to be configured
+* **A Kubernetes cluster:** You must use Kubernetes v1.14 or later. A default StorageClass has to be configured
 or you need to specify which StorageClass to use.
 
-1. **A private image registry:** VMware recommends that you keep the Kubernetes Operator
-image private even if your registry is publicly accessible.
+* **A private image registry:** VMware recommends that you keep the Kubernetes Operator image private even if
+your registry is publicly accessible.
 If you do not have access to a private image registry, email the team at rabbitmq-for-k8s@pivotal.io for help.
 
 ## <a id='overview'></a> Overview
@@ -196,14 +197,15 @@ This reference should look similar to the below:
 
 To install <%= vars.product_short %>:
 
-1. Run:
+1. Apply the Kubernetes manifests you configured in the steps above by running:
 
     ```
     kubectl apply -f manifests/
     ```
 
-1. Apply the Kubernetes manifests you configured in the above steps. When you do so, kubectl:
+    When you do so, kubectl:
     * Deploys the Kubernetes Operator
     * Installs the `RabbitmqCluster` custom resource definition (CRD)
 
-To uninstall the product, follow the steps in [Uninstall Through the Manifests](./upgrading.html#uninstall-manifests).
+To uninstall the product,
+follow the procedure in [Uninstall <%= vars.product_short %> ](./upgrading.html#uninstall-manifests).
