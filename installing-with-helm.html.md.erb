@@ -107,13 +107,7 @@ To configure a Helm chart repository hosted in <%= vars.product_network %>:
     * `EMAIL-ADDRESS` is the email address used to register in <%= vars.product_network %>.
     * `PASSWORD` is the same password of your <%= vars.product_network %> account.
 
-    <p class='note'>
-      <strong>Note:</strong> Helm stores these credentials in a hidden file in plaintext.
-      Consider using a bot or shared account details instead of your personal account credentials.
-    </p>
-
-
-1. Update the local Helm cache by running:
+1. Update the local cache by running:
 
     ```
     helm repo update
@@ -145,8 +139,10 @@ To create a values file:
 
     Where:
     * `IMAGE-REGISTRY-URL` is your image registry URL.
-    * `USERNAME` is the email address associated with your <%= vars.product_network %> account.
-    * `PASSWORD` is the password associated with your <%= vars.product_network %> account.
+    * `USERNAME` is the username for the image registry. If using the <%= vars.product_network %> image
+    registry, your username is the email address linked to your <%= vars.product_network %> account.
+    * `PASSWORD` is the password for the image registry. If using the <%= vars.product_network %> image registry,
+    the password is your <%= vars.product_network %> account password.
     * `PROJECT-NAME` is your project name.
     * `VERSION-NUMBER` is your build version.
 
