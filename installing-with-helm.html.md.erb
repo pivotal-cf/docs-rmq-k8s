@@ -6,11 +6,13 @@ owner: RMQ for k8s
 <strong><%= modified_date %></strong>
 
 This topic describes how to install and configure <%= vars.product_full %> using a Helm chart hosted on
-<%= vars.product_network %>.
-This is the fastest way to install <%= vars.product_short %> in most cases.
+a <%= vars.product_network %> image registry.
+
+In most cases, using a Helm chart is the fastest way to install <%= vars.product_short %>.
 For more information about Helm charts, see the [Helm documentation](https://helm.sh/docs/topics/charts/).
 
-If this procedure is not feasible for you, follow the steps in
+If you do not want to use a Helm chart to install <%= vars.product_short %>,
+follow the procedures in
 [Installing <%= vars.product_full %>](./installing.html) instead.
 
 
@@ -64,7 +66,8 @@ To verify that you have access to the <%= vars.product_network %> registry:
     docker pull registry.pivotal.io/p-rabbitmq-for-kubernetes/rabbitmq-for-kubernetes-operator:VERSION-NUMBER
     ```
 
-    Where `VERSION-NUMBER` is the product version in <%= vars.product_network %>. For example, `0.7.0-build.41`.<br><br>
+    Where `VERSION-NUMBER` is the product version in <%= vars.product_network %>.
+    For example, `0.7.0-build.41`.<br><br>
 
     If you see an error similar to:
 
@@ -72,8 +75,8 @@ To verify that you have access to the <%= vars.product_network %> registry:
     Error response from daemon: pull access denied [...]
     </pre>
 
-    Install <%= vars.product_short %> by following the steps in
-    [Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing.html) instead.<br><br>
+    Install <%= vars.product_short %> by following the procedures in
+    [Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing.html).<br><br>
 
     If you successfully pulled the image registry, and you do not want to relocate the Operator image, skip to
     [Configure a Helm Chart Repository](#helm-configure-repo) below.
@@ -89,8 +92,8 @@ To verify that you have access to the <%= vars.product_network %> registry:
 
 If you successfully pulled the image registry, and you want to relocate the Operator image:
 
-1. Follow the steps in [Set a Version Variable](./installing.html#set-ver-var).
-1. Follow the steps in [Move the Images](./installing.html#relocate).
+1. Follow the procedure in [Set a Version Variable](./installing.html#set-ver-var).
+1. Follow the procedure in [Move the Images](./installing.html#relocate).
 
 
 ## <a id='helm-configure-repo'></a> Configure a Helm Chart Repository
