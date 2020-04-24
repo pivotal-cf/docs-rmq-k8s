@@ -1,5 +1,5 @@
 ---
-title: Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93; Using a Helm Chart
+title: Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93; with a Helm Chart
 owner: RMQ for k8s
 ---
 
@@ -13,7 +13,7 @@ For more information about Helm charts, see the [Helm documentation](https://hel
 
 If you do not want to use a Helm chart to install <%= vars.product_short %>,
 follow the procedures in
-[Installing <%= vars.product_full %>](./installing.html) instead.
+[Installing <%= vars.product_full %> with Kubectl](./installing-with-kubectl.html) instead.
 
 
 ## <a id='prereqs'></a> Prerequisites
@@ -76,7 +76,7 @@ To verify that you have access to the <%= vars.product_network %> registry:
     </pre>
 
     Install <%= vars.product_short %> by following the procedures in
-    [Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing.html).<br><br>
+    [Installing RabbitMQ for VMware Tanzu &#91;Kubernetes&#93;](./installing-with-kubectl.html).<br><br>
 
     If you successfully pulled the image registry, and you do not want to relocate the Operator image, skip to
     [Configure a Helm Chart Repository](#helm-configure-repo) below.
