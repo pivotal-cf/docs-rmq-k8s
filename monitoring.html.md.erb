@@ -27,41 +27,37 @@ Follow one of the procedures below to monitor RabbitMQ clusters:
 
 ## <a id='prom-annotations'></a> Monitor RabbitMQ Using Prometheus and Scraping Annotations
 
-Prometheus can automatically scrape all Pods with the `prometheus.io/scrape: true` annotation.
-<%= vars.product_full %> has this annotation by default.
-If you have Prometheus configured with this annotation, then Prometheus is likely already monitoring your
-RabbitMQ clusters.
+Prometheus can automatically scrape all Pods that have the `prometheus.io/scrape: true` and metrics port annotations:
 
-To verify that you have the `prometheus.io/scrape: true` annotation:
+To add the scrape annotations:
 
 1. Run:
 
     ```
-    kubectl get -o yaml service INSTANCE-rabbitmq-ingress
+    kubectl edit statefulset INSTANCE-rabbitmq-server
     ```
 
     Where `INSTANCE` is the name of the service instance.
 
-1. Check for `"prometheus.io/scrape": "true"` under `service/annotations` in the `spec.service` part of the
-output, as in the example below:
+1. Add `"prometheus.io/scrape": "true"` and `"prometheus.io/port: "15692"` under `spec/template/metadata/annotations` in the
+output manifest, as in the example below:
 
     ```
-    apiVersion: rabbitmq.pivotal.io/v1beta1
-    kind: RabbitmqCluster
+    apiVersion: apps/v1
+    kind: StatefulSet
     metadata:
-      name: INSTANCE
+      name: INSTANCE-rabbitmq-server
     spec:
-      service:
-        annotations:
-          "prometheus.io/scrape": "true"
-          "prometheus.io/port": "15692"
+      template:
+        metadata:
+          annotations:
+            prometheus.io/scrape: true
+            prometheus.io/port: 15692
     ```
 
-    If `"prometheus.io/scrape": "true"` or `"prometheus.io/port": "15692"` does not exist, consider following
-    the steps in [Monitor RabbitMQ Using the Prometheus Operator](#prom-operator) below instead.
+1. Apply the changes by saving the file (`:wq`)
 
-    Alternatively, add the missing service annotations by following the
-    [Update a RabbitMQ Instance](./using.html#update) procedure.
+This approach will trigger a `rollout restart` of the cluster Pods. Currently, these changes will be lost if the `StatefulSet` is recreated by the RabbitMQ operator. For a more persistent solution consider [using the Prometheus Operator](#prom-operator)
 
 ## <a id='prom-operator'></a> Monitor RabbitMQ Using the Prometheus Operator
 
