@@ -58,68 +58,11 @@ The images are for:
 
 ## <a id='set-ver-var'></a> Set a Version Variable
 
-To set a version variable:
-
-1. Run:
-
-    ```
-    export version=NUMBER-build.NUMBER
-    ```
-
-    Where `NUMBER` is the installation artifact version listed in the name of the artifact file you downloaded.<br><br>
-    For example:
-
-    <pre class="terminal">
-    export version=0.6.0-build.22
-    </pre>
+<%= partial vars.path_to_partials + '/rabbitmq-kubernetes/set-a-version-variable' %>
 
 ## <a id='relocate'></a> Move the Images
 
-To move the images:
-
-1. Load the images to your local Docker by running these commands:
-
-    ```
-    mkdir rabbitmq-for-kubernetes-${version}
-    ```
-
-    ```
-    tar -C rabbitmq-for-kubernetes-${version} -xf rabbitmq-for-kubernetes-${version}.tar
-    ```
-
-    ```
-    cd rabbitmq-for-kubernetes-${version}
-    ```
-
-    ```
-    docker load -i images/rabbitmq-for-kubernetes-operator
-    ```
-
-    ```
-    docker load -i images/rabbitmq
-    ```
-
-1. Tag each image to point to your own image registry by running these commands:
-
-    ```
-    docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq \
-      YOUR-REGISTRY/rabbitmq:$version
-    ```
-
-    ```
-    docker tag registry.pivotal.io/p-rabbitmq-for-kubernetes-staging/rabbitmq-for-kubernetes-operator \
-      YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:$version
-    ```
-
-1. Push each image to your own image registry by running these commands:
-
-    ```
-    docker push YOUR-REGISTRY/rabbitmq:$version
-    ```
-
-    ```
-    docker push YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:$version
-    ```
+<%= partial vars.path_to_partials + '/rabbitmq-kubernetes/move-the-images' %>
 
 ## <a id='namespace-rbac'></a> Create the Namespace and Role-Based Access Control Objects
 
