@@ -90,11 +90,16 @@ To verify that you have access to the <%= vars.product_network %> registry:
   If you do not have access to a private image registry, email the team at rabbitmq-for-k8s@pivotal.io for help.
 </p>
 
-If you successfully pulled the image registry, and you want to relocate the Operator image:
+If you successfully pulled the image registry, and you want to relocate the Operator image,
+follow these procedures.
 
-1. Follow the procedure in [Set a Version Variable](./installing-with-kubectl.html#set-ver-var).
-1. Follow the procedure in [Move the Images](./installing-with-kubectl.html#relocate).
+### <a id='set-a-version-variable'></a>Set a Version Variable
 
+<%= partial vars.path_to_partials + '/rabbitmq-kubernetes/set-a-version-variable' %>
+
+### <a id='move-the-images'></a>Move the Images
+
+<%= partial vars.path_to_partials + '/rabbitmq-kubernetes/move-the-images' %>
 
 ## <a id='helm-configure-repo'></a> Configure a Helm Chart Repository
 
