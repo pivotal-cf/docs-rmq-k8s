@@ -1,4 +1,4 @@
-# RabbitMQ for VMware Tanzu [Kubernetes] docs
+# VMware Tanzu RabbitMQ [Kubernetes] docs
 
 ## Branches in this Content Repo
 
@@ -60,7 +60,7 @@ then you will need to:
 
 ### Partials
 
-Cross-product partials (if any) for **RabbitMQ for VMware Tanzu [Kubernetes] are single sourced from the [Docs Partials](https://github.com/pivotal-cf/docs-partials) repository.
+Cross-product partials (if any) for VMware Tanzu RabbitMQ [Kubernetes] are single sourced from the [Docs Partials](https://github.com/pivotal-cf/docs-partials) repository.
 
 ### Releasing a New Minor Version
 
@@ -74,7 +74,7 @@ After this point, **master** will then be the target for the next version of the
 
 ## Style Guide
 
-This is a word list for terminology and word usage specific to the RabbitMQ for Kubernetes for docs.
+This is a word list for terminology and word usage specific to the VMware Tanzu RabbitMQ [Kubernetes] for docs.
 
 | Word | Explanation |
 |------|-------------|
