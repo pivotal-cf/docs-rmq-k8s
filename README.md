@@ -24,14 +24,7 @@ Then, if necessary, immediately cherry-pick/copy any changes that you want to pu
 
 ## Book Repo
 
-**docs-book-rmq-k8s** is the book repo:
-
-* **Edge** branch is for the next unreleased version is not yet staged.
-But, eventually will be staged at this link:
-http://docs-pcf-staging.cfapps.io/rabbitmq-kubernetes/1-n/index.html
-
-* **Master** branch is for the published/live releases listed above.
-
+The book repo associated with this content is [pivotal-cf/docs-book-rmq-k8s](https://github.com/pivotal-cf/docs-book-rmq-k8s).
 
 ### Staging Environment
 
