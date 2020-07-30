@@ -129,11 +129,11 @@ To authorize access to images:
 To configure the image registry:
 
 1. Edit `manifests/operator.yaml`.
-1. Replace all instances of `REPLACE-WITH-OPERATOR-IMAGE-URL` with the full Kubernetes Operator image reference.
+1. Replace all instances of `REPLACE-WITH-OPERATOR-IMAGE-URL` with the full Kubernetes Operator image reference and explicit version.
 This reference should look similar to the below:
 
     ```
-    image: YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:$version
+    image: YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:YOUR-VERSION
     ```
 
 ## <a id='deploy-op'></a> Install <%= vars.product_short %>
