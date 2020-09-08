@@ -12,6 +12,7 @@ To install and configure <%= vars.product_full %> using a Helm chart hosted on
 <%= vars.product_network %>, follow the procedures in
 [Installing <%= vars.product_full %> with a Helm Chart](./installing-with-helm.html) instead.
 
+
 ## <a id='prerequisites'></a> Prerequisites
 
 Before you install and configure <%= vars.product_short %>, you must install and configure:
@@ -30,6 +31,7 @@ even if your registry is publicly accessible.
 If you do not have access to a private image registry, email the team at rabbitmq-for-k8s@pivotal.io
 for help.
 
+
 ## <a id='overview'></a> Overview
 
 To install and configure <%= vars.product_short %>:
@@ -41,6 +43,7 @@ To install and configure <%= vars.product_short %>:
 1. [(Optional) Configure Kubernetes Cluster Access to Private Images](#private-images)
 1. [Configure the Image Registry](#image-repo)
 1. [Install <%= vars.product_short %>](#deploy-op)
+
 
 ## <a id='artifact'></a> Download <%= vars.product_short %>
 
@@ -58,6 +61,7 @@ The images are for:
 * RabbitMQ
 * The Kubernetes Operator
 
+
 ## <a id='set-ver-var'></a> Set a Version Variable
 
 <%= partial vars.path_to_partials + '/rabbitmq-kubernetes/set-a-version-variable' %>
@@ -72,15 +76,16 @@ To create the namespace and role-based access control (RBAC) objects:
 
 1. Create a `pivotal-rabbitmq-system` namespace by running:
 
-	  ```
-	  kubectl apply -f manifests/namespace.yaml
-	  ```
+    ```
+    kubectl apply -f manifests/namespace.yaml
+    ```
 
 1. Create RBAC objects in the `pivotal-rabbitmq-system` namespace by running:
 
-	  ```
-	  kubectl apply -f manifests/rbac.yaml
-	  ```
+    ```
+    kubectl apply -f manifests/rbac.yaml
+    ```
+
 
 ## <a id='private-images'></a> (Optional) Configure Kubernetes Cluster Access to Private Images
 
@@ -96,34 +101,35 @@ To authorize access to images:
 
 1. Create a secret for your private image registry by running:
 
-		```
-		kubectl -n pivotal-rabbitmq-system create secret \
-		docker-registry p-rmq-registry-access \
-		--docker-server=DOCKER-SERVER \
-		--docker-username=DOCKER-USERNAME \
-		--docker-password=DOCKER-PASSWORD
-		```
-		Where:
-		+ `DOCKER-SERVER` is the server URL for your private image registry.
-		+ `DOCKER-USERNAME` is your username for your private image registry authentication.
-		+ `DOCKER-PASSWORD` is your password for your private image registry authentication.
+    ```
+    kubectl -n pivotal-rabbitmq-system create secret \
+    docker-registry p-rmq-registry-access \
+    --docker-server=DOCKER-SERVER \
+    --docker-username=DOCKER-USERNAME \
+    --docker-password=DOCKER-PASSWORD
+    ```
+    Where:
+    + `DOCKER-SERVER` is the server URL for your private image registry.
+    + `DOCKER-USERNAME` is your username for your private image registry authentication.
+    + `DOCKER-PASSWORD` is your password for your private image registry authentication.
 
-		For example:
-		<pre class="terminal">
-		$ kubectl -n pivotal-rabbitmq-system create secret \
-		docker-registry p-rmq-registry-access \
-		--docker-server=docker.io/my-registry \
-		--docker-username=my-username \
-		--docker-password=example-password1
-		secret/p-rmq-registry-access created
-		</pre>
+    For example:
+    <pre class="terminal">
+    $ kubectl -n pivotal-rabbitmq-system create secret \
+    docker-registry p-rmq-registry-access \
+    --docker-server=docker.io/my-registry \
+    --docker-username=my-username \
+    --docker-password=example-password1
+    secret/p-rmq-registry-access created
+    </pre>
 
 1. Update your service account by running:
 
-		```
-		kubectl -n pivotal-rabbitmq-system patch serviceaccount \
-		p-rmq-operator -p '{"imagePullSecrets": [{"name": "p-rmq-registry-access"}]}'
-		```
+    ```
+    kubectl -n pivotal-rabbitmq-system patch serviceaccount \
+    p-rmq-operator -p '{"imagePullSecrets": [{"name": "p-rmq-registry-access"}]}'
+    ```
+
 
 ## <a id='image-repo'></a> Configure the Image Registry
 
@@ -134,9 +140,10 @@ To configure the image registry:
 reference and explicit version.
 This reference should look similar to the below:
 
-	```
-	image: YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:YOUR-VERSION
-	```
+    ```
+    image: YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:YOUR-VERSION-NUMBER
+    ```
+
 
 ## <a id='deploy-op'></a> Install <%= vars.product_short %>
 
@@ -144,13 +151,13 @@ To install <%= vars.product_short %>:
 
 1. Apply the Kubernetes manifests you configured in the steps above by running:
 
-		```
-		kubectl apply -f manifests/
-		```
+    ```
+    kubectl apply -f manifests/
+    ```
 
-		When you do so, kubectl:
-		* Deploys the Kubernetes Operator
-		* Installs the `RabbitmqCluster` custom resource definition (CRD)
+    When you do so, kubectl:
+    * Deploys the Kubernetes Operator
+    * Installs the `RabbitmqCluster` custom resource definition (CRD)
 
 To uninstall the product,
 follow the procedure in [Uninstall <%= vars.product_short %> ](./upgrading.html#uninstall-manifests).
