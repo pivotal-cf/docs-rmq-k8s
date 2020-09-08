@@ -8,8 +8,9 @@ owner: RMQ for k8s
 This topic describes how to install and configure <%= vars.product_full %> without using a Helm chart.
 
 In most cases, using a Helm chart is the fastest way to install <%= vars.product_short %>.
-To install and configure <%= vars.product_full %> using a Helm chart hosted on <%= vars.product_network %>,
-follow the procedures in [Installing <%= vars.product_full %> with a Helm Chart](./installing-with-helm.html) instead.
+To install and configure <%= vars.product_full %> using a Helm chart hosted on
+<%= vars.product_network %>, follow the procedures in
+[Installing <%= vars.product_full %> with a Helm Chart](./installing-with-helm.html) instead.
 
 ## <a id='prerequisites'></a> Prerequisites
 
@@ -21,12 +22,13 @@ see the [Kubernetes documentation](https://kubernetes.io/docs/tasks/tools/instal
 * **The Docker CLI:** For installation instructions,
 see the [Docker documentation](https://docs.docker.com/install/).
 
-* **A Kubernetes cluster:** You must use Kubernetes v1.14 or later. A default StorageClass has to be configured
-or you need to specify which StorageClass to use.
+* **A Kubernetes cluster:** You must use Kubernetes v1.14 or later. A default StorageClass has to be
+configured or you need to specify which StorageClass to use.
 
-* **A private image registry:** VMware recommends that you keep the Kubernetes Operator image private even if
-your registry is publicly accessible.
-If you do not have access to a private image registry, email the team at rabbitmq-for-k8s@pivotal.io for help.
+* **A private image registry:** VMware recommends that you keep the Kubernetes Operator image private
+even if your registry is publicly accessible.
+If you do not have access to a private image registry, email the team at rabbitmq-for-k8s@pivotal.io
+for help.
 
 ## <a id='overview'></a> Overview
 
@@ -82,12 +84,12 @@ To create the namespace and role-based access control (RBAC) objects:
 
 ## <a id='private-images'></a> (Optional) Configure Kubernetes Cluster Access to Private Images
 
-If you require authentication to pull images from your private image registry, you must authorize access to the
-images from the `pivotal-rabbitmq-system` namespace.
+If you require authentication to pull images from your private image registry, you must authorize
+access to the images from the `pivotal-rabbitmq-system` namespace.
 
 <p class=note>
-  <strong>Note:</strong> If your registry is publicly accessible, VMware recommends that you keep your
-  Kubernetes Operator image in a private image registry.
+  <strong>Note:</strong> If your registry is publicly accessible, VMware recommends that you keep
+  your Kubernetes Operator image in a private image registry.
 </p>
 
 To authorize access to images:
@@ -101,7 +103,6 @@ To authorize access to images:
     --docker-username=DOCKER-USERNAME \
     --docker-password=DOCKER-PASSWORD
     ```
-
     Where:
     + `DOCKER-SERVER` is the server URL for your private image registry.
     + `DOCKER-USERNAME` is your username for your private image registry authentication.
@@ -129,11 +130,12 @@ To authorize access to images:
 To configure the image registry:
 
 1. Edit `manifests/operator.yaml`.
-1. Replace all instances of `REPLACE-WITH-OPERATOR-IMAGE-URL` with the full Kubernetes Operator image reference and explicit version.
+1. Replace all instances of `REPLACE-WITH-OPERATOR-IMAGE-URL` with the full Kubernetes Operator image
+reference and explicit version.
 This reference should look similar to the below:
 
     ```
-    image: YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:YOUR-VERSION
+    image: YOUR-REGISTRY/rabbitmq-for-kubernetes-operator:YOUR-VERSION-NUMBER
     ```
 
 ## <a id='deploy-op'></a> Install <%= vars.product_short %>
