@@ -1,13 +1,13 @@
 ---
-title: Using with Container Service Manager
+title: Using Container Service Manager
 owner: RMQ for k8s
 ---
 
 <strong><%= modified_date %></strong>
 
 This topic describes how to deploy <%= vars.product_full %> using
-Container Services Manager for VMware Tanzu (KSM). For information about KSM,
-see [Container Services Manager for VMware Tanzu (Beta)](https://docs.pivotal.io/ksm/index.html).
+Tanzu Service Manager. For information about Tanzu Service ManagerKSM,
+see [Tanzu Service Manager](https://docs.pivotal.io/tanzu-service-manager/index.html).
 
 You can use the procedures in this topic if you have a running
 <%= vars.app_runtime_full %> (<%= vars.app_runtime_abbr %>) deployment.
@@ -21,7 +21,7 @@ Before you deploy  <%= vars.product_short %>  using KSM, you must:
 + **Install KSM:** KSM enables operators to provide app developers with access to <%= vars.product_short %>
 through the `cf marketplace`.
 For instructions, see
-[Installing and Configuring KSM](https://docs.pivotal.io/ksm/installing.html).
+[Installing and Configuring KSM](https://docs.pivotal.io/tanzu-service-manager/installing.html).
 
 + **Install Helm 2:** Helm 2 packages the <%= vars.product_short %> Helm chart.
 For instructions, see the [Helm documentation](https://v2.helm.sh/docs/using_helm/#quickstart).
@@ -55,6 +55,6 @@ To add <%= vars.product_short %> to KSM:
       + `ha`: This is a three-node cluster plan.
 
 1. Add <%= vars.product_short %> to KSM by following the procedures in
-[Retrieve Credentials for KSM](https://docs.pivotal.io/ksm/using.html#credentials),
-[Add a Service Offering to KSM](https://docs.pivotal.io/ksm/using.html#add), and
-[Enable Service Offering Access](https://docs.pivotal.io/ksm/using.html#enable).
+[Retrieve Credentials for KSM](https://docs.pivotal.io/tanzu-service-manager/using.html#credentials),
+[Add a Service Offering to KSM](https://docs.pivotal.io/tanzu-service-manager/using.html#add), and
+[Enable Service Offering Access](https://docs.pivotal.io/tanzu-service-manager/using.html#enable).
