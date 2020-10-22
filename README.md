@@ -1,5 +1,8 @@
 # VMware Tanzu RabbitMQ [Kubernetes] docs
 
+THIS REPO IS NOT CURRENTLY IN USE. For documentation for the RabbitMQ Cluster Operator for Kubernetes (formerly known as VMware Tanzu RabbitMQ [Kubernetes]), see the open source [RabbitMQ Documentation](https://www.rabbitmq.com/kubernetes/operator/operator-overview.html).
+
+
 ## Branches in this Content Repo
 
 The master branch is the tree-trunk, so **always** make changes you want carried forward in this branch. This includes:
