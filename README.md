@@ -2,6 +2,11 @@
 
 THIS REPO IS NOT CURRENTLY IN USE. For documentation for the RabbitMQ Cluster Operator for Kubernetes (formerly known as VMware Tanzu RabbitMQ [Kubernetes]), see the open source [RabbitMQ Documentation](https://www.rabbitmq.com/kubernetes/operator/operator-overview.html).
 
+There are two paused concourse pipelines associated with this repo:
+
+https://concourse.run.pivotal.io/teams/cf-docs/pipelines/cf-services?group=rmq-k8s
+https://concourse.run.pivotal.io/teams/cf-docs/pipelines/cf-services-edge?group=rmq-k8s-edge
+
 
 ## Branches in this Content Repo
 
